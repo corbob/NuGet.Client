@@ -32,7 +32,8 @@ namespace NuGet.PackageManagement
     /// NuGetPackageManager orchestrates a nuget package operation such as an install or uninstall
     /// It is to be called by various NuGet Clients including the custom third-party ones
     /// </summary>
-    public class NuGetPackageManager
+    public partial class NuGetPackageManager
+    // Chocolatey added partial
     {
         private IReadOnlyList<SourceRepository> _globalPackageFolderRepositories;
 
@@ -2574,6 +2575,14 @@ namespace NuGet.PackageManagement
                             {
                                 executedNuGetProjectActions.Push(nuGetProjectAction);
 
+                                /*
+                                var uninstallingEvent = new ChocolateyPackageOperationEventArgs(
+                                    "UninstallingPathShouldBeHere",
+                                    nuGetProjectAction.PackageIdentity,
+                                    nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+                                OnUninstalled(uninstallingEvent);
+                                */
+
                                 await ExecuteUninstallAsync(nuGetProject,
                                     nuGetProjectAction.PackageIdentity,
                                     packageWithDirectoriesToBeDeleted,
@@ -2584,6 +2593,14 @@ namespace NuGet.PackageManagement
                                     Strings.SuccessfullyUninstalled,
                                     nuGetProjectAction.PackageIdentity,
                                     nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+
+                                /*
+                                var uninstalledEvent = new ChocolateyPackageOperationEventArgs(
+                                    "UninstallPathShouldBeHere",
+                                    nuGetProjectAction.PackageIdentity,
+                                    nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+                                OnUninstalled(uninstalledEvent);
+                                */
                             }
                         }
                     }
@@ -2616,6 +2633,14 @@ namespace NuGet.PackageManagement
                                 var preFetchResult = downloadTasks[nuGetProjectAction.PackageIdentity];
                                 using (var downloadPackageResult = await preFetchResult.GetResultAsync())
                                 {
+                                    /*
+                                    var installingEvent = new ChocolateyPackageOperationEventArgs(
+                                        "InstallingPathShouldBeHere",
+                                        nuGetProjectAction.PackageIdentity,
+                                        nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+                                    OnUninstalled(installingEvent);
+                                    */
+
                                     // use the version exactly as specified in the nuspec file
                                     var packageIdentity = await downloadPackageResult.PackageReader.GetIdentityAsync(token);
 
@@ -2639,6 +2664,14 @@ namespace NuGet.PackageManagement
                                     Strings.SuccessfullyInstalled,
                                     identityString,
                                     nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+
+                                /*
+                                var chocolateyEvent = new ChocolateyPackageOperationEventArgs(
+                                    "InstallPathShouldBeHere",
+                                    nuGetProjectAction.PackageIdentity,
+                                    nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name));
+                                OnInstalled(chocolateyEvent);
+                                */
                             }
                         }
                     }
@@ -3345,7 +3378,7 @@ namespace NuGet.PackageManagement
                 if (dgSpecForParents.Restore.Count > 0)
                 {
                     // Restore and commit the lock file to disk regardless of the result
-                    // This will restore all parents in a single restore 
+                    // This will restore all parents in a single restore
                     await DependencyGraphRestoreUtility.RestoreAsync(
                         dgSpecForParents,
                         referenceContext,
