@@ -73,7 +73,7 @@ namespace NuGet.Packaging
             return builder.ToString();
         }
 
-        public string GetManifestFileName(PackageIdentity packageIdentity)
+        public virtual string GetManifestFileName(PackageIdentity packageIdentity)
         {
             return GetId(packageIdentity) + PackagingCoreConstants.NuspecExtension;
         }

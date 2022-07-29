@@ -689,7 +689,7 @@ NuGet.Packaging.PackageHelper
 NuGet.Packaging.PackageIdValidator
 NuGet.Packaging.PackagePathHelper
 NuGet.Packaging.PackagePathResolver
-NuGet.Packaging.PackagePathResolver.GetManifestFileName(NuGet.Packaging.Core.PackageIdentity packageIdentity) -> string
+virtual NuGet.Packaging.PackagePathResolver.GetManifestFileName(NuGet.Packaging.Core.PackageIdentity packageIdentity) -> string
 NuGet.Packaging.PackagePathResolver.GetPackageDownloadMarkerFileName(NuGet.Packaging.Core.PackageIdentity packageIdentity) -> string
 NuGet.Packaging.PackagePathResolver.PackagePathResolver(string rootDirectory, bool useSideBySidePaths = true) -> void
 NuGet.Packaging.PackagePathResolver.Root.get -> string
