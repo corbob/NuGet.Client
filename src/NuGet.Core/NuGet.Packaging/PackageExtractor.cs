@@ -199,6 +199,24 @@ namespace NuGet.Packaging
 
                 var packageFiles = await packageReader.GetPackageFilesAsync(packageSaveMode, token);
                 var packageFileExtractor = new PackageFileExtractor(packageFiles, packageExtractionContext.XmlDocFileSaveMode);
+
+                if (packageSaveMode.HasFlag(PackageSaveMode.Nuspec))
+                {
+                    var sourceNuspecFile = packageFiles.Single(p => PackageHelper.IsManifest(p));
+
+                    var targetNuspecPath = Path.Combine(
+                        packageDirectory,
+                        packagePathResolver.GetManifestFileName(packageIdentityFromNuspec));
+
+                    // Extract the .nuspec file with a well known file name.
+                    using (var nuspecSourceStream = await packageReader.GetNuspecAsync(token))
+                    {
+                        filesAdded.Add(nuspecSourceStream.CopyToFile(targetNuspecPath));
+                    }
+
+                    packageFiles = packageFiles.Except(new[] { sourceNuspecFile });
+                }
+
                 filesAdded.AddRange(await packageReader.CopyFilesAsync(
                     packageDirectory,
                     packageFiles,
@@ -300,6 +318,23 @@ namespace NuGet.Packaging
 
                 var packageFiles = await packageReader.GetPackageFilesAsync(packageSaveMode, token);
                 var packageFileExtractor = new PackageFileExtractor(packageFiles, packageExtractionContext.XmlDocFileSaveMode);
+
+                if (packageSaveMode.HasFlag(PackageSaveMode.Nuspec))
+                {
+                    var sourceNuspecFile = packageFiles.Single(p => PackageHelper.IsManifest(p));
+
+                    var targetNuspecPath = Path.Combine(
+                        packageDirectory,
+                        packagePathResolver.GetManifestFileName(packageIdentityFromNuspec));
+
+                    // Extract the .nuspec file with a well known file name.
+                    using (var nuspecSourceStream = await packageReader.GetNuspecAsync(token))
+                    {
+                        filesAdded.Add(nuspecSourceStream.CopyToFile(targetNuspecPath));
+                    }
+
+                    packageFiles = packageFiles.Except(new[] { sourceNuspecFile });
+                }
 
                 filesAdded.AddRange(await packageReader.CopyFilesAsync(
                     packageDirectory,
