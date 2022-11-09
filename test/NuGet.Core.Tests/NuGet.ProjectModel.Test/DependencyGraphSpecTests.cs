@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using NuGet.Configuration;
@@ -14,7 +15,7 @@ using Xunit;
 
 namespace NuGet.ProjectModel.Test
 {
-    public class DependencyGraphSpecTests
+    public class DependencyGraphSpecTests : IDisposable
     {
         private const string DgSpecWithCentralDependencies = "DependencyGraphSpec_CentralVersionDependencies.json";
         private const string Project1Json = "project1.json";
@@ -25,6 +26,18 @@ namespace NuGet.ProjectModel.Test
 
         private const string PackageSpecName = "x";
         private const string PackageSpecPath = @"c:\fake\project.json";
+        private readonly CultureInfo _originalCulture;
+
+        public DependencyGraphSpecTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
 
         [Fact]
         public void GetParents_WhenCalledOnChild_ReturnsParents()

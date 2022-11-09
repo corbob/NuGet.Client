@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -20,10 +21,23 @@ using Xunit;
 
 namespace NuGet.Packaging.Test
 {
-    public class PackageArchiveReaderTests
+    public class PackageArchiveReaderTests : IDisposable
     {
         private const string SignatureVerificationEnvironmentVariable = "DOTNET_NUGET_SIGNATURE_VERIFICATION";
         private const string SignatureVerificationEnvironmentVariableTypo = "DOTNET_NUGET_SIGNATURE_VERIFICATIOn";
+        private readonly CultureInfo _originalCulture;
+
+        public PackageArchiveReaderTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
+
 
         [Fact]
         public void Constructor_WithStringPathParameter_DisposesInvalidStream()

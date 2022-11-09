@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,25 @@ using Xunit;
 
 namespace NuGet.ProjectModel.Test
 {
-    public class JsonPackageSpecReaderTests
+    public class JsonPackageSpecReaderTests : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+        private readonly CultureInfo _originalUiCulture;
+
+        public JsonPackageSpecReaderTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            _originalUiCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+            CultureInfo.CurrentUICulture = _originalUiCulture;
+        }
+
         [Fact]
         public void PackageSpecReader_PackageMissingVersion()
         {

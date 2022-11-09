@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -10,8 +11,21 @@ using Xunit;
 
 namespace NuGet.ProjectModel.Test
 {
-    public class JsonTextReaderExtensionsTests
+    public class JsonTextReaderExtensionsTests : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+
+        public JsonTextReaderExtensionsTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
+
         [Fact]
         public void ReadDelimitedString_WhenReaderIsNull_Throws()
         {

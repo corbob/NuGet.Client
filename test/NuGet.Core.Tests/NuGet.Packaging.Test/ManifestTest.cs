@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -14,8 +15,25 @@ using Xunit;
 
 namespace NuGet.Packaging.Test
 {
-    public class ManifestTest
+    public class ManifestTest : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+        private readonly CultureInfo _originalUiCulture;
+
+        public ManifestTest()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            _originalUiCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+            CultureInfo.CurrentUICulture = _originalUiCulture;
+        }
+
         [Fact]
         public void ManifestValidatesMetadata()
         {

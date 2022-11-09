@@ -83,7 +83,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             _logger = new TestLogger(output);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _testDirectory?.Dispose();
             _solutionManager?.Dispose();

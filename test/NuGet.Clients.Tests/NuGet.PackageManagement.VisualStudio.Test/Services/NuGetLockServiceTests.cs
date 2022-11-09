@@ -28,7 +28,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.False(_lockService.IsLockHeld);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _lockService.Dispose();
             _cts.Dispose();
