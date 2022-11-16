@@ -67,18 +67,19 @@ object ChocolateyNugetClient : BuildType({
             name = "Publish NuGet Packages - Internally"
             toolPath = "%teamcity.tool.NuGet.CommandLine.DEFAULT%"
             packages = """
-                artifacts/nupkgs/Chocolatey.NuGet.Commands.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Common.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Configuration.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Credentials.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.DependencyResolver.Core.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.LibraryModel.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.PackageManagement.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Packaging.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.ProjectModel.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Protocol.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Resolver.*.nupkg
-                artifacts/nupkgs/Chocolatey.NuGet.Versioning.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Commands.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Common.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Configuration.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Credentials.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.DependencyResolver.Core.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.LibraryModel.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.PackageManagement.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Packaging.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.ProjectModel.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Protocol.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Resolver.*.nupkg
+                +:artifacts/nupkgs/Chocolatey.NuGet.Versioning.*.nupkg
+                -:artifacts/nupkgs/*.symbols.nupkg
             """.trimIndent()
             serverUrl = "%env.NUGETDEVPUSH_SOURCE%"
             apiKey = "%env.NUGETDEVPUSH_API_KEY%"
