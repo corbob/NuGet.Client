@@ -9,7 +9,7 @@ project {
 }
 
 object ChocolateyNugetClient : BuildType({
-    name = "Chocolatey Nuget Client"
+    name = "Build"
 
     artifactRules = """
         artifacts/nupkgs/Chocolatey.NuGet.Commands.*.nupkg
@@ -63,26 +63,19 @@ object ChocolateyNugetClient : BuildType({
             }
             scriptArgs = "-CI -SkipUnitTest"
         }
-        nuGetPublish {
-            name = "Publish NuGet Packages - Internally"
-            toolPath = "%teamcity.tool.NuGet.CommandLine.DEFAULT%"
-            packages = """
-                +:artifacts/nupkgs/Chocolatey.NuGet.Commands.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Common.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Configuration.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Credentials.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.DependencyResolver.Core.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.LibraryModel.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.PackageManagement.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Packaging.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.ProjectModel.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Protocol.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Resolver.*.nupkg
-                +:artifacts/nupkgs/Chocolatey.NuGet.Versioning.*.nupkg
-                -:artifacts/nupkgs/*.symbols.nupkg
-            """.trimIndent()
-            serverUrl = "%env.NUGETDEVPUSH_SOURCE%"
-            apiKey = "%env.NUGETDEVPUSH_API_KEY%"
+        powerShell {
+            conditions {
+                equals("teamcity.build.branch.is_default", "true")
+            }
+            scriptMode = script {
+                content = """
+                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*"}
+
+                    foreach (${'$'}file in ${'$'}files) {
+                      & "%teamcity.tool.NuGet.CommandLine.DEFAULT%" push -Source %env.NUGETDEVPUSH_SOURCE% -ApiKey %env.NUGETDEVPUSH_API_KEY% "${'$'}(${'$'}file.FullName)"
+                    }
+                """.trimIndent()
+            }
         }
     }
 
