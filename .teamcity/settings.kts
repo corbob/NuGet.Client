@@ -64,9 +64,6 @@ object ChocolateyNugetClient : BuildType({
             scriptArgs = "-CI -SkipUnitTest"
         }
         powerShell {
-            conditions {
-                equals("teamcity.build.branch.is_default", "true")
-            }
             scriptMode = script {
                 content = """
                     ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*"}
