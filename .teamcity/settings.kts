@@ -69,7 +69,7 @@ object ChocolateyNugetClient : BuildType({
                     ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*"}
 
                     foreach (${'$'}file in ${'$'}files) {
-                      & "%teamcity.tool.NuGet.CommandLine.DEFAULT%" push -Source %env.NUGETDEVPUSH_SOURCE% -ApiKey %env.NUGETDEVPUSH_API_KEY% "${'$'}(${'$'}file.FullName)"
+                      & "%teamcity.tool.NuGet.CommandLine.DEFAULT%\NuGet.exe" push -Source %env.NUGETDEVPUSH_SOURCE% -ApiKey %env.NUGETDEVPUSH_API_KEY% "${'$'}(${'$'}file.FullName)"
                     }
                 """.trimIndent()
             }
