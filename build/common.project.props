@@ -126,10 +126,15 @@
 
   <!--Setting the product information for Beta builds-->
   <Choose>
+    <When Condition="'$(BuildRTM)' != 'true' AND '$(PreReleaseVersion)' != '' AND '$(PreReleaseVersion)' != '0' AND '$(BuildDate)' != '' AND '$(BuildDate)' != '0' ">
+      <PropertyGroup>
+        <PreReleaseInformationVersion>-$(ReleaseLabel)-$(BuildDate)-$(PreReleaseVersion)</PreReleaseInformationVersion>
+      </PropertyGroup>
+    </When>
     <!-- If we aren't excluding the build number, use the release label and the build number. -->
     <When Condition="'$(BuildRTM)' != 'true' AND '$(PreReleaseVersion)' != '' AND '$(PreReleaseVersion)' != '0' ">
       <PropertyGroup>
-        <PreReleaseInformationVersion>-$(ReleaseLabel).$(PreReleaseVersion)</PreReleaseInformationVersion>
+        <PreReleaseInformationVersion>-$(ReleaseLabel)-$(PreReleaseVersion)</PreReleaseInformationVersion>
       </PropertyGroup>
     </When>
     <!-- If we are excluding the build number, show the release label unless we are RTM. -->

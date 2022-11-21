@@ -40,11 +40,13 @@ param (
     [ValidateSet('debug', 'release')]
     [Alias('c')]
     [string]$Configuration,
-    [ValidatePattern('^(beta|final|preview|rc|release|rtm|xprivate|zlocal)([0-9]*)$')]
+    [ValidatePattern('^(alpha|beta|final|preview|rc|release|rtm|xprivate|zlocal)([0-9]*)$')]
     [Alias('l')]
     [string]$ReleaseLabel = 'zlocal',
     [Alias('n')]
     [int]$BuildNumber,
+    [Alias('d')]
+    [string]$BuildDate = (Get-Date -Format "yyyyMMdd"),
     [Alias('su')]
     [switch]$SkipUnitTest,
     [Alias('f')]
@@ -116,6 +118,11 @@ Invoke-BuildStep 'Running Restore' {
         $restoreArgs += "/p:BuildNumber=$BuildNumber"
     }
 
+    if ($BuildDate)
+    {
+        $restoreArgs += "/p:BuildDate=$BuildDate"
+    }
+
     if ($Binlog)
     {
         $restoreArgs += "-bl:msbuild.restore.binlog"
@@ -140,6 +147,11 @@ Invoke-BuildStep $VSMessage {
     if ($BuildNumber)
     {
         $buildArgs += "/p:BuildNumber=$BuildNumber"
+    }
+
+    if ($BuildDate)
+    {
+        $buildArgs += "/p:BuildDate=$BuildDate"
     }
 
     If ($SkipDelaySigning)
@@ -186,6 +198,11 @@ Invoke-BuildStep 'Running Restore RTM' {
         $restoreArgs += "/p:BuildNumber=$BuildNumber"
     }
 
+    if ($BuildDate)
+    {
+        $restoreArgs += "/p:BuildDate=$BuildDate"
+    }
+
     if ($Binlog)
     {
         $restoreArgs += "-bl:msbuild.restore.binlog"
@@ -212,6 +229,11 @@ Invoke-BuildStep 'Packing RTM' {
     if ($BuildNumber)
     {
         $packArgs += "/p:BuildNumber=$BuildNumber"
+    }
+
+    if ($BuildDate)
+    {
+        $packArgs += "/p:BuildDate=$BuildDate"
     }
 
     if ($Binlog)
