@@ -56,6 +56,9 @@ object ChocolateyNugetClient : BuildType({
             }
         }
         powerShell {
+            conditions {
+                equals("teamcity.build.branch.is_default", "true")
+            }
             name = "Publish NuGet Packages"
             scriptMode = script {
                 content = """
