@@ -61,7 +61,7 @@ object ChocolateyNugetClient : BuildType({
             scriptMode = file {
                 path = "build.ps1"
             }
-            scriptArgs = "-CI -SkipUnitTest"
+            scriptArgs = """-CI -SkipUnitTest -BuildNumber %build.counter% -ReleaseLabel alpha -BuildDate (Get-Date -Format "yyyyMMdd")"""
         }
         powerShell {
             scriptMode = script {
