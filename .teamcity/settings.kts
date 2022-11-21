@@ -12,18 +12,8 @@ object ChocolateyNugetClient : BuildType({
     name = "Build"
 
     artifactRules = """
-        artifacts/nupkgs/Chocolatey.NuGet.Commands.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Common.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Configuration.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Credentials.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.DependencyResolver.Core.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.LibraryModel.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.PackageManagement.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Packaging.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.ProjectModel.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Protocol.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Resolver.*.nupkg
-        artifacts/nupkgs/Chocolatey.NuGet.Versioning.*.nupkg
+        +:artifacts/nupkgs/*.nupkg
+        -:artifacts/nupkgs/*.symbols.nupkg
     """.trimIndent()
 
     vcs {
