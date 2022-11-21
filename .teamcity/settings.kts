@@ -48,12 +48,14 @@ object ChocolateyNugetClient : BuildType({
         }
         powerShell {
             name = "Build"
-            scriptMode = file {
-                path = "build.ps1"
+            scriptMode = script {
+                content = """
+                    .\build.ps1 -CI -SkipUnitTest -BuildNumber %build.counter% -ReleaseLabel alpha -BuildDate (Get-Date -Format "yyyyMMdd")
+                """.trimIndent()
             }
-            scriptArgs = """-CI -SkipUnitTest -BuildNumber %build.counter% -ReleaseLabel alpha -BuildDate (Get-Date -Format "yyyyMMdd")"""
         }
         powerShell {
+            name = "Publish NuGet Packages"
             scriptMode = script {
                 content = """
                     ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*"}
