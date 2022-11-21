@@ -14,6 +14,7 @@ object ChocolateyNugetClient : BuildType({
     artifactRules = """
         +:artifacts/nupkgs/*.nupkg
         -:artifacts/nupkgs/*.symbols.nupkg
+        -:artifacts/nupkgs/*.alpha.nupkg
     """.trimIndent()
 
     vcs {
@@ -58,7 +59,7 @@ object ChocolateyNugetClient : BuildType({
             name = "Publish NuGet Packages"
             scriptMode = script {
                 content = """
-                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*"}
+                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*" -and ${'$'}_.Name -notlike "*alpha.nupkg"}
 
                     foreach (${'$'}file in ${'$'}files) {
                       NuGet push -Source '%env.NUGETDEVPUSH_SOURCE%' -ApiKey '%env.NUGETDEVPUSH_API_KEY%' "${'$'}(${'$'}file.FullName)"
