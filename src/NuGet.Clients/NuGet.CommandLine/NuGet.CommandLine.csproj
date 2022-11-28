@@ -12,16 +12,9 @@
     <RootNamespace>NuGet.CommandLine</RootNamespace>
     <AssemblyName>NuGet</AssemblyName>
     <AssemblyTitle>NuGet Command Line</AssemblyTitle>
-    <PackageId>NuGet.CommandLine</PackageId>
     <TargetFramework>$(NETFXTargetFramework)</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <!-- //////////////////////////////////////////////////////////
-         // Start - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->
-    <PackageId>Chocolatey.NuGet.Commandline</PackageId>
-    <!-- //////////////////////////////////////////////////////////
-         // End - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->
+    <PackageId>NuGet.Commandline</PackageId>
     <Description>NuGet Command Line Interface.</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Shipping>true</Shipping>
