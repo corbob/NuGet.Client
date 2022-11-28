@@ -450,7 +450,15 @@ function Get-PackagesConfigNuGetProject {
     $metadataDictionary = New-Object 'System.Collections.Generic.Dictionary[string,object]'
     $metadataDictionary.Add('Name', $Project.Name)
     $targetFrameworkMoniker = $project.Properties.Item("TargetFrameworkMoniker").Value
-    $nuGetFramework = [NuGet.Frameworks.NuGetFramework]::Parse($targetFrameworkMoniker)
+    <#  //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+    #>
+    $nuGetFramework = [Chocolatey.NuGet.Frameworks.NuGetFramework]::Parse($targetFrameworkMoniker)
+    <#  //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+    #>
     $metadataDictionary.Add('TargetFramework', $nuGetFramework)
     $packagesConfigNuGetProject = New-Object NuGet.ProjectManagement.PackagesConfigNuGetProject($packagesConfigFolderPath, $metadataDictionary)
     return $packagesConfigNuGetProject

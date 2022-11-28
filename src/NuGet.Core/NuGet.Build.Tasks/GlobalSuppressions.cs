@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 // This file is used by Code Analysis to maintain SuppressMessage
@@ -71,6 +72,12 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Build", "CA1819:Properties should not return arrays", Justification = "<Pending>", Scope = "member", Target = "~P:NuGet.Build.Tasks.WarnForInvalidProjectsTask.AllProjects")]
 [assembly: SuppressMessage("Build", "CA1819:Properties should not return arrays", Justification = "<Pending>", Scope = "member", Target = "~P:NuGet.Build.Tasks.WarnForInvalidProjectsTask.ValidProjects")]
 [assembly: SuppressMessage("Build", "CA1819:Properties should not return arrays", Justification = "<Pending>", Scope = "member", Target = "~P:NuGet.Build.Tasks.WriteRestoreGraphTask.RestoreGraphItems")]
-[assembly: SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>", Scope = "member", Target = "~M:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.TryParseFramework(System.String,System.String,System.String,NuGet.Build.MSBuildLogger,NuGet.Frameworks.NuGetFramework@)~System.Boolean")]
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+[assembly: SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>", Scope = "member", Target = "~M:NuGet.Build.Tasks.GetReferenceNearestTargetFrameworkTask.TryParseFramework(System.String,System.String,System.String,NuGet.Build.MSBuildLogger,Chocolatey.NuGet.Frameworks.NuGetFramework@)~System.Boolean")]
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 [assembly: SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "MSBuild tasks expect arrays.", Scope = "member", Target = "~P:NuGet.Build.Tasks.CheckForDuplicateNuGetItemsTask.Items")]
 [assembly: SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "MSBuild tasks expect arrays.", Scope = "member", Target = "~P:NuGet.Build.Tasks.CheckForDuplicateNuGetItemsTask.DeduplicatedItems")]

@@ -1,0 +1,8 @@
+NuGet.LibraryModel.LibraryDependencyInfo.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+NuGet.LibraryModel.LibraryDependencyInfo.LibraryDependencyInfo(NuGet.LibraryModel.LibraryIdentity library, bool resolved, Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> dependencies) -> void
+static NuGet.LibraryModel.LibraryDependencyInfo.Create(NuGet.LibraryModel.LibraryIdentity library, Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> dependencies) -> NuGet.LibraryModel.LibraryDependencyInfo
+static NuGet.LibraryModel.LibraryDependencyInfo.CreateUnresolved(NuGet.LibraryModel.LibraryIdentity library, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> NuGet.LibraryModel.LibraryDependencyInfo
+*REMOVED* NuGet.LibraryModel.LibraryDependencyInfo.Framework.get -> NuGet.Frameworks.NuGetFramework
+*REMOVED* NuGet.LibraryModel.LibraryDependencyInfo.LibraryDependencyInfo(NuGet.LibraryModel.LibraryIdentity library, bool resolved, NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> dependencies) -> void
+*REMOVED* static NuGet.LibraryModel.LibraryDependencyInfo.Create(NuGet.LibraryModel.LibraryIdentity library, NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> dependencies) -> NuGet.LibraryModel.LibraryDependencyInfo
+*REMOVED* static NuGet.LibraryModel.LibraryDependencyInfo.CreateUnresolved(NuGet.LibraryModel.LibraryIdentity library, NuGet.Frameworks.NuGetFramework framework) -> NuGet.LibraryModel.LibraryDependencyInfo

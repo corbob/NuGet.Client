@@ -100,7 +100,6 @@ NuGet.Common.INuGetTelemetryService
 NuGet.Common.INuGetTelemetryService.EmitTelemetryEvent(NuGet.Common.TelemetryEvent telemetryData) -> void
 NuGet.Common.INuGetTelemetryService.StartActivity(string activityName) -> System.IDisposable
 NuGet.Common.IPackLogMessage
-NuGet.Common.IPackLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
 NuGet.Common.IPackLogMessage.Framework.set -> void
 NuGet.Common.IPackLogMessage.LibraryId.get -> string
 NuGet.Common.IPackLogMessage.LibraryId.set -> void
@@ -353,7 +352,6 @@ NuGet.Common.PackagingLogMessage.EndLineNumber.get -> int
 NuGet.Common.PackagingLogMessage.EndLineNumber.set -> void
 NuGet.Common.PackagingLogMessage.FilePath.get -> string
 NuGet.Common.PackagingLogMessage.FilePath.set -> void
-NuGet.Common.PackagingLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
 NuGet.Common.PackagingLogMessage.Framework.set -> void
 NuGet.Common.PackagingLogMessage.Level.get -> NuGet.Common.LogLevel
 NuGet.Common.PackagingLogMessage.Level.set -> void
@@ -560,7 +558,6 @@ static NuGet.Common.NullLogger.Instance.get -> NuGet.Common.ILogger
 static NuGet.Common.PackagingLogMessage.CreateError(string message, NuGet.Common.NuGetLogCode code) -> NuGet.Common.PackagingLogMessage
 static NuGet.Common.PackagingLogMessage.CreateMessage(string message, NuGet.Common.LogLevel logLevel) -> NuGet.Common.PackagingLogMessage
 static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code) -> NuGet.Common.PackagingLogMessage
-static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage
 static NuGet.Common.PathResolver.FilterPackageFiles<T>(System.Collections.Generic.ICollection<T> source, System.Func<T, string> getPath, System.Collections.Generic.IEnumerable<string> wildcards) -> void
 static NuGet.Common.PathResolver.GetFilteredPackageFiles<T>(System.Collections.Generic.ICollection<T> source, System.Func<T, string> getPath, System.Collections.Generic.IEnumerable<string> wildcards) -> System.Collections.Generic.IEnumerable<T>
 static NuGet.Common.PathResolver.GetMatches<T>(System.Collections.Generic.IEnumerable<T> source, System.Func<T, string> getPath, System.Collections.Generic.IEnumerable<string> wildcards) -> System.Collections.Generic.IEnumerable<T>

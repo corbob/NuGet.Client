@@ -1,36 +1,66 @@
 # NuGet delay signed assemblies
 NuGetConsole.Host.PowerShell.dll
 NuGet.Console.dll
-NuGet.Credentials.dll
+# //////////////////////////////////////////
+# Start - Chocolatey Specific Modifications
+# //////////////////////////////////////////
+Chocolatey.NuGet.Credentials.dll
+# //////////////////////////////////////////
+# End - Chocolatey Specific Modifications
+# //////////////////////////////////////////
 NuGet.PackageManagement.PowerShellCmdlets.dll
 NuGet.PackageManagement.VisualStudio.dll
 NuGet.SolutionRestoreManager.dll
 NuGet.Tools.dll
-NuGet.VisualStudio.dll
+# //////////////////////////////////////////
+# Start - Chocolatey Specific Modifications
+# //////////////////////////////////////////
+Chocolatey.NuGet.VisualStudio.dll
+# //////////////////////////////////////////
+# End - Chocolatey Specific Modifications
+# //////////////////////////////////////////
 NuGet.VisualStudio.Common.dll
-NuGet.VisualStudio.Contracts.dll
+# //////////////////////////////////////////
+# Start - Chocolatey Specific Modifications
+# //////////////////////////////////////////
+Chocolatey.NuGet.VisualStudio.Contracts.dll
+# //////////////////////////////////////////
+# End - Chocolatey Specific Modifications
+# //////////////////////////////////////////
 NuGet.VisualStudio.Interop.dll
 NuGet.VisualStudio.Implementation.dll
 NuGet.VisualStudio.Internal.Contracts.dll
 NuGet.VisualStudio.OnlineEnvironment.Client.dll
 
 # MS delay signed assemblies
-Microsoft.Build.NuGetSdkResolver.dll
-NuGet.Build.Tasks.dll
-NuGet.Commands.dll
-NuGet.Common.dll
-NuGet.Configuration.dll
-NuGet.DependencyResolver.Core.dll
-NuGet.Frameworks.dll
-NuGet.Indexing.dll
-NuGet.LibraryModel.dll
-NuGet.PackageManagement.dll
+# //////////////////////////////////////////
+# Start - Chocolatey Specific Modifications
+# //////////////////////////////////////////
+Chocolatey.Microsoft.Build.NuGetSdkResolver.dll
+Chocolatey.NuGet.Build.Tasks.dll
+Chocolatey.NuGet.Commands.dll
+Chocolatey.NuGet.Common.dll
+Chocolatey.NuGet.Configuration.dll
+Chocolatey.NuGet.DependencyResolver.Core.dll
+Chocolatey.NuGet.Frameworks.dll
+Chocolatey.NuGet.Indexing.dll
+Chocolatey.NuGet.LibraryModel.dll
+Chocolatey.NuGet.PackageManagement.dll
+# //////////////////////////////////////////
+# End - Chocolatey Specific Modifications
+# //////////////////////////////////////////
 NuGet.PackageManagement.UI.dll
-NuGet.Packaging.dll
-NuGet.ProjectModel.dll
-NuGet.Protocol.dll
-NuGet.Resolver.dll
-NuGet.Versioning.dll
+# //////////////////////////////////////////
+# Start - Chocolatey Specific Modifications
+# //////////////////////////////////////////
+Chocolatey.NuGet.Packaging.dll
+Chocolatey.NuGet.ProjectModel.dll
+Chocolatey.NuGet.Protocol.dll
+Chocolatey.NuGet.Resolver.dll
+Chocolatey.NuGet.Versioning.dll
+# //////////////////////////////////////////
+# End - Chocolatey Specific Modifications
+# //////////////////////////////////////////
 
 # 3rd party dlls to keep
 Lucene.Net.dll

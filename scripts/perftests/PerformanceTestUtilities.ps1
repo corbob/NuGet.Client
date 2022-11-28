@@ -180,7 +180,15 @@ Function GetClientVersion([string] $nugetClientFilePath)
     ElseIf($(IsClientMSBuildExe $nugetClientFilePath))
     {
         $clientDir = Split-Path -Path $nugetClientFilePath
-        $nugetClientPath = Resolve-Path (Join-Path -Path $clientDir -ChildPath "../../../Common7/IDE/CommonExtensions/Microsoft/NuGet/NuGet.Build.Tasks.dll")
+        <#  //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+        #>
+        $nugetClientPath = Resolve-Path (Join-Path -Path $clientDir -ChildPath "../../../Common7/IDE/CommonExtensions/Microsoft/NuGet/Chocolatey.NuGet.Build.Tasks.dll")
+        <#  //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+        #>
         $versionInfo = Get-ChildItem $nugetClientPath | % versioninfo | Select-Object FileVersion
         Return $(($versionInfo -split '\n')[0]).TrimStart("@{").TrimEnd('}').Substring("FileVersion=".Length)
     }
