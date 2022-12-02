@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -94,7 +95,13 @@ namespace NuGet.CommandLine
             var nugetExePath = Assembly.GetEntryAssembly().Location;
 
             // Check for the non-ILMerged path
-            var buildTasksPath = Path.Combine(Path.GetDirectoryName(nugetExePath), "NuGet.Build.Tasks.dll");
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            var buildTasksPath = Path.Combine(Path.GetDirectoryName(nugetExePath), "Chocolatey.NuGet.Build.Tasks.dll");
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             if (File.Exists(buildTasksPath))
             {

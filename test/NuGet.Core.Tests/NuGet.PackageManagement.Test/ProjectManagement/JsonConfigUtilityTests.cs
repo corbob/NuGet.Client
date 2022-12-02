@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -118,7 +119,13 @@ namespace ProjectManagement.Test
             Assert.Equal(1, frameworks.Count());
 
             // Act
-            JsonConfigUtility.AddFramework(json, new NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            JsonConfigUtility.AddFramework(json, new Chocolatey.NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             frameworks = JsonConfigUtility.GetFrameworks(json);
 
             //Assert
@@ -134,12 +141,24 @@ namespace ProjectManagement.Test
             var frameworks = JsonConfigUtility.GetFrameworks(json);
             Assert.Equal(1, frameworks.Count());
 
-            JsonConfigUtility.AddFramework(json, new NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            JsonConfigUtility.AddFramework(json, new Chocolatey.NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             frameworks = JsonConfigUtility.GetFrameworks(json);
             Assert.Equal(2, frameworks.Count());
 
             // Act
-            JsonConfigUtility.AddFramework(json, new NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            JsonConfigUtility.AddFramework(json, new Chocolatey.NuGet.Frameworks.NuGetFramework("uap", new Version("10.0.0")));
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             frameworks = JsonConfigUtility.GetFrameworks(json);
             Assert.Equal(2, frameworks.Count());
         }

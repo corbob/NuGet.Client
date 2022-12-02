@@ -18,14 +18,8 @@
 
   <PropertyGroup Condition = " Exists($(StrongNameKey)) ">
     <SignAssembly>true</SignAssembly>
-    <!-- //////////////////////////////////////////////////////////
-         // Start - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->
-    <DelaySign>false</DelaySign>
-    <PublicSign>false</PublicSign>
-    <!-- //////////////////////////////////////////////////////////
-         // End - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->
+    <DelaySign Condition="'$(IsXplat)' != 'true'">true</DelaySign>
+    <PublicSign Condition="'$(IsXplat)' == 'true'">true</PublicSign>
     <AssemblyOriginatorKeyFile Condition = " '$(AssemblyOriginatorKeyFile)' == '' ">$(StrongNameKey)</AssemblyOriginatorKeyFile>
     <StrongNameCert Condition="'$(StrongNameCert)' == ''">$(DefaultStrongNameCert)</StrongNameCert>
   </PropertyGroup>
