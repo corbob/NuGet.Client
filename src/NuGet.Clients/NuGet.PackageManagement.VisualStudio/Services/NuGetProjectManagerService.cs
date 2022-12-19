@@ -171,6 +171,7 @@ namespace NuGet.PackageManagement.VisualStudio
 
         public async ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
             IReadOnlyCollection<string> projectIds,
+            bool includeTransitiveOrigins,
             CancellationToken cancellationToken)
         {
             Assumes.NotNullOrEmpty(projectIds);
@@ -186,7 +187,7 @@ namespace NuGet.PackageManagement.VisualStudio
             {
                 if (project is IPackageReferenceProject packageReferenceProject)
                 {
-                    prStyleTasks.Add(packageReferenceProject.GetInstalledAndTransitivePackagesAsync(cancellationToken));
+                    prStyleTasks.Add(packageReferenceProject.GetInstalledAndTransitivePackagesAsync(includeTransitiveOrigins, cancellationToken));
                 }
                 else
                 {
@@ -205,6 +206,10 @@ namespace NuGet.PackageManagement.VisualStudio
             TransitivePackageReferenceContextInfo[] transitivePackageContextInfos = prStyleReferences.SelectMany(e => e.TransitivePackages).Select(pr => TransitivePackageReferenceContextInfo.Create(pr)).ToArray();
             return new InstalledAndTransitivePackages(installedPackagesContextInfos, transitivePackageContextInfos);
         }
+
+        public async ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
+            IReadOnlyCollection<string> projectIds,
+            CancellationToken cancellationToken) => await GetInstalledAndTransitivePackagesAsync(projectIds, includeTransitiveOrigins: false, cancellationToken);
 
         public async ValueTask<IReadOnlyCollection<PackageDependencyInfo>> GetInstalledPackagesDependencyInfoAsync(
             string projectId,
@@ -677,7 +682,7 @@ namespace NuGet.PackageManagement.VisualStudio
 
         private static string CreateProjectActionId()
         {
-            return Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            return Guid.NewGuid().ToString("N", provider: null);
         }
 
         private async Task<IReadOnlyList<NuGetProject>> GetProjectsAsync(

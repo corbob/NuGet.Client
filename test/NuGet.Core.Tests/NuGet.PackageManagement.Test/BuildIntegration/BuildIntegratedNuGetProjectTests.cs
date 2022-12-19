@@ -124,11 +124,6 @@ namespace NuGet.PackageManagement.Test
                     Assert.True(restoreSummary.Success);
                     Assert.False(restoreSummary.NoOpRestore);
                 }
-
-                var filePath = DependencyGraphRestoreUtility.GetDefaultDGSpecFileName();
-
-                Assert.True(File.Exists(filePath));
-
             }
         }
 
@@ -191,10 +186,6 @@ namespace NuGet.PackageManagement.Test
                     {
                         Assert.False(restoreSummary.Success);
                     }
-
-                    var filePath = DependencyGraphRestoreUtility.GetDefaultDGSpecFileName();
-
-                    Assert.True(File.Exists(filePath));
                 }
             }
         }

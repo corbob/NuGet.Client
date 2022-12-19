@@ -353,7 +353,8 @@ EndGlobal";
             }
         }
 
-        [Theory]
+        // Skipped on macOS due to https://github.com/NuGet/Home/issues/12147
+        [PlatformTheory(Platform.Windows, Platform.Linux)]
         [InlineData("TRUE")]
         [InlineData("true")]
         public async Task DotnetRestore_WithUnSignedPackageAndSignatureValidationModeAsRequired_WithEnvVarTrue_Fails(string envVarValue)
@@ -435,7 +436,8 @@ EndGlobal";
             }
         }
 
-        [PlatformFact(Platform.Darwin)]
+        // Skipped on macOS due to https://github.com/NuGet/Home/issues/12147
+        [PlatformFact(Platform.Darwin, SkipPlatform = Platform.Darwin)]
         public async Task DotnetRestore_WithUnSignedPackageAndSignatureValidationModeAsRequired_WithEnvVarNameCaseSensitive_Succeed()
         {
             using (var pathContext = _msbuildFixture.CreateSimpleTestPathContext())
@@ -517,7 +519,8 @@ EndGlobal";
             }
         }
 
-        [PlatformFact(Platform.Linux, Platform.Darwin)]
+        // Skipped on macOS due to https://github.com/NuGet/Home/issues/12147
+        [PlatformFact(Platform.Linux, Platform.Darwin, SkipPlatform = Platform.Darwin)]
         public async Task DotnetRestore_WithUnSignedPackageAndSignatureValidationModeAsRequired_WithEnvVarValueCaseInsensitive_Fails()
         {
             using (var pathContext = _msbuildFixture.CreateSimpleTestPathContext())
@@ -918,15 +921,16 @@ EndGlobal";
         }
 
         [PlatformFact(Platform.Windows)]
-        public void DotnetRestore_LockedMode_Net5WithAndWithoutPlatform()
+        public void DotnetRestore_LockedMode_Net7WithAndWithoutPlatform()
         {
             using (var pathContext = _msbuildFixture.CreateSimpleTestPathContext())
             {
                 // Arrange
+                string tfm = Constants.DefaultTargetFramework.GetShortFolderName();
                 string projectFileContents =
-@"<Project Sdk=""Microsoft.NET.Sdk"">
+@$"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
-        <TargetFrameworks>net6.0;net6.0-windows</TargetFrameworks>
+        <TargetFrameworks>{tfm};{tfm}-windows</TargetFrameworks>
     </PropertyGroup>
 </Project>";
                 File.WriteAllText(Path.Combine(pathContext.SolutionRoot, "a.csproj"), projectFileContents);
@@ -942,9 +946,9 @@ EndGlobal";
                 // Assert
                 PackagesLockFile lockFile = PackagesLockFileFormat.Read(lockFilePath);
                 Assert.Equal(2, lockFile.Targets.Count);
-                Assert.Contains(lockFile.Targets, target => target.TargetFramework == FrameworkConstants.CommonFrameworks.Net60);
-                NuGetFramework net5win7 = NuGetFramework.Parse("net6.0-windows7.0");
-                Assert.Contains(lockFile.Targets, target => target.TargetFramework == net5win7);
+                Assert.Contains(lockFile.Targets, target => target.TargetFramework == Constants.DefaultTargetFramework);
+                NuGetFramework targetFramework = NuGetFramework.Parse($"{tfm}-windows7.0");
+                Assert.Contains(lockFile.Targets, target => target.TargetFramework == targetFramework);
             }
         }
 
@@ -1197,47 +1201,6 @@ EndGlobal";
                 library.Should().NotBeNull("The assets file is expect to have a single library");
                 library.CompileTimeAssemblies.Count.Should().Be(1, because: "The package has 1 compatible file");
                 library.CompileTimeAssemblies.Single().Properties.Should().Contain(new KeyValuePair<string, string>(LockFileItem.AliasesProperty, "Core"));
-            }
-        }
-
-        [PlatformFact(Platform.Windows)]
-        public void RestoreCommand_ProjectUsingCPVM_DisplaysCPVMInPreviewMessage()
-        {
-            using (var testDirectory = _msbuildFixture.CreateTestDirectory())
-            {
-                // Arrange
-                var projectName = "ClassLibrary1";
-                var workingDirectory = Path.Combine(testDirectory, projectName);
-                var projectFile = Path.Combine(workingDirectory, $"{projectName}.csproj");
-
-                _msbuildFixture.CreateDotnetNewProject(testDirectory.Path, projectName, " classlib", 60000);
-
-                using (var stream = new FileStream(projectFile, FileMode.Open, FileAccess.ReadWrite))
-                {
-                    var xml = XDocument.Load(stream);
-                    ProjectFileUtils.AddProperty(
-                        xml,
-                        "ManagePackageVersionsCentrally",
-                        "true");
-
-                    ProjectFileUtils.WriteXmlToFile(xml, stream);
-                }
-
-                // The test depends on the presence of these packages and their versions.
-                // Change to Directory.Packages.props when new cli that supports NuGet.props will be downloaded
-                var directoryPackagesPropsName = Path.Combine(workingDirectory, $"Directory.Build.props");
-                var directoryPackagesPropsContent = @"<Project>
-                        <PropertyGroup>
-                            <CentralPackageVersionsFileImported>true</CentralPackageVersionsFileImported>
-                        </PropertyGroup>
-                    </Project>";
-                File.WriteAllText(directoryPackagesPropsName, directoryPackagesPropsContent);
-
-                // Act
-                var result = _msbuildFixture.RunDotnet(workingDirectory, "restore");
-
-                // Assert
-                Assert.True(result.Output.Contains($"The project {projectFile} is using CentralPackageVersionManagement, a NuGet preview feature."));
             }
         }
 
@@ -2521,7 +2484,7 @@ EndGlobal";
                 using (var stream = File.Open(projectFile1, FileMode.Open, FileAccess.ReadWrite))
                 {
                     var xml = XDocument.Load(stream);
-                    ProjectFileUtils.SetTargetFrameworkForProject(xml, "TargetFrameworks", "net6.0");
+                    ProjectFileUtils.SetTargetFrameworkForProject(xml, "TargetFrameworks", Constants.DefaultTargetFramework.GetShortFolderName());
                     ProjectFileUtils.AddProperty(xml, "ManagePackageVersionsCentrally", "true");
 
                     ProjectFileUtils.AddItem(
@@ -2560,7 +2523,7 @@ EndGlobal";
                 var assetsFilePath = Path.Combine(workingDirectory1, "obj", "project.assets.json");
                 File.Exists(assetsFilePath).Should().BeTrue(because: "The assets file needs to exist");
                 var assetsFile = new LockFileFormat().Read(assetsFilePath);
-                LockFileTarget target = assetsFile.Targets.Single(e => e.TargetFramework.Equals(NuGetFramework.Parse("net6.0")) && string.IsNullOrEmpty(e.RuntimeIdentifier));
+                LockFileTarget target = assetsFile.Targets.Single(e => e.TargetFramework.Equals(Constants.DefaultTargetFramework) && string.IsNullOrEmpty(e.RuntimeIdentifier));
                 target.Libraries.Should().ContainSingle(e => e.Name.Equals("x"));
 
                 // Act another restore
@@ -2580,14 +2543,14 @@ EndGlobal";
             // Arrange
             using var pathContext = _msbuildFixture.CreateSimpleTestPathContext();
             await SimpleTestPackageUtility.CreateFolderFeedV3Async(pathContext.PackageSource, new SimpleTestPackageContext("x", "1.0.0"));
-
+            string tfm = Constants.DefaultTargetFramework.GetShortFolderName();
             string projectFileContents =
-@"<Project Sdk=""Microsoft.NET.Sdk"">
+@$"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1;{tfm}</TargetFrameworks>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Condition=""'$(TargetFramework)' == 'net6.0'"" Include=""x"" Version=""1.0.0"" />
+        <PackageReference Condition=""'$(TargetFramework)' == '{tfm}'"" Include=""x"" Version=""1.0.0"" />
         <PackageReference Condition=""'$(TargetFramework)' == 'netstandard2.1'"" Include=""DoesNotExist"" Version=""1.0.0"" />
     </ItemGroup>
 </Project>";
@@ -2595,7 +2558,7 @@ EndGlobal";
 
             // Act
             var additionalArgs = useStaticGraphEvaluation ? "/p:RestoreUseStaticGraphEvaluation=true" : string.Empty;
-            var result = _msbuildFixture.RunDotnet(pathContext.SolutionRoot, args: $"restore a.csproj {additionalArgs} /p:TargetFramework=\"net6.0\"", ignoreExitCode: true);
+            var result = _msbuildFixture.RunDotnet(pathContext.SolutionRoot, args: $"restore a.csproj {additionalArgs} /p:TargetFramework=\"{tfm}\"", ignoreExitCode: true);
 
             // Assert
             result.Success.Should().BeTrue(because: result.AllOutput);
@@ -2625,19 +2588,20 @@ EndGlobal";
             Directory.CreateDirectory(projectBWorkingDirectory);
             var projectAPath = Path.Combine(projectAWorkingDirectory, "a.csproj");
             var projectBPath = Path.Combine(projectBWorkingDirectory, "b.csproj");
+            string tfm = Constants.DefaultTargetFramework.GetShortFolderName();
             string projectAFileContents =
 @$"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
+        <TargetFrameworks>netstandard2.1;{tfm}</TargetFrameworks>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Condition=""'$(TargetFramework)' == 'net6.0'"" Include=""..\b\b.csproj"" Version=""1.0.0"" />
+        <ProjectReference Condition=""'$(TargetFramework)' == '{tfm}'"" Include=""..\b\b.csproj"" Version=""1.0.0"" />
     </ItemGroup>
 </Project>";
             string projectBFileContents =
 @$"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
-        <TargetFrameworks>net6.0</TargetFrameworks>
+        <TargetFrameworks>{tfm}</TargetFrameworks>
     </PropertyGroup>
 </Project>";
             File.WriteAllText(projectAPath, projectAFileContents);
@@ -2645,7 +2609,7 @@ EndGlobal";
 
             // Act
             var additionalArgs = useStaticGraphEvaluation ? "/p:RestoreUseStaticGraphEvaluation=true" : string.Empty;
-            var result = _msbuildFixture.RunDotnet(projectAWorkingDirectory, args: $"restore a.csproj /p:TargetFramework=\"net6.0\" /p:RestoreRecursive=\"false\" {additionalArgs}", ignoreExitCode: true);
+            var result = _msbuildFixture.RunDotnet(projectAWorkingDirectory, args: $"restore a.csproj /p:TargetFramework=\"{tfm}\" /p:RestoreRecursive=\"false\" {additionalArgs}", ignoreExitCode: true);
 
             // Assert
             result.Success.Should().BeTrue(because: result.AllOutput);
@@ -2670,15 +2634,15 @@ EndGlobal";
             using var pathContext = _msbuildFixture.CreateSimpleTestPathContext();
             var additionalSource = Path.Combine(pathContext.SolutionRoot, "additionalSource");
             await SimpleTestPackageUtility.CreateFolderFeedV3Async(additionalSource, new SimpleTestPackageContext("x", "1.0.0"));
-
+            string tfm = Constants.DefaultTargetFramework.GetShortFolderName();
             string projectFileContents =
 @$"<Project Sdk=""Microsoft.NET.Sdk"">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.1;net6.0</TargetFrameworks>
-        <RestoreAdditionalProjectSources Condition=""'$(TargetFramework)' == 'net6.0'"">{additionalSource}</RestoreAdditionalProjectSources>
+        <TargetFrameworks>netstandard2.1;{tfm}</TargetFrameworks>
+        <RestoreAdditionalProjectSources Condition=""'$(TargetFramework)' == '{tfm}'"">{additionalSource}</RestoreAdditionalProjectSources>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Condition=""'$(TargetFramework)' == 'net6.0'"" Include=""x"" Version=""1.0.0"" />
+        <PackageReference Condition=""'$(TargetFramework)' == '{tfm}'"" Include=""x"" Version=""1.0.0"" />
         <PackageReference Condition=""'$(TargetFramework)' == 'netstandard2.1'"" Include=""DoesNotExist"" Version=""1.0.0"" />
     </ItemGroup>
 </Project>";
@@ -2686,7 +2650,7 @@ EndGlobal";
 
             // Act
             var additionalArgs = useStaticGraphEvaluation ? "/p:RestoreUseStaticGraphEvaluation=true" : string.Empty;
-            var result = _msbuildFixture.RunDotnet(pathContext.SolutionRoot, args: $"restore a.csproj /p:TargetFramework=\"net6.0\" {additionalArgs}", ignoreExitCode: true);
+            var result = _msbuildFixture.RunDotnet(pathContext.SolutionRoot, args: $"restore a.csproj /p:TargetFramework=\"{tfm}\" {additionalArgs}", ignoreExitCode: true);
 
             // Assert
             result.Success.Should().BeTrue(because: result.AllOutput);
@@ -2702,7 +2666,7 @@ EndGlobal";
             net50Target.Libraries.Single().Name.Should().Be("x");
             assetsFile.PackageSpec.RestoreMetadata.Sources.Select(e => e.Source).Should().Contain(additionalSource);
 
-            var condition = @"<ItemGroup Condition="" '$(TargetFramework)' == 'net6.0' AND '$(ExcludeRestorePackageImports)' != 'true' "">";
+            var condition = @$"<ItemGroup Condition="" '$(TargetFramework)' == '{tfm}' AND '$(ExcludeRestorePackageImports)' != 'true' "">";
             var targetsFilePath = Path.Combine(pathContext.SolutionRoot, "obj", "a.csproj.nuget.g.props");
             var allTargets = File.ReadAllText(targetsFilePath);
             allTargets.Should().Contain(condition);

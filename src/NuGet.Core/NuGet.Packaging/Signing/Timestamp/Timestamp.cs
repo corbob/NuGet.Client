@@ -133,7 +133,7 @@ namespace NuGet.Packaging.Signing
             flags |= VerificationUtility.ValidateTimestamp(this, signature, treatIssueAsError, issues, SigningSpecifications.V1);
             if (flags == SignatureVerificationStatusFlags.NoErrors)
             {
-                issues.Add(SignatureLog.InformationLog(string.Format(CultureInfo.CurrentCulture, Strings.TimestampValue, GeneralizedTime.LocalDateTime.ToString()) + Environment.NewLine));
+                issues.Add(SignatureLog.InformationLog(string.Format(CultureInfo.CurrentCulture, Strings.TimestampValue, GeneralizedTime.LocalDateTime.ToString(CultureInfo.CurrentCulture)) + Environment.NewLine));
 
                 issues.Add(SignatureLog.InformationLog(string.Format(CultureInfo.CurrentCulture,
                     Strings.VerificationTimestamperCertDisplay,
@@ -142,7 +142,7 @@ namespace NuGet.Packaging.Signing
 
                 var certificateExtraStore = SignedCms.Certificates;
 
-                using (var chainHolder = new X509ChainHolder())
+                using (X509ChainHolder chainHolder = X509ChainHolder.CreateForTimestamping())
                 {
                     var chain = chainHolder.Chain;
 

@@ -104,12 +104,11 @@ namespace NuGet.PackageManagement.VisualStudio
         /// </summary>
         public override async Task<IEnumerable<PackageReference>> GetInstalledPackagesAsync(CancellationToken token)
         {
-            ProjectPackages packages = await GetInstalledAndTransitivePackagesAsync(token);
+            ProjectPackages packages = await GetInstalledAndTransitivePackagesAsync(includeTransitiveOrigins: false, token);
             return packages.InstalledPackages;
         }
 
-        /// <inheritdoc/>
-        public virtual async Task<ProjectPackages> GetInstalledAndTransitivePackagesAsync(CancellationToken token)
+        public async Task<ProjectPackages> GetInstalledAndTransitivePackagesAsync(bool includeTransitiveOrigins, CancellationToken token)
         {
             PackageSpec packageSpec = null;
             string assetsPath = null;
@@ -172,12 +171,22 @@ namespace NuGet.PackageManagement.VisualStudio
 
             CounterfactualLoggers.TransitiveDependencies.EmitIfNeeded(); // Emit only one event per VS session
             IEnumerable<TransitivePackageReference> transitivePackagesWithOrigins;
-            if (await ExperimentUtility.IsTransitiveOriginExpEnabled.GetValueAsync(token))
+            if (await ExperimentUtility.IsTransitiveOriginExpEnabled.GetValueAsync(token) && includeTransitiveOrigins)
             {
                 // Compute Transitive Origins
                 Dictionary<string, TransitiveEntry> transitiveOrigins;
-                if (IsInstalledAndTransitiveComputationNeeded || TransitiveOriginsCache == null)
+                if (IsInstalledAndTransitiveComputationNeeded // Cache invalidation
+                    || TransitiveOriginsCache == null // If any data race left the cache as null
+                    || (!TransitiveOriginsCache.Any() && calculatedTransitivePackages.Any())) // We have transitive packages, but no transitive origins and the call is requesting transitive origins
                 {
+                    // Special case: Installed and Transitive lists (<see cref="InstalledPackages" />, <see cref="TransitivePackages" /> respectively) are populated,
+                    // but Transitive Origins Cache <see cref="TransitiveOriginsCache" /> is not populated.
+                    // Then, we need targets section from project.assets.json file on disk to populate Transitive Origins cache
+                    if (targetsList == null)
+                    {
+                        targetsList = (await GetTargetsListAsync(assetsPath, token))?.ToList();
+                    }
+
                     transitiveOrigins = calculatedTransitivePackages.Any() ? ComputeTransitivePackageOrigins(calculatedInstalledPackages, targetsList, token) : new Dictionary<string, TransitiveEntry>();
                 }
                 else
@@ -222,6 +231,9 @@ namespace NuGet.PackageManagement.VisualStudio
             return new ProjectPackages(calculatedInstalledPackages, transitivePkgsResult);
         }
 
+        /// <inheritdoc/>
+        public virtual async Task<ProjectPackages> GetInstalledAndTransitivePackagesAsync(CancellationToken token) => await GetInstalledAndTransitivePackagesAsync(includeTransitiveOrigins: false, token);
+
         protected abstract IEnumerable<PackageReference> ResolvedInstalledPackagesList(IEnumerable<LibraryDependency> libraries, NuGetFramework targetFramework, IReadOnlyList<LockFileTarget> targets, T installedPackages);
 
         protected abstract IReadOnlyList<PackageReference> ResolvedTransitivePackagesList(NuGetFramework targetFramework, IReadOnlyList<LockFileTarget> targets, T installedPackages, T transitivePackages);
@@ -244,7 +256,7 @@ namespace NuGet.PackageManagement.VisualStudio
             IReadOnlyList<LockFileTarget> targets)
         {
             return libraries
-                .Where(library => library.LibraryRange.TypeConstraint == LibraryDependencyTarget.Package)
+                .Where(library => (library.LibraryRange.TypeConstraint & LibraryDependencyTarget.Package) != 0)
                 .Select(library => new BuildIntegratedPackageReference(library, targetFramework, GetPackageReferenceUtility.UpdateResolvedVersion(library, targetFramework, targets, installedPackages)));
         }
 

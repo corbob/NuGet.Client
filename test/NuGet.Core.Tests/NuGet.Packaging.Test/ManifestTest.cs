@@ -18,6 +18,7 @@ using Chocolatey.NuGet.Frameworks;
 //////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
+using Test.Utility;
 using Xunit;
 
 namespace NuGet.Packaging.Test

@@ -526,7 +526,7 @@ namespace NuGet.ProjectModel
             });
         }
 
-        internal static void ReadCentralTransitveDependencyGroup(
+        internal static void ReadCentralTransitiveDependencyGroup(
             JsonTextReader jsonReader,
             IList<LibraryDependency> results,
             string packageSpecPath)
@@ -815,6 +815,7 @@ namespace NuGet.ProjectModel
                     {
                         throw FileFormatException.Create(
                             string.Format(
+                                CultureInfo.CurrentCulture,
                                 Strings.Log_InvalidImportFramework,
                                 import,
                                 PackageSpec.PackageSpecFileName),
@@ -1509,7 +1510,7 @@ namespace NuGet.ProjectModel
                     else
                     {
                         throw FileFormatException.Create(
-                            string.Format("The value of a script in '{0}' can only be a string or an array of strings", PackageSpec.PackageSpecFileName),
+                            string.Format(CultureInfo.CurrentCulture, "The value of a script in '{0}' can only be a string or an array of strings", PackageSpec.PackageSpecFileName),
                             jsonReader.LineNumber,
                             jsonReader.LinePosition,
                             packageSpec.FilePath);

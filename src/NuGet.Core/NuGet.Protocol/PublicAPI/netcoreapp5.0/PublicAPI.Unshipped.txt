@@ -1,22 +1,21 @@
-NuGet.Protocol.Core.Types.FatalProtocolException.FatalProtocolException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-NuGet.Protocol.Core.Types.NuGetProtocolException.NuGetProtocolException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-NuGet.Protocol.Core.Types.RetriableProtocolException.RetriableProtocolException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-NuGet.Protocol.HttpSource.ProcessHttpStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.HttpSourceResource.OverrideHttpSource(NuGet.Protocol.IHttpSource source) -> void
-NuGet.Protocol.IHttpSource
-NuGet.Protocol.IHttpSource.GetAsync<T>(NuGet.Protocol.HttpSourceCachedRequest request, System.Func<NuGet.Protocol.HttpSourceResult, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.GetJObjectAsync(NuGet.Protocol.HttpSourceRequest request, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<Newtonsoft.Json.Linq.JObject>
-NuGet.Protocol.IHttpSource.HttpCacheDirectory.get -> string
-NuGet.Protocol.IHttpSource.HttpCacheDirectory.set -> void
-NuGet.Protocol.IHttpSource.PackageSource.get -> string
-NuGet.Protocol.IHttpSource.ProcessHttpStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.ProcessResponseAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.ProcessResponseAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.IO.Stream, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.IO.Stream, System.Threading.Tasks.Task<T>> processAsync, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
-NuGet.Protocol.IHttpSource.RetryHandler.get -> NuGet.Protocol.IHttpRetryHandler
-NuGet.Protocol.IHttpSource.RetryHandler.set -> void
-NuGet.Protocol.InvalidCacheProtocolException.InvalidCacheProtocolException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+*REMOVED* abstract NuGet.Protocol.Core.Types.DependencyInfoResource.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
+*REMOVED* abstract NuGet.Protocol.Core.Types.DependencyInfoResource.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
+*REMOVED* override NuGet.Protocol.DependencyInfoResourceV2Feed.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
+*REMOVED* override NuGet.Protocol.DependencyInfoResourceV2Feed.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
+*REMOVED* override NuGet.Protocol.DependencyInfoResourceV3.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
+*REMOVED* override NuGet.Protocol.DependencyInfoResourceV3.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
+*REMOVED* override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
+*REMOVED* override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
+*REMOVED* override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworks() -> System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>
+*REMOVED* override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworksAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>>
+NuGet.Protocol.Core.Types.DownloadCache
+NuGet.Protocol.Core.Types.DownloadCache.Checksum.get -> string
+NuGet.Protocol.Core.Types.DownloadCache.Checksum.set -> void
+NuGet.Protocol.Core.Types.DownloadCache.DownloadCache() -> void
+NuGet.Protocol.Core.Types.DownloadCache.FileName.get -> string
+NuGet.Protocol.Core.Types.DownloadCache.FileName.set -> void
+NuGet.Protocol.Core.Types.DownloadCache.OriginalUrl.get -> string
+NuGet.Protocol.Core.Types.DownloadCache.OriginalUrl.set -> void
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.DownloadCache.get -> System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.DownloadCache>
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.DownloadCacheDate.get -> System.DateTime?
 NuGet.Protocol.Core.Types.IPackageSearchMetadata.IsApproved.get -> bool
@@ -72,14 +71,21 @@ NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetada
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.PackageValidationResultStatus.set -> void
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.get -> int?
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.set -> void
-NuGet.Protocol.Core.Types.DownloadCache
-NuGet.Protocol.Core.Types.DownloadCache.Checksum.get -> string
-NuGet.Protocol.Core.Types.DownloadCache.Checksum.set -> void
-NuGet.Protocol.Core.Types.DownloadCache.DownloadCache() -> void
-NuGet.Protocol.Core.Types.DownloadCache.FileName.get -> string
-NuGet.Protocol.Core.Types.DownloadCache.FileName.set -> void
-NuGet.Protocol.Core.Types.DownloadCache.OriginalUrl.get -> string
-NuGet.Protocol.Core.Types.DownloadCache.OriginalUrl.set -> void
+NuGet.Protocol.HttpSource.ProcessHttpStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.HttpSourceResource.OverrideHttpSource(NuGet.Protocol.IHttpSource source) -> void
+NuGet.Protocol.IHttpSource
+NuGet.Protocol.IHttpSource.GetAsync<T>(NuGet.Protocol.HttpSourceCachedRequest request, System.Func<NuGet.Protocol.HttpSourceResult, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.GetJObjectAsync(NuGet.Protocol.HttpSourceRequest request, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<Newtonsoft.Json.Linq.JObject>
+NuGet.Protocol.IHttpSource.HttpCacheDirectory.get -> string
+NuGet.Protocol.IHttpSource.HttpCacheDirectory.set -> void
+NuGet.Protocol.IHttpSource.PackageSource.get -> string
+NuGet.Protocol.IHttpSource.ProcessHttpStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.ProcessResponseAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.ProcessResponseAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.Net.Http.HttpResponseMessage, System.Threading.Tasks.Task<T>> processAsync, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.IO.Stream, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.IO.Stream, System.Threading.Tasks.Task<T>> processAsync, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+NuGet.Protocol.IHttpSource.RetryHandler.get -> NuGet.Protocol.IHttpRetryHandler
+NuGet.Protocol.IHttpSource.RetryHandler.set -> void
 NuGet.Protocol.LocalPackageSearchMetadata.DownloadCache.get -> System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.DownloadCache>
 NuGet.Protocol.LocalPackageSearchMetadata.DownloadCacheDate.get -> System.DateTime?
 NuGet.Protocol.LocalPackageSearchMetadata.GetNuspecReader.get -> NuGet.Packaging.NuspecReader
@@ -182,13 +188,3 @@ override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackage(NuGet.Packagi
 override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackages(string packageId, Chocolatey.NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
 override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworks() -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
 override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworksAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>>
-*REMOVED* abstract NuGet.Protocol.Core.Types.DependencyInfoResource.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
-*REMOVED* abstract NuGet.Protocol.Core.Types.DependencyInfoResource.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
-*REMOVED* override NuGet.Protocol.DependencyInfoResourceV2Feed.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
-*REMOVED* override NuGet.Protocol.DependencyInfoResourceV2Feed.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
-*REMOVED* override NuGet.Protocol.DependencyInfoResourceV3.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
-*REMOVED* override NuGet.Protocol.DependencyInfoResourceV3.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
-*REMOVED* override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackage(NuGet.Packaging.Core.PackageIdentity package, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>
-*REMOVED* override NuGet.Protocol.LocalDependencyInfoResource.ResolvePackages(string packageId, NuGet.Frameworks.NuGetFramework projectFramework, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
-*REMOVED* override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworks() -> System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>
-*REMOVED* override NuGet.Protocol.Plugins.PluginPackageReader.GetSupportedFrameworksAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>>

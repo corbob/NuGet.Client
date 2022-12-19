@@ -17,6 +17,7 @@ using Chocolatey.NuGet.Frameworks;
 //////////////////////////////////////////////////////////
 using NuGet.Protocol;
 using NuGet.Test.Utility;
+using Test.Utility;
 using Xunit;
 
 namespace NuGet.CommandLine.Test

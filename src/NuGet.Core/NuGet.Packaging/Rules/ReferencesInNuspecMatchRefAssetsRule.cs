@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -144,7 +145,7 @@ namespace NuGet.Packaging.Rules
                 {
                     foreach (var item in file.MissingItems)
                     {
-                        message.AppendLine(string.Format(_addToRefFormat, item, file.Tfm));
+                        message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToRefFormat, item, file.Tfm));
                     }
                 }
 
@@ -154,11 +155,11 @@ namespace NuGet.Packaging.Rules
                     {
                         if (reference.Tfm.Equals("any"))
                         {
-                            message.AppendLine(string.Format(_addToNuspecNoTfmFormat, item));
+                            message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToNuspecNoTfmFormat, item));
                         }
                         else
                         {
-                            message.AppendLine(string.Format(_addToNuspecFormat, item, reference.Tfm));
+                            message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToNuspecFormat, item, reference.Tfm));
                         }
                     }
                 }

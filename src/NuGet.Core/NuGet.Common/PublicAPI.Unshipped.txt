@@ -1,11 +1,6 @@
 NuGet.Common.IPackLogMessage.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
-NuGet.Common.NuGetLogCode.NU1504 = 1504 -> NuGet.Common.NuGetLogCode
-NuGet.Common.NuGetLogCode.NU1505 = 1505 -> NuGet.Common.NuGetLogCode
-NuGet.Common.NuGetLogCode.NU1506 = 1506 -> NuGet.Common.NuGetLogCode
-NuGet.Common.NuGetLogCode.NU1803 = 1803 -> NuGet.Common.NuGetLogCode
 NuGet.Common.PackagingLogMessage.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
 static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage
-static NuGet.Common.UriUtility.IsNuGetOrg(string source) -> bool
 *REMOVED* NuGet.Common.IPackLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
 *REMOVED* NuGet.Common.PackagingLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
 *REMOVED* static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage

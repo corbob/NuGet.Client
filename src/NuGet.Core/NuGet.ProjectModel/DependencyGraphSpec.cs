@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -25,7 +26,7 @@ namespace NuGet.ProjectModel
 
         public static string GetDGSpecFileName(string projectName)
         {
-            return string.Format(DGSpecFileNameExtension, projectName);
+            return string.Format(CultureInfo.InvariantCulture, DGSpecFileNameExtension, projectName);
         }
 
         public DependencyGraphSpec()
@@ -280,7 +281,14 @@ namespace NuGet.ProjectModel
         public void Save(string path)
         {
             using (var fileStream = new FileStream(path, FileMode.Create))
-            using (var textWriter = new StreamWriter(fileStream))
+            {
+                Save(fileStream);
+            }
+        }
+
+        public void Save(Stream stream)
+        {
+            using (var textWriter = new StreamWriter(stream))
             using (var jsonWriter = new JsonTextWriter(textWriter))
             using (var writer = new RuntimeModel.JsonObjectWriter(jsonWriter))
             {

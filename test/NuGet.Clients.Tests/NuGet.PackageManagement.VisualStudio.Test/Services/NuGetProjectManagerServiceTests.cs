@@ -621,7 +621,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.True(result.Success);
 
             // Act
-            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, CancellationToken.None);
+            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, includeTransitiveOrigins: true, CancellationToken.None);
 
             // Assert
             installedAndTransitive.InstalledPackages.Should().HaveCount(1);
@@ -772,7 +772,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             RestoreResult result = await command.ExecuteAsync();
             await result.CommitAsync(logger, CancellationToken.None);
             Assert.True(result.Success);
-            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, CancellationToken.None);
+            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, includeTransitiveOrigins: true, CancellationToken.None);
 
             // Verify transitive package B
             var transitivePackageB = installedAndTransitive.TransitivePackages.Where(pkg => pkg.Identity.Id == "packageB").First();
@@ -876,7 +876,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             CounterfactualLoggers.TransitiveDependencies.Reset();
 
             // Act
-            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, CancellationToken.None);
+            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, includeTransitiveOrigins: true, CancellationToken.None);
 
             var packagesB = installedAndTransitive
                 .TransitivePackages
@@ -982,6 +982,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             // Act
             var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(
                 new[] { projectId },
+                includeTransitiveOrigins: true,
                 CancellationToken.None);
 
             Assert.Equal(2, installedAndTransitive.InstalledPackages.Count);
@@ -1134,7 +1135,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.True(result.Success);
             Assert.True(File.Exists(pajFilepath));
 
-            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, CancellationToken.None);
+            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, includeTransitiveOrigins: true, CancellationToken.None);
 
             // Act I
             var topPackagesB = installedAndTransitive
@@ -1320,7 +1321,7 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.True(File.Exists(pajFilepath));
 
             // Act
-            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, CancellationToken.None);
+            var installedAndTransitive = await _projectManager.GetInstalledAndTransitivePackagesAsync(new[] { projectId }, includeTransitiveOrigins: true, CancellationToken.None);
 
             // Act I
             var topPackagesB = installedAndTransitive

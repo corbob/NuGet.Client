@@ -24,6 +24,7 @@
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UsePublicApiAnalyzer>false</UsePublicApiAnalyzer>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(IsVsixBuild)' == 'true' ">
@@ -48,6 +49,7 @@
 
   <ItemGroup>
     <None Include="App.config" Condition=" '$(TargetFramework)' == '$(NETFXTargetFramework)' " />
+    <None Include="app.manifest" />
   </ItemGroup>
 
   <ItemGroup>

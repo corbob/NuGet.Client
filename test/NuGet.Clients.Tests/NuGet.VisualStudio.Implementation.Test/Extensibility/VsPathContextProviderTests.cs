@@ -4,8 +4,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Threading;
@@ -28,7 +30,9 @@ using NuGet.ProjectManagement.Projects;
 using NuGet.ProjectModel;
 using NuGet.Test.Utility;
 using NuGet.Versioning;
+using NuGet.VisualStudio.Implementation.Exceptions;
 using NuGet.VisualStudio.Implementation.Extensibility;
+using NuGet.VisualStudio.Implementation.Resources;
 using NuGet.VisualStudio.Telemetry;
 using Xunit;
 
@@ -283,10 +287,9 @@ namespace NuGet.VisualStudio.Implementation.Test.Extensibility
                             NuGetFramework.AnyFramework)
                     });
 
-                // Act
-                var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => target.CreatePathContextAsync(project.Object, CancellationToken.None));
-
-                // Assert
+                // Act & Assert
+                var exception = await Assert.ThrowsAsync<ProjectNotRestoredException>(() => target.CreatePathContextAsync(project.Object, CancellationToken.None));
+                Assert.Equal(0, _telemetryProvider.Invocations.Count);
                 Assert.Contains(projectUniqueName, exception.Message);
             }
         }
@@ -442,6 +445,7 @@ namespace NuGet.VisualStudio.Implementation.Test.Extensibility
         [Fact]
         public async Task CreatePathContextAsync_WithUnrestoredPackageReference_Throws()
         {
+            // Arrange
             var target = new VsPathContextProvider(
                 Mock.Of<ISettings>(),
                 Mock.Of<IVsSolutionManager>(),
@@ -453,9 +457,8 @@ namespace NuGet.VisualStudio.Implementation.Test.Extensibility
 
             var project = new TestPackageReferenceProject(projectUniqueName);
 
-            // Act
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => target.CreatePathContextAsync(project, CancellationToken.None));
-
+            // Assert
+            var exception = await Assert.ThrowsAsync<ProjectNotRestoredException>(() => target.CreatePathContextAsync(project, CancellationToken.None));
             Assert.Contains(projectUniqueName, exception.Message);
         }
 

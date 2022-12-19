@@ -251,7 +251,7 @@ namespace NuGet.Commands
             var manifest = new Manifest(new ManifestMetadata(builder), files: null);
             string tempOutputPath = Path.Combine(
                 NuGetEnvironment.GetFolderPath(NuGetFolderPath.Temp),
-                Path.GetFileName(resolvedNuSpecOutputPath));
+                Path.GetRandomFileName());
 
             using (var stream = new FileStream(tempOutputPath, FileMode.Create))
             {
@@ -277,7 +277,7 @@ namespace NuGet.Commands
             // to the package directory with a guid would break some build tools caching
             string tempOutputPath = Path.Combine(
                 NuGetEnvironment.GetFolderPath(NuGetFolderPath.Temp),
-                Path.GetFileName(sha512OutputPath));
+                Path.GetRandomFileName());
 
             _packArgs.Logger.Log(
                 PackagingLogMessage.CreateMessage(

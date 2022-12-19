@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -135,6 +134,14 @@ namespace NuGet.Test.Utility
                 .Select(Path.GetFileName) // just the folder name (version string)
                 .OrderByDescending(path => NuGetVersion.Parse(Path.GetFileName(path))) // in case there are multiple matching SDKs, selected the highest version
                 .FirstOrDefault();
+
+            if (selectedVersion == null)
+            {
+                selectedVersion = Directory.EnumerateDirectories(SdkDirSource)
+                    .Select(Path.GetFileName)
+                    .OrderByDescending(directoryName => NuGetVersion.Parse(directoryName))
+                    .FirstOrDefault();
+            }
 
             if (selectedVersion == null)
             {
@@ -287,7 +294,7 @@ project TFMs found: {string.Join(", ", compiledTfms.Keys.Select(k => k.ToString(
                 {
                     File.Copy(sourceFileName: Path.Combine(packProjectCoreArtifactsDirectory.FullName, "ilmerge", packFileName),
                         destFileName: Path.Combine(packAssemblyDestinationDirectory, packFileName),
-                        overwrite:true);
+                        overwrite: true);
                 }
             }
             else
