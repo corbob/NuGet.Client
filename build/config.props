@@ -54,16 +54,34 @@
   <!-- Nuspec defaults -->
   <PropertyGroup>
     <Authors>Microsoft</Authors>
-    <PackageProjectUrl>https://aka.ms/nugetprj</PackageProjectUrl>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <PackageProjectUrl>https://github.com/chocolatey/nuget.client</PackageProjectUrl>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->    
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/NuGet/NuGet.Client</RepositoryUrl>
-    <PackageTags>nuget</PackageTags>
-    <Description>NuGet client library.</Description>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <RepositoryUrl>https://github.com/chocolatey/nuget.client</RepositoryUrl>
+    <PackageTags>nuget;chocolatey</PackageTags>
+    <Description>Chocolatey NuGet client library.</Description>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->    
     <Copyright>&#169; Microsoft Corporation. All rights reserved.</Copyright>
     <Serviceable>true</Serviceable>
-    <PackageIcon>icon.png</PackageIcon>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <PackageIcon>chocolateyicon.png</PackageIcon>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
   </PropertyGroup>
 
   <PropertyGroup>
