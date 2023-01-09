@@ -13,6 +13,17 @@ namespace NuGet.Common.Migrations
 
         public static void Run()
         {
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            // We don't want any chance of these migrations happening, even though they don't currently get called via code that Chocolatey CLI uses.
+            return;
+#pragma warning disable CS0162 // Unreachable code detected
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+
             string migrationsDirectory = GetMigrationsDirectory();
             var expectedMigrationFilename = Path.Combine(migrationsDirectory, MaxMigrationFilename);
 
@@ -42,6 +53,14 @@ namespace NuGet.Common.Migrations
                     }
                 }
             }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+#pragma warning disable CS0162 // Unreachable code detected
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             static bool WaitForMutex(Mutex mutex)
             {
