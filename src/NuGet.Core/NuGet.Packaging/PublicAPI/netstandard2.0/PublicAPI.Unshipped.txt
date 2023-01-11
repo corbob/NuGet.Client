@@ -211,3 +211,4 @@ virtual NuGet.Packaging.PackageReaderBase.GetSupportedFrameworksAsync(System.Thr
 *REMOVED* static NuGet.Packaging.FrameworksExtensions.GetFrameworkString(this NuGet.Frameworks.NuGetFramework self) -> string
 *REMOVED* virtual NuGet.Packaging.PackageReaderBase.GetSupportedFrameworks() -> System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>
 *REMOVED* virtual NuGet.Packaging.PackageReaderBase.GetSupportedFrameworksAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>>
+static NuGet.Packaging.CollectionExtensions.RemoveAll<T>(this System.Collections.Generic.ICollection<T> collection, System.Func<T, bool> match) -> int
