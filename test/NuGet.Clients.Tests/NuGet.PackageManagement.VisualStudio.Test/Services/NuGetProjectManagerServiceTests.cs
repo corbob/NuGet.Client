@@ -368,7 +368,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             }
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task GetInstalledPackagesAsync_WhenProjectReturnsNullPackageReference_NullIsRemoved()
         {
             const string projectName = "a";
@@ -799,7 +805,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
                 x => Assert.Equal(x.Identity, new PackageIdentity("packageX", NuGetVersion.Parse("3.0.0"))));
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         private async Task GetInstalledAndTransitivePackagesAsync_WithCpsPackageReferenceProject_OneTransitiveReferenceAndEmitsCounterfactualTelemetryAsync()
         {
             // packageA_2.0.0 -> packageB_1.0.0

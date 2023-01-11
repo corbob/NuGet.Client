@@ -2692,7 +2692,13 @@ namespace NuGet.Commands.Test
             }
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task ExecuteAsync_WithSinglePackage_PopulatesCorrectTelemetry()
         {
             // Arrange
@@ -2765,7 +2771,13 @@ namespace NuGet.Commands.Test
             projectInformationEvent["FallbackFoldersCount"].Should().Be(0);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task ExecuteAsync_WithSinglePackage_WhenNoOping_PopulatesCorrectTelemetry()
         {
             // Arrange
@@ -2841,7 +2853,13 @@ namespace NuGet.Commands.Test
             projectInformationEvent["FallbackFoldersCount"].Should().Be(0);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task ExecuteAsync_WithPartiallyPopulatedGlobalPackagesFolder_PopulatesNewlyInstalledPackagesTelemetry()
         {
             // Arrange

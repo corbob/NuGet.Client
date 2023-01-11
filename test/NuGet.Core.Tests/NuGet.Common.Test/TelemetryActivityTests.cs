@@ -35,7 +35,13 @@ namespace NuGet.Common.Test
             TelemetryActivity.NuGetTelemetryService = _telemetryService.Object;
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_WithOperationIdAndWithoutParentId_EmitsOperationIdAndNotParentId()
         {
             Guid operationId;
@@ -49,7 +55,13 @@ namespace NuGet.Common.Test
             Assert.Equal(operationId.ToString(), _telemetryEvent["OperationId"]);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_WithOperationIdAndParentId_EmitsOperationIdAndParentId()
         {
             var parentId = Guid.NewGuid();
@@ -64,7 +76,13 @@ namespace NuGet.Common.Test
             Assert.Equal(operationId.ToString(), _telemetryEvent["OperationId"]);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_WithIntervalMeasure_EmitsIntervalMeasure()
         {
             const string measureName = "testInterval";
@@ -83,7 +101,13 @@ namespace NuGet.Common.Test
             Assert.True(actualCount >= secondsToWait, $"The telemetry duration count should at least be {secondsToWait} seconds.");
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_WithEmptyParentId_EmitsNoParentId()
         {
             var parentId = Guid.Empty;
@@ -95,7 +119,13 @@ namespace NuGet.Common.Test
             Assert.Null(_telemetryEvent["ParentId"]);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_Always_EmitsStartTime()
         {
             using (var telemetry = TelemetryActivity.Create(CreateNewTelemetryEvent()))
@@ -109,7 +139,13 @@ namespace NuGet.Common.Test
             TelemetryUtility.VerifyDateTimeFormat(startTime);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_Always_EmitsEndTime()
         {
             using (var telemetry = TelemetryActivity.Create(CreateNewTelemetryEvent()))
@@ -123,7 +159,13 @@ namespace NuGet.Common.Test
             TelemetryUtility.VerifyDateTimeFormat(endTime);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_Always_EmitsDuration()
         {
             using (var telemetry = TelemetryActivity.Create(CreateNewTelemetryEvent()))
@@ -156,7 +198,13 @@ namespace NuGet.Common.Test
             Assert.True(_activityDisposed);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_IndependentInterval_EmitsIntervalMeasure()
         {
             const string measureName = nameof(Dispose_IndependentInterval_EmitsIntervalMeasure);
@@ -176,7 +224,13 @@ namespace NuGet.Common.Test
             Assert.True(actualCount >= secondsToWait, $"The telemetry duration count should at least be {secondsToWait} seconds.");
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Dispose_WithIndependentInterval_DoesNotClashWithNonoverlappingInterval()
         {
             const string independentInterval = "independentTestInterval";

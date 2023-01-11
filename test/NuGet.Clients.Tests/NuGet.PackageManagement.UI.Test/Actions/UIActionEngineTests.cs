@@ -214,7 +214,13 @@ namespace NuGet.PackageManagement.UI.Test
             }
         }
 
-        [Theory]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Theory(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         [MemberData(nameof(GetInstallActionTestData))]
         public async Task CreateInstallAction_OnInstallingProject_EmitsPkgWasTransitiveTelemetryAndTabAndIsSolutionPropertiesAsync(ContractsItemFilter activeTab, bool isSolutionLevel, string packageIdToInstall, bool? expectedPkgWasTransitive)
         {
