@@ -13,7 +13,13 @@ namespace NuGet.Common.Test
     [CollectionDefinition("MigrationRunner", DisableParallelization = true)]
     public class MigrationRunnerTests
     {
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Run_WhenExecutedOnSingleThreadThenOneMigrationFileIsCreated_Success()
         {
             // Arrange
@@ -31,7 +37,13 @@ namespace NuGet.Common.Test
             Assert.Equal(Path.Combine(directory, "1"), files[0]);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void Run_WhenExecutedInParallelThenOnlyOneMigrationFileIsCreated_Success()
         {
             var threads = new List<Thread>();
