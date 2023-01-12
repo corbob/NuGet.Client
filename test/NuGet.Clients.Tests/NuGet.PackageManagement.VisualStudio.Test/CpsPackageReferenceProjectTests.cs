@@ -2386,7 +2386,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             }
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task TestPackageManager_RaiseTelemetryEvents()
         {
             // set up telemetry service

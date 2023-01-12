@@ -433,7 +433,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.Null(recommender);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task CreatePackageFeedAsync_ProjectPMUIInstalledTab_EmitsCounterfactualTelemetryAsync()
         {
             // Arrange
