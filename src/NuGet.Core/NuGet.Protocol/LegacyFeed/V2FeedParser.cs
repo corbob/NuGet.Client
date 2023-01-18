@@ -41,7 +41,18 @@ namespace NuGet.Protocol
 
         // XNames used in the feed
         private static readonly XName _xnameEntry = XName.Get("entry", W3Atom);
-        private static readonly XName _xnameTitle = XName.Get("title", W3Atom);
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private static readonly XName _xnameAtomTitle = XName.Get("title", W3Atom);
+        private static readonly XName _xnameTitle = XName.Get("Title", DataServicesNS);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private static readonly XName _xnameContent = XName.Get("content", W3Atom);
         private static readonly XName _xnameLink = XName.Get("link", W3Atom);
         private static readonly XName _xnameProperties = XName.Get("properties", MetadataNS);
@@ -356,7 +367,16 @@ namespace NuGet.Protocol
         {
             var properties = element.Element(_xnameProperties);
             var idElement = properties.Element(_xnameId);
-            var titleElement = element.Element(_xnameTitle);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var titleElement = element.Element(_xnameAtomTitle);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // If 'Id' element exist, use its value as accurate package Id
             // Otherwise, use the value of 'title' if it exist
@@ -366,7 +386,16 @@ namespace NuGet.Protocol
             var version = metadataCache.GetVersion(metadataCache.GetString(versionString));
             var downloadUrl = metadataCache.GetString(element.Element(_xnameContent).Attribute("src").Value);
 
-            var title = metadataCache.GetString(titleElement?.Value);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var title = metadataCache.GetString(GetString(properties, _xnameTitle));
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             var summary = metadataCache.GetString(GetString(element, _xnameSummary));
             var description = metadataCache.GetString(GetString(properties, _xnameDescription));
             var iconUrl = metadataCache.GetString(GetString(properties, _xnameIconUrl));

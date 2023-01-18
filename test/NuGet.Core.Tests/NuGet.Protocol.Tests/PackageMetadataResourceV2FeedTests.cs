@@ -42,7 +42,17 @@ namespace NuGet.Protocol.Tests
 
             Assert.Equal("WindowsAzure.Storage", latestPackage.Identity.Id);
             Assert.Equal("6.2.2-preview", latestPackage.Identity.Version.ToNormalizedString());
-            Assert.Equal("WindowsAzure.Storage", latestPackage.Title);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            Assert.Equal("Windows Azure Storage", latestPackage.Title);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             Assert.Equal("Microsoft", latestPackage.Authors);
             Assert.Equal("", latestPackage.Owners);
             Assert.True(latestPackage.Description.StartsWith("This client library enables"));

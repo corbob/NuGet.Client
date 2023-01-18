@@ -98,7 +98,7 @@ namespace NuGet.Protocol.Tests
             // Assert
             Assert.Equal("WindowsAzure.Storage", latest.Id);
             Assert.Equal("6.2.2-preview", latest.Version.ToNormalizedString());
-            Assert.Equal("WindowsAzure.Storage", latest.Title);
+            Assert.Equal("Windows Azure Storage", latest.Title);
             Assert.Equal("Microsoft", String.Join(",", latest.Authors));
             Assert.Equal("", String.Join(",", latest.Owners));
             Assert.True(latest.Description.StartsWith("This client library enables"));
@@ -208,7 +208,17 @@ namespace NuGet.Protocol.Tests
             // Assert
             Assert.Equal("WindowsAzure.Storage", package.Id);
             Assert.Equal("6.2.0", package.Version.ToNormalizedString());
-            Assert.Equal("WindowsAzure.Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            Assert.Equal("Windows Azure Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             Assert.Equal("Microsoft", String.Join(",", package.Authors));
             Assert.Equal("", String.Join(",", package.Owners));
             Assert.True(package.Description.StartsWith("This client library enables"));
@@ -423,7 +433,17 @@ namespace NuGet.Protocol.Tests
             // Assert
             Assert.Equal("WindowsAzure.Storage", package.Id);
             Assert.Equal("4.3.2-preview", package.Version.ToNormalizedString());
-            Assert.Equal("WindowsAzure.Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            Assert.Equal("Windows Azure Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             Assert.Equal("Microsoft", String.Join(",", package.Authors));
             Assert.Equal("", String.Join(",", package.Owners));
             Assert.True(package.Description.StartsWith("This client library enables"));
@@ -492,7 +512,17 @@ namespace NuGet.Protocol.Tests
             // Assert
             Assert.Equal("WindowsAzure.Storage", package.Id);
             Assert.Equal("4.3.2-preview", package.Version.ToNormalizedString());
-            Assert.Equal("WindowsAzure.Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            Assert.Equal("Windows Azure Storage", package.Title);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             Assert.Equal("Microsoft", String.Join(",", package.Authors));
             Assert.Equal("", String.Join(",", package.Owners));
             Assert.True(package.Description.StartsWith("This client library enables"));
