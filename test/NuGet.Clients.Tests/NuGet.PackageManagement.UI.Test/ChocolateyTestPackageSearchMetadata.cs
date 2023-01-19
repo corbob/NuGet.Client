@@ -33,5 +33,15 @@ namespace NuGet.PackageManagement.UI.Test
         public bool IsDownloadCacheAvailable { get; set; }
         public DateTime? DownloadCacheDate { get; set; }
         public IEnumerable<DownloadCache> DownloadCache { get; set; }
+        public string ReleaseNotes { get; set; }
+        public Uri ProjectSourceUrl { get; set; }
+        public Uri PackageSourceUrl { get; set; }
+        public Uri DocsUrl { get; set; }
+        public Uri MailingListUrl { get; set; }
+        public Uri BugTrackerUrl { get; set; }
+        public string DownloadCacheStatus { get; set; }
+        public string PackageScanStatus { get; set; }
+        public DateTime? PackageScanResultDate { get; set; }
+        public string PackageScanFlagResult { get; set; }
     }
 }

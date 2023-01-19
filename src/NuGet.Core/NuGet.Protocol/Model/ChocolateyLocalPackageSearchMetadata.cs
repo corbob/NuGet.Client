@@ -119,5 +119,73 @@ namespace NuGet.Protocol
         }
 
         public NuspecReader GetNuspecReader => _nuspec;
+
+        public string ReleaseNotes
+        {
+            get
+            {
+                return _nuspec.GetReleaseNotes();
+            }
+        }
+
+        public Uri ProjectSourceUrl
+        {
+            get
+            {
+                return Convert(_nuspec.GetProjectSourceUrl());
+            }
+        }
+
+        public Uri PackageSourceUrl
+        {
+            get
+            {
+                return Convert(_nuspec.GetPackageSourceUrl());
+            }
+        }
+
+        public Uri DocsUrl
+        {
+            get
+            {
+                return Convert(_nuspec.GetDocsUrl());
+            }
+        }
+
+        public Uri MailingListUrl
+        {
+            get
+            {
+                return Convert(_nuspec.GetMailingListUrl());
+            }
+        }
+
+        public Uri BugTrackerUrl
+        {
+            get
+            {
+                return Convert(_nuspec.GetBugTrackerUrl());
+            }
+        }
+
+        /// <remarks>
+        /// Not applicable to local packages
+        /// </remarks>
+        public string DownloadCacheStatus => null;
+
+        /// <remarks>
+        /// Not applicable to local packages
+        /// </remarks>
+        public string PackageScanStatus => null;
+
+        /// <remarks>
+        /// Not applicable to local packages
+        /// </remarks>
+        public DateTime? PackageScanResultDate => null;
+
+        /// <remarks>
+        /// Not applicable to local packages
+        /// </remarks>
+        public string PackageScanFlagResult => null;
     }
 }

@@ -35,6 +35,16 @@ namespace NuGet.Test.Utility
             public bool IsDownloadCacheAvailable => false;
             public DateTime? DownloadCacheDate => null;
             public IEnumerable<DownloadCache> DownloadCache => null;
+            public string ReleaseNotes => null;
+            public Uri ProjectSourceUrl => null;
+            public Uri PackageSourceUrl => null;
+            public Uri DocsUrl => null;
+            public Uri MailingListUrl => null;
+            public Uri BugTrackerUrl => null;
+            public string DownloadCacheStatus => null;
+            public string PackageScanStatus => null;
+            public DateTime? PackageScanResultDate => null;
+            public string PackageScanFlagResult => null;
         }
     }
 }

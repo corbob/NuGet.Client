@@ -29,6 +29,19 @@ namespace NuGet.Protocol
         private static readonly XName _xnameIsDownloadCacheAvailable = XName.Get("IsDownloadCacheAvailable", DataServicesNS);
         private static readonly XName _xnameDownloadCacheDate = XName.Get("DownloadCacheDate", DataServicesNS);
         private static readonly XName _xnameDownloadCache = XName.Get("DownloadCache", DataServicesNS);
+        private static readonly XName _xnameIsLatestVersion = XName.Get("IsLatestVersion", DataServicesNS);
+        private static readonly XName _xnameIsAbsoluteLatestVersion = XName.Get("IsAbsoluteLatestVersion", DataServicesNS);
+        private static readonly XName _xnameIsPrerelease = XName.Get("IsPrerelease", DataServicesNS);
+        private static readonly XName _xnameReleaseNotes = XName.Get("ReleaseNotes", DataServicesNS);
+        private static readonly XName _xnameProjectSourceUrl = XName.Get("ProjectSourceUrl", DataServicesNS);
+        private static readonly XName _xnamePackageSourceUrl = XName.Get("PackageSourceUrl", DataServicesNS);
+        private static readonly XName _xnameDocsUrl = XName.Get("DocsUrl", DataServicesNS);
+        private static readonly XName _xnameMailingListUrl = XName.Get("MailingListUrl", DataServicesNS);
+        private static readonly XName _xnameBugTrackerUrl = XName.Get("BugTrackerUrl", DataServicesNS);
+        private static readonly XName _xnameDownloadCacheStatus = XName.Get("DownloadCacheStatus", DataServicesNS);
+        private static readonly XName _xnamePackageScanStatus = XName.Get("PackageScanStatus", DataServicesNS);
+        private static readonly XName _xnamePackageScanResultDate = XName.Get("PackageScanResultDate", DataServicesNS);
+        private static readonly XName _xnamePackageScanFlagResult = XName.Get("PackageScanFlagResult", DataServicesNS);
 #pragma warning restore IDE1006 // Naming Styles
 
 

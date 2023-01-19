@@ -31,6 +31,19 @@ namespace NuGet.Protocol
         private readonly bool _isDownloadCacheAvailable;
         private readonly DateTime? _downloadCacheDate;
         private readonly string _downloadCacheString;
+        private readonly bool _isLatestVersion;
+        private readonly bool _isAbsoluteLatestVersion;
+        private readonly bool _isPrerelease;
+        private readonly string _releaseNotes;
+        private readonly string _projectSourceUrl;
+        private readonly string _packageSourceUrl;
+        private readonly string _docsUrl;
+        private readonly string _mailingListUrl;
+        private readonly string _bugTrackerUrl;
+        private readonly string _downloadCacheStatus;
+        private readonly string _packageScanStatus;
+        private readonly DateTime? _packageScanResultDate;
+        private readonly string _packageScanFlagResult;
 
         public V2FeedPackageInfo(PackageIdentity identity, string title, string summary, string description, IEnumerable<string> authors, IEnumerable<string> owners,
             string iconUrl, string licenseUrl, string projectUrl, string reportAbuseUrl, string galleryDetailsUrl,
@@ -38,7 +51,9 @@ namespace NuGet.Protocol
             string downloadCount, string packageHash, string packageHashAlgorithm, NuGetVersion minClientVersion, long? packageSize, int? versionDownloadCount, bool isApproved,
             string packageStatus, string packageSubmittedStatus, string packageTestResultStatus, DateTime? packageTestResultStatusDate, string packageValidationResultStatus,
             DateTime? packageValidationResultDate, DateTime? packageCleanupResultDate, DateTime? packageReviewedDate, DateTime? packageApprovedDate,
-            string packageReviewer, bool isDownloadCacheAvailable, DateTime? downloadCacheDate, string downloadCacheString)
+            string packageReviewer, bool isDownloadCacheAvailable, DateTime? downloadCacheDate, string downloadCacheString, bool isLatestVersion, bool isAbsoluteLatestVersion,
+            bool isPrerelease, string releaseNotes, string projectSourceUrl, string packageSourceUrl, string docsUrl, string mailingListUrl, string bugTrackerUrl, string downloadCacheStatus,
+            string packageScanStatus, DateTime? packageScanResultDate, string packageScanFlagResult)
             : base(identity.Id, identity.Version)
         {
             _summary = summary;
@@ -80,6 +95,19 @@ namespace NuGet.Protocol
             _isDownloadCacheAvailable = isDownloadCacheAvailable;
             _downloadCacheDate = downloadCacheDate;
             _downloadCacheString = downloadCacheString;
+            _isLatestVersion = isLatestVersion;
+            _isAbsoluteLatestVersion = isAbsoluteLatestVersion;
+            _isPrerelease = isPrerelease;
+            _releaseNotes = releaseNotes;
+            _projectSourceUrl = projectSourceUrl;
+            _packageSourceUrl = packageSourceUrl;
+            _docsUrl = docsUrl;
+            _mailingListUrl = mailingListUrl;
+            _bugTrackerUrl = bugTrackerUrl;
+            _downloadCacheStatus = downloadCacheStatus;
+            _packageScanStatus = packageScanStatus;
+            _packageScanResultDate = packageScanResultDate;
+            _packageScanFlagResult = packageScanFlagResult;
         }
 
         public long? PackageSize => _packageSize;
@@ -99,5 +127,18 @@ namespace NuGet.Protocol
         public bool IsDownloadCacheAvailable => _isDownloadCacheAvailable;
         public DateTime? DownloadCacheDate => _downloadCacheDate;
         public string DownloadCacheString => _downloadCacheString;
+        public bool IsLatestVersion => _isLatestVersion;
+        public bool IsAbsoluteLatestVersion => _isAbsoluteLatestVersion;
+        public bool IsPrerelease => _isPrerelease;
+        public string ReleaseNotes => _releaseNotes;
+        public string ProjectSourceUrl => _projectSourceUrl;
+        public string PackageSourceUrl => _packageSourceUrl;
+        public string DocsUrl => _docsUrl;
+        public string MailingListUrl => _mailingListUrl;
+        public string BugTrackerUrl => _bugTrackerUrl;
+        public string DownloadCacheStatus => _downloadCacheStatus;
+        public string PackageScanStatus => _packageScanStatus;
+        public DateTime? PackageScanResultDate => _packageScanResultDate;
+        public string PackageScanFlagResult => _packageScanFlagResult;
     }
 }
