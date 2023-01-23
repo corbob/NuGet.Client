@@ -12,13 +12,6 @@ namespace NuGet.Protocol.Core.Types
 {
     public partial interface IPackageSearchMetadata
     {
-        /*
-        Created = p.Created,
-        GalleryDetailsUrl = siteRoot + "packages/" + p.PackageRegistration.Id + "/" + p.Version,
-        IsPrerelease = p.IsPrerelease,
-        LastUpdated = p.LastUpdated,
-        */
-
         string PackageHash { get; }
         string PackageHashAlgorithm { get; }
         long? PackageSize { get; }
@@ -41,5 +34,15 @@ namespace NuGet.Protocol.Core.Types
         IEnumerable<DownloadCache> DownloadCache { get; }
 
         public string PackagePath { get; }
+        string ReleaseNotes { get; }
+        Uri ProjectSourceUrl { get; }
+        Uri PackageSourceUrl { get; }
+        Uri DocsUrl { get; }
+        Uri MailingListUrl { get; }
+        Uri BugTrackerUrl { get; }
+        string DownloadCacheStatus { get; }
+        string PackageScanStatus { get; }
+        DateTime? PackageScanResultDate { get; }
+        string PackageScanFlagResult { get; }
     }
 }

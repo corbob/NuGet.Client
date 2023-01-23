@@ -456,6 +456,19 @@ namespace NuGet.Protocol
             var isDownloadCacheAvailable = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsDownloadCacheAvailable));
             var downloadCacheDate = GetNoOffsetDate(properties, _xnameDownloadCacheDate);
             var downloadCacheString = metadataCache.GetString(GetString(properties, _xnameDownloadCache));
+            var isLatestVersion = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsLatestVersion));
+            var isAbsoluteLatestVersion = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsAbsoluteLatestVersion));
+            var isPrerelease = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsPrerelease));
+            var releaseNotes = metadataCache.GetString(GetString(properties, _xnameReleaseNotes));
+            var projectSourceUrl = metadataCache.GetString(GetString(properties, _xnameProjectSourceUrl));
+            var packageSourceUrl = metadataCache.GetString(GetString(properties, _xnamePackageSourceUrl));
+            var docsUrl = metadataCache.GetString(GetString(properties, _xnameDocsUrl));
+            var mailingListUrl = metadataCache.GetString(GetString(properties, _xnameMailingListUrl));
+            var bugTrackerUrl = metadataCache.GetString(GetString(properties, _xnameBugTrackerUrl));
+            var downloadCacheStatus = metadataCache.GetString(GetString(properties, _xnameDownloadCacheStatus));
+            var packageScanStatus = metadataCache.GetString(GetString(properties, _xnamePackageScanStatus));
+            var packageScanResultDate = GetNoOffsetDate(properties, _xnamePackageScanResultDate);
+            var packageScanFlagResult = metadataCache.GetString(GetString(properties, _xnamePackageScanFlagResult));
 
             return new V2FeedPackageInfo(new PackageIdentity(identityId, version), title, summary, description, authors,
                 owners, iconUrl, licenseUrl, projectUrl, reportAbuseUrl, galleryDetailsUrl, tags, created, lastEdited,
@@ -463,7 +476,9 @@ namespace NuGet.Protocol
                 packageHashAlgorithm, minClientVersion, packageSize, versionDownloadCount, isApproved, packageStatus,
                 packageSubmittedStatus, packageTestResultStatus, packageTestResultStatusDate, packageValidationResultStatus,
                 packageValidationResultDate, packageCleanupResultDate, packageReviewedDate, packageApprovedDate,
-                packageReviewer, isDownloadCacheAvailable, downloadCacheDate, downloadCacheString);
+                packageReviewer, isDownloadCacheAvailable, downloadCacheDate, downloadCacheString, isLatestVersion,
+                isAbsoluteLatestVersion, isPrerelease, releaseNotes, projectSourceUrl, packageSourceUrl, docsUrl, mailingListUrl,
+                bugTrackerUrl, downloadCacheStatus, packageScanStatus, packageScanResultDate, packageScanFlagResult);
 
             //////////////////////////////////////////////////////////
             // End - Chocolatey Specific Modification

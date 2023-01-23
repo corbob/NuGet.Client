@@ -34,5 +34,15 @@ namespace NuGet.VisualStudio.Internal.Contracts
         public IEnumerable<DownloadCache> DownloadCache => _packageSearchMetadata.DownloadCache;
 
         public string PackagePath => _packageSearchMetadata.PackagePath;
+        public string ReleaseNotes => _packageSearchMetadata.ReleaseNotes;
+        public Uri ProjectSourceUrl => _packageSearchMetadata.ProjectSourceUrl;
+        public Uri PackageSourceUrl => _packageSearchMetadata.PackageSourceUrl;
+        public Uri DocsUrl => _packageSearchMetadata.DocsUrl;
+        public Uri MailingListUrl => _packageSearchMetadata.MailingListUrl;
+        public Uri BugTrackerUrl => _packageSearchMetadata.BugTrackerUrl;
+        public string DownloadCacheStatus => _packageSearchMetadata.DownloadCacheStatus;
+        public string PackageScanStatus => _packageSearchMetadata.PackageScanStatus;
+        public DateTime? PackageScanResultDate => _packageSearchMetadata.PackageScanResultDate;
+        public string PackageScanFlagResult => _packageSearchMetadata.PackageScanFlagResult;
     }
 }

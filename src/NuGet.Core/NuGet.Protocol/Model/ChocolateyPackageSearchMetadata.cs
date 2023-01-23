@@ -54,6 +54,27 @@ namespace NuGet.Protocol
         [JsonIgnore]
         public IEnumerable<DownloadCache> DownloadCache { get; set; }
 
-        [JsonIgnore] public string PackagePath => null;
+        [JsonIgnore]
+        public string PackagePath => null;
+        [JsonIgnore]
+        public string ReleaseNotes { get; set; }
+        [JsonIgnore]
+        public Uri ProjectSourceUrl { get; set; }
+        [JsonIgnore]
+        public Uri PackageSourceUrl { get; set; }
+        [JsonIgnore]
+        public Uri DocsUrl { get; set; }
+        [JsonIgnore]
+        public Uri MailingListUrl { get; set; }
+        [JsonIgnore]
+        public Uri BugTrackerUrl { get; set; }
+        [JsonIgnore]
+        public string DownloadCacheStatus { get; set; }
+        [JsonIgnore]
+        public string PackageScanStatus { get; set; }
+        [JsonIgnore]
+        public DateTime? PackageScanResultDate { get; set; }
+        [JsonIgnore]
+        public string PackageScanFlagResult { get; set; }
     }
 }

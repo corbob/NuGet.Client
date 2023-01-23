@@ -157,11 +157,29 @@ namespace NuGet.Protocol.Core.Types
                 PackageReviewer = _metadata.PackageReviewer,
                 IsDownloadCacheAvailable = _metadata.IsDownloadCacheAvailable,
                 DownloadCacheDate = _metadata.DownloadCacheDate,
+                ReleaseNotes = _metadata.ReleaseNotes,
+                ProjectSourceUrl = _metadata.ProjectSourceUrl,
+                PackageSourceUrl = _metadata.PackageSourceUrl,
+                DocsUrl = _metadata.DocsUrl,
+                MailingListUrl = _metadata.MailingListUrl,
+                BugTrackerUrl = _metadata.BugTrackerUrl,
+                DownloadCacheStatus = _metadata.DownloadCacheStatus,
+                PackageScanStatus = _metadata.PackageScanStatus,
+                PackageScanResultDate = _metadata.PackageScanResultDate,
+                PackageScanFlagResult = _metadata.PackageScanFlagResult,
 
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
             };
+
+            if (_metadata is PackageSearchMetadataV2Feed)
+            {
+                var metaDataV2 = (PackageSearchMetadataV2Feed)_metadata;
+                clonedMetadata.IsLatestVersion = metaDataV2.IsLatestVersion;
+                clonedMetadata.IsAbsoluteLatestVersion = metaDataV2.IsAbsoluteLatestVersion;
+                clonedMetadata.IsPrerelease = metaDataV2.IsPrerelease;
+            }
 
             return clonedMetadata;
         }

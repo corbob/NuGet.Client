@@ -72,6 +72,20 @@ namespace NuGet.Protocol
             }
         }
 
+        public bool IsLatestVersion { get; private set; }
+        public bool IsAbsoluteLatestVersion { get; private set; }
+        public bool IsPrerelease { get; private set; }
+        public string ReleaseNotes { get; private set; }
+        public Uri ProjectSourceUrl { get; private set; }
+        public Uri PackageSourceUrl { get; private set; }
+        public Uri DocsUrl { get; private set; }
+        public Uri MailingListUrl { get; private set; }
+        public Uri BugTrackerUrl { get; private set; }
+        public string DownloadCacheStatus { get; private set; }
+        public string PackageScanStatus { get; private set; }
+        public DateTime? PackageScanResultDate { get; private set; }
+        public string PackageScanFlagResult { get; private set; }
+
         private void FinishInitialization(V2FeedPackageInfo package)
         {
             PackageHash = package.PackageHash;
@@ -92,6 +106,19 @@ namespace NuGet.Protocol
             IsDownloadCacheAvailable = package.IsDownloadCacheAvailable;
             DownloadCacheDate = package.DownloadCacheDate;
             _downloadCacheString = package.DownloadCacheString;
+            IsLatestVersion = package.IsLatestVersion;
+            IsAbsoluteLatestVersion = package.IsAbsoluteLatestVersion;
+            IsPrerelease = package.IsPrerelease;
+            ReleaseNotes = package.ReleaseNotes;
+            ProjectSourceUrl = GetUriSafe(package.ProjectSourceUrl);
+            PackageSourceUrl = GetUriSafe(package.PackageSourceUrl);
+            DocsUrl = GetUriSafe(package.DocsUrl);
+            MailingListUrl = GetUriSafe(package.MailingListUrl);
+            BugTrackerUrl = GetUriSafe(package.BugTrackerUrl);
+            DownloadCacheStatus = package.DownloadCacheStatus;
+            PackageScanStatus = package.PackageScanStatus;
+            PackageScanResultDate = package.PackageScanResultDate;
+            PackageScanFlagResult = package.PackageScanFlagResult;
         }
     }
 }
