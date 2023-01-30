@@ -91,6 +91,21 @@ namespace NuGet.Protocol
             catch
             {
                 // If there is a failure getting the metadata, assume default capabilities.
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                // If we are unable to grab information directly from the metadata URL for a source
+                // regarding what capabilities that it has, let's assume that it can't do either of
+                // the following.  This is in-keeping with what was done in the original NuGet.Core
+                // assembly.
+                capabilities.SupportsIsAbsoluteLatestVersion = false;
+                capabilities.SupportsSearch = false;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             }
 
             return capabilities;
