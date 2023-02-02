@@ -9,6 +9,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using NuGet.Common;
+using NuGet.Packaging.Core;
+using NuGet.Protocol.Core.Types;
+
 //////////////////////////////////////////////////////////
 // Start - Chocolatey Specific Modification
 //////////////////////////////////////////////////////////
@@ -16,8 +19,6 @@ using Chocolatey.NuGet.Frameworks;
 //////////////////////////////////////////////////////////
 // End - Chocolatey Specific Modification
 //////////////////////////////////////////////////////////
-using NuGet.Packaging.Core;
-using NuGet.Protocol.Core.Types;
 
 namespace NuGet.Protocol
 {
@@ -46,7 +47,18 @@ namespace NuGet.Protocol
         private const string GetSpecificPackageFormat = "/Packages(Id='{0}',Version='{1}')";
 
         // constants for /Search() endpoint
-        private const string SearchEndpointFormat = "/Search()?{0}{1}searchTerm='{2}'&targetFramework='{3}'&includePrerelease={4}&$skip={5}&$top={6}&" + SemVerLevel;
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private const string SearchEndpointFormat = "/Search(){0}?{1}{2}searchTerm='{3}'&targetFramework='{4}'&includePrerelease={5}&$skip={6}&$top={7}&" + SemVerLevel;
+        private const string CountQueryString = "/$count";
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private const string QueryDelimiter = "&";
 
         // constants for /FindPackagesById() endpoint
@@ -73,12 +85,30 @@ namespace NuGet.Protocol
             TagsProperty
         };
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public string BuildSearchUri(
             string searchTerm,
             SearchFilter filters,
             int skip,
             int take)
         {
+            return BuildSearchUri(searchTerm, filters, skip, take, false);
+        }
+
+        public string BuildSearchUri(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            bool isCount)
+        {
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             var shortFormTargetFramework = string.Join(
                 "|",
                 filters
@@ -99,6 +129,15 @@ namespace NuGet.Protocol
             var uri = string.Format(
                 CultureInfo.InvariantCulture,
                 SearchEndpointFormat,
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                isCount ? CountQueryString : string.Empty,
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 filter != null ? filter + QueryDelimiter : string.Empty,
                 orderBy != null ? orderBy + QueryDelimiter : string.Empty,
                 UriUtility.UrlEncodeOdataParameter(searchTerm),
