@@ -32,6 +32,16 @@ namespace NuGet.Protocol
         private const string IdProperty = "Id";
         private const string SemVerLevel = "semVerLevel=2.0.0";
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private const string DownloadCountProperty = "DownloadCount";
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         // constants for /Packages(ID,VERSION) endpoint
         private const string GetSpecificPackageFormat = "/Packages(Id='{0}',Version='{1}')";
 
@@ -248,6 +258,19 @@ namespace NuGet.Protocol
                 case SearchOrderBy.Id:
                     orderBy = IdProperty;
                     break;
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                case SearchOrderBy.DownloadCount:
+                    orderBy = DownloadCountProperty;
+                    break;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 case null:
                     orderBy = null;
                     break;

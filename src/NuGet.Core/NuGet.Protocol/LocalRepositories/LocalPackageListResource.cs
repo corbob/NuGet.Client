@@ -121,6 +121,19 @@ namespace NuGet.Protocol
                         case SearchOrderBy.Id:
                             _currentEnumerator = results.OrderBy(p => p.Identity).GetEnumerator();
                             break;
+
+                        //////////////////////////////////////////////////////////
+                        // Start - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
+
+                        case SearchOrderBy.DownloadCount:
+                            // Local packages do not have downloads available
+                            goto default;
+
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
+
                         default:
                             _currentEnumerator = results.GetEnumerator();
                             break;
