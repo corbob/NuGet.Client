@@ -1,0 +1,6 @@
+NuGet.Versioning.NuGetVersionConverter
+NuGet.Versioning.NuGetVersionConverter.NuGetVersionConverter() -> void
+override NuGet.Versioning.NuGetVersionConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
+override NuGet.Versioning.NuGetVersionConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
+override NuGet.Versioning.NuGetVersionConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
+override NuGet.Versioning.NuGetVersionConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
