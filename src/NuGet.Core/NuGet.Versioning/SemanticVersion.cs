@@ -12,6 +12,7 @@ namespace NuGet.Versioning
     /// A strict SemVer implementation
     /// </summary>
     [TypeConverter(typeof(SemanticVersionConverter))]
+    [Serializable]
     public partial class SemanticVersion
     {
         // store as array to avoid enumerator allocations
