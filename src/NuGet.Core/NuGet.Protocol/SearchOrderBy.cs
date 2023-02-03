@@ -8,6 +8,19 @@ namespace NuGet.Protocol.Core.Types
         /// <summary>
         /// Order the resulting packages by package ID.
         /// </summary>
-        Id
+        Id,
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Order the resulting packages by number of donwnloads.
+        /// </summary>
+        DownloadCount
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

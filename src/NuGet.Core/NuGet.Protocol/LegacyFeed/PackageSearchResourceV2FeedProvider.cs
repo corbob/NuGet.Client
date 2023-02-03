@@ -26,7 +26,23 @@ namespace NuGet.Protocol
 
                 var serviceDocument = await source.GetResourceAsync<ODataServiceDocumentResourceV2>(token);
 
-                resource = new PackageSearchResourceV2Feed(httpSourceResource, serviceDocument.BaseAddress, source.PackageSource);
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                if (serviceDocument != null)
+                {
+                    var parser = new V2FeedParser(httpSourceResource.HttpSource, serviceDocument.BaseAddress, source.PackageSource.Source);
+                    var feedCapabilityResource = new LegacyFeedCapabilityResourceV2Feed(parser, serviceDocument.BaseAddress);
+                    if (await feedCapabilityResource.SupportsSearchAsync(Common.NullLogger.Instance, token))
+                    {
+                        resource = new PackageSearchResourceV2Feed(httpSourceResource, serviceDocument.BaseAddress, source.PackageSource);
+                    }
+                }
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             }
 
             return new Tuple<bool, INuGetResource>(resource != null, resource);

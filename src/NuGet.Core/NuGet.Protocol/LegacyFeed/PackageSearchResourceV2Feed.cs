@@ -9,6 +9,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Protocol.Core.Types;
 
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using NuGet.Common;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+
 namespace NuGet.Protocol
 {
     public class PackageSearchResourceV2Feed : PackageSearchResource
@@ -67,5 +75,22 @@ namespace NuGet.Protocol
 
             return results.ToList();
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<int> SearchCountAsync(string searchTerm, SearchFilter filters, ILogger log, CancellationToken cancellationToken)
+        {
+            return await _feedParser.SearchCountAsync(
+                searchTerm,
+                filters,
+                log,
+                cancellationToken);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }
