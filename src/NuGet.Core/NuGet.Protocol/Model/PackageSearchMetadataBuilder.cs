@@ -155,6 +155,7 @@ namespace NuGet.Protocol.Core.Types
                 PackageReviewedDate = _metadata.PackageReviewedDate,
                 PackageApprovedDate = _metadata.PackageApprovedDate,
                 PackageReviewer = _metadata.PackageReviewer,
+                DownloadCache = _metadata.DownloadCache,
                 IsDownloadCacheAvailable = _metadata.IsDownloadCacheAvailable,
                 DownloadCacheDate = _metadata.DownloadCacheDate,
                 ReleaseNotes = _metadata.ReleaseNotes,
