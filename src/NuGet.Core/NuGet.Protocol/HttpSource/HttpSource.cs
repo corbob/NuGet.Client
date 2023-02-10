@@ -209,7 +209,7 @@ namespace NuGet.Protocol
         //////////////////////////////////////////////////////////
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
-        public async Task<T> ProcessHttpStreamAsync<T>(
+        public virtual async Task<T> ProcessHttpStreamAsync<T>(
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
@@ -267,7 +267,7 @@ namespace NuGet.Protocol
         //////////////////////////////////////////////////////////
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
-        public async Task<T> ProcessStreamAsync<T>(
+        public virtual async Task<T> ProcessStreamAsync<T>(
             HttpSourceRequest request,
             Func<Stream, ChocolateyProgressInfo, Task<T>> processAsync,
             SourceCacheContext cacheContext,
