@@ -1682,6 +1682,19 @@ namespace NuGet.Test
         {
             throw Exception;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            throw Exception;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 
     /// <summary>
@@ -1713,5 +1726,23 @@ namespace NuGet.Test
                 await Task.Delay(20);
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            while (true)
+            {
+                token.ThrowIfCancellationRequested();
+
+                await Task.Delay(20);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

@@ -66,6 +66,24 @@ namespace Test.Utility
             return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results.Select(p => ApplySource(p)));
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, CancellationToken token)
+        {
+            // TODO: Need to filter out pre-release packages here
+            var results = new HashSet<SourcePackageDependencyInfo>(
+                Packages.Where(e => StringComparer.OrdinalIgnoreCase.Equals(packageId, e.Id)),
+                PackageIdentity.Comparer);
+
+            return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results.Select(p => ApplySource(p)));
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         SourcePackageDependencyInfo ApplySource(SourcePackageDependencyInfo original)
         {
             if (original == null)

@@ -155,6 +155,55 @@ namespace NuGet.Protocol
             }
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="projectFramework">project target framework. This is used for finding the dependency group</param>
+        /// <param name="token">cancellation token</param>
+        /// <returns>available packages and their dependencies</returns>
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext cacheContext, Common.ILogger log, CancellationToken token)
+        {
+            try
+            {
+                var results = new List<SourcePackageDependencyInfo>();
+
+                // Construct the registration index url
+                var uri = _regResource.GetUri(packageId);
+
+                // Retrieve the registration blob
+                var regInfo = await ResolverMetadataClient.GetRegistrationInfo(_client, uri, packageId, includePrerelease ? VersionRange.All : VersionRange.AllStable, cacheContext, projectFramework, log, token);
+
+                // regInfo is null if the server returns a 404 for the package to indicate that it does not exist
+                if (regInfo != null)
+                {
+                    // Parse package and dependeny info from the blob
+                    var packages = GetPackagesFromRegistration(regInfo, token);
+
+                    // Filter on prerelease
+                    results.AddRange(packages);
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Retrieve the available packages and their dependencies.
         /// </summary>
@@ -171,6 +220,32 @@ namespace NuGet.Protocol
 
                 // Retrieve the registration blob
                 return ResolverMetadataClient.GetDependencies(_client, uri, packageId, VersionRange.All, cacheContext, log, token);
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="token">cancellation token</param>
+        /// <returns>available packages and their dependencies</returns>
+        public override Task<IEnumerable<RemoteSourceDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, SourceCacheContext cacheContext, Common.ILogger log, CancellationToken token)
+        {
+            try
+            {
+                // Construct the registration index url
+                var uri = _regResource.GetUri(packageId);
+
+                // Retrieve the registration blob
+                return ResolverMetadataClient.GetDependencies(_client, uri, packageId, includePrerelease ? VersionRange.All : VersionRange.AllStable, cacheContext, log, token);
             }
             catch (Exception ex)
             {

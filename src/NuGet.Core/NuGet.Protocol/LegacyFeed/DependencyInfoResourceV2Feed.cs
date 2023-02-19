@@ -97,6 +97,44 @@ namespace NuGet.Protocol
             }
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(
+            string packageId,
+            bool includePrerelease,
+            NuGetFramework projectFramework,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+
+            try
+            {
+                var packages = await _feedParser.FindPackagesByIdAsync(packageId, true, includePrerelease, sourceCacheContext, log, token);
+
+                var results = new List<SourcePackageDependencyInfo>();
+
+                foreach (var package in packages)
+                {
+                    results.Add(CreateDependencyInfo(package, projectFramework));
+                }
+                return results;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = String.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Convert a V2 feed package into a V3 PackageDependencyInfo
         /// </summary>

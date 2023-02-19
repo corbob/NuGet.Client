@@ -143,6 +143,75 @@ namespace NuGet.Protocol
             return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results);
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve dependency info for a single package.
+        /// </summary>
+        /// <param name="packageId">package id</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="projectFramework">project target framework. This is used for finding the dependency group</param>
+        /// <param name="token">cancellation token</param>
+        public override Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(
+            string packageId,
+            bool includePrerelease,
+            NuGetFramework projectFramework,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            if (packageId == null)
+            {
+                throw new ArgumentNullException(nameof(packageId));
+            }
+
+            if (projectFramework == null)
+            {
+                throw new ArgumentNullException(nameof(projectFramework));
+            }
+
+            var results = new List<SourcePackageDependencyInfo>();
+
+            try
+            {
+                // Retrieve all packages
+                foreach (var package in _localResource.FindPackagesById(packageId, log, token))
+                {
+                    // Filter based on whether or not prerelease packages are included
+                    if (package.Identity.Version.IsPrerelease && !includePrerelease)
+                    {
+                        continue;
+                    }
+
+                    // Convert to dependency info type
+                    results.Add(CreateDependencyInfo(package, projectFramework));
+                }
+            }
+            catch (NuGetProtocolException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Strings.Protocol_PackageMetadataError,
+                    packageId,
+                    _localResource.Root);
+
+                throw new FatalProtocolException(error, ex);
+            }
+
+            return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Convert a package into a PackageDependencyInfo
         /// </summary>
