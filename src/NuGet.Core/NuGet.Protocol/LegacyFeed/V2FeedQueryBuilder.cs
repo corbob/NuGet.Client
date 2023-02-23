@@ -303,7 +303,7 @@ namespace NuGet.Protocol
                 //////////////////////////////////////////////////////////
 
                 case SearchOrderBy.DownloadCount:
-                    orderBy = DownloadCountProperty;
+                    orderBy = string.Format("{0}%20desc,{1}", DownloadCountProperty, IdProperty);
                     break;
 
                 //////////////////////////////////////////////////////////
