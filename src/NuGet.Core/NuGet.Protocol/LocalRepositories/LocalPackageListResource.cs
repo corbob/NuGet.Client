@@ -31,7 +31,7 @@ namespace NuGet.Protocol
             {
                 filter = new SearchFilter(includePrerelease: prerelease, filter: null)
                 {
-                    OrderBy = SearchOrderBy.Id,
+                    OrderBy = SearchOrderBy.Version,
                     IncludeDelisted = includeDelisted
                 };
             }
@@ -129,6 +129,11 @@ namespace NuGet.Protocol
                         case SearchOrderBy.DownloadCount:
                             // Local packages do not have downloads available
                             goto default;
+
+                        case SearchOrderBy.Version:
+                        case SearchOrderBy.DownloadCountAndVersion:
+                            _currentEnumerator = results.OrderBy(p => p.Identity.Id).ThenByDescending(p => p.Identity.Version).GetEnumerator();
+                            break;
 
                         //////////////////////////////////////////////////////////
                         // End - Chocolatey Specific Modification

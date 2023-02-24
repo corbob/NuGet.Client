@@ -38,6 +38,7 @@ namespace NuGet.Protocol
         //////////////////////////////////////////////////////////
 
         private const string DownloadCountProperty = "DownloadCount";
+        private const string VersionProperty = "Version";
 
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
@@ -304,6 +305,14 @@ namespace NuGet.Protocol
 
                 case SearchOrderBy.DownloadCount:
                     orderBy = string.Format("{0}%20desc,{1}", DownloadCountProperty, IdProperty);
+                    break;
+
+                case SearchOrderBy.Version:
+                    orderBy = string.Format("{0},{1}%20desc", IdProperty, VersionProperty);
+                    break;
+
+                case SearchOrderBy.DownloadCountAndVersion:
+                    orderBy = string.Format("{0}%20desc,{1},{2}%20desc", DownloadCountProperty, IdProperty, VersionProperty);
                     break;
 
                 //////////////////////////////////////////////////////////

@@ -122,6 +122,8 @@ NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetada
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.get -> int?
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.set -> void
 NuGet.Protocol.Core.Types.SearchOrderBy.DownloadCount = 1 -> NuGet.Protocol.Core.Types.SearchOrderBy
+NuGet.Protocol.Core.Types.SearchOrderBy.DownloadCountAndVersion = 3 -> NuGet.Protocol.Core.Types.SearchOrderBy
+NuGet.Protocol.Core.Types.SearchOrderBy.Version = 2 -> NuGet.Protocol.Core.Types.SearchOrderBy
 NuGet.Protocol.HttpSourceResource.OverrideHttpSource(NuGet.Protocol.IHttpSource source) -> void
 NuGet.Protocol.IHttpSource
 NuGet.Protocol.IHttpSource.GetAsync<T>(NuGet.Protocol.HttpSourceCachedRequest request, System.Func<NuGet.Protocol.HttpSourceResult, System.Threading.Tasks.Task<T>> processAsync, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
