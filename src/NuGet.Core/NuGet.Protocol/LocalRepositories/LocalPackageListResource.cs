@@ -130,6 +130,10 @@ namespace NuGet.Protocol
                             // Local packages do not have downloads available
                             goto default;
 
+                        case SearchOrderBy.Version:
+                            _currentEnumerator = results.OrderBy(p => p.Identity.Id).ThenByDescending(p => p.Identity.Version).GetEnumerator();
+                            break;
+
                         //////////////////////////////////////////////////////////
                         // End - Chocolatey Specific Modification
                         //////////////////////////////////////////////////////////

@@ -17,7 +17,12 @@ namespace NuGet.Protocol.Core.Types
         /// <summary>
         /// Order the resulting packages by number of donwnloads.
         /// </summary>
-        DownloadCount
+        DownloadCount,
+
+        /// <summary>
+        /// Order the resulting packages grouped by the version number
+        /// </summary>
+        Version
 
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
