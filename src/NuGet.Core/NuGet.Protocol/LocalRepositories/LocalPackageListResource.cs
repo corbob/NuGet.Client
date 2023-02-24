@@ -131,6 +131,7 @@ namespace NuGet.Protocol
                             goto default;
 
                         case SearchOrderBy.Version:
+                        case SearchOrderBy.DownloadCountAndVersion:
                             _currentEnumerator = results.OrderBy(p => p.Identity.Id).ThenByDescending(p => p.Identity.Version).GetEnumerator();
                             break;
 

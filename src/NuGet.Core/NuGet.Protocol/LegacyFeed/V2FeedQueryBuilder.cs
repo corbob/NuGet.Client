@@ -311,6 +311,10 @@ namespace NuGet.Protocol
                     orderBy = string.Format("{0},{1}%20desc", IdProperty, VersionProperty);
                     break;
 
+                case SearchOrderBy.DownloadCountAndVersion:
+                    orderBy = string.Format("{0}%20desc,{1},{2}%20desc", DownloadCountProperty, IdProperty, VersionProperty);
+                    break;
+
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
