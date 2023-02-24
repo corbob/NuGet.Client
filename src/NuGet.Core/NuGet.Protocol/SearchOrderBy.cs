@@ -15,7 +15,7 @@ namespace NuGet.Protocol.Core.Types
         //////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Order the resulting packages by number of donwnloads.
+        /// Order the resulting packages by number of downloads.
         /// </summary>
         DownloadCount,
 
