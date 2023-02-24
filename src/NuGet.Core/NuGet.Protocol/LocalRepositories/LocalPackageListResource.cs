@@ -31,7 +31,7 @@ namespace NuGet.Protocol
             {
                 filter = new SearchFilter(includePrerelease: prerelease, filter: null)
                 {
-                    OrderBy = SearchOrderBy.Id,
+                    OrderBy = SearchOrderBy.Version,
                     IncludeDelisted = includeDelisted
                 };
             }
