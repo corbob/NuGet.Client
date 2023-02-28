@@ -109,6 +109,34 @@ namespace NuGet.Protocol
             return new EnumerableAsync<IPackageSearchMetadata>(_feedParser, searchTerm, filter, 0, Take, isSearchSupported, allVersions,
                         logger, token);
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public async override Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var metadataCache = new MetadataReferenceCache();
+            var searchFilter = new SearchFilter(prerelease);
+            searchFilter.ExactPackageId = true;
+
+            var pageOfResults = await _feedParser.GetPackagesPageAsync(searchTerm, searchFilter, 0, 1, logger, token);
+
+            if (!pageOfResults.Items.Any())
+            {
+                return null;
+            }
+
+            return V2FeedUtilities.CreatePackageSearchResult(pageOfResults.Items[0], metadataCache, searchFilter, (V2FeedParser)_feedParser, logger, token);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }
 

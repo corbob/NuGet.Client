@@ -55,8 +55,23 @@ namespace NuGet.Protocol
                 // Filter on search terms
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    var terms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    query = query.Where(package => ContainsAnyTerm(terms, package));
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
+                    if (filters.ExactPackageId)
+                    {
+                        query = query.Where(package => package.Identity.Id.ToUpperInvariant() == searchTerm.ToUpperInvariant());
+                    }
+                    else
+                    {
+                        var terms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        query = query.Where(package => ContainsAnyTerm(terms, package));
+                    }
+
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
                 }
 
                 // Collapse to the highest version per id, if necessary

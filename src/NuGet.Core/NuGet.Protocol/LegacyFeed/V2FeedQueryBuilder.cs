@@ -55,6 +55,7 @@ namespace NuGet.Protocol
 
         private const string SearchEndpointFormat = "/Search(){0}?{1}{2}searchTerm='{3}'&targetFramework='{4}'&includePrerelease={5}&$skip={6}&$top={7}&" + SemVerLevel;
         private const string CountQueryString = "/$count";
+        private const string ExactFilterFormat = "tolower(Id)%20eq%20'{0}'";
 
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
@@ -187,10 +188,26 @@ namespace NuGet.Protocol
             int? skip,
             int? take)
         {
-            var filterParameter = BuildFilter(searchTerm, filters.Filter);
-            var orderByParameter = BuildOrderBy(filters.OrderBy);
-            var skipParameter = BuildSkip(skip);
-            var topParameter = BuildTop(take);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var filterParameter = BuildFilter(searchTerm, filters.Filter, filters.ExactPackageId);
+
+            string orderByParameter = null;
+            string skipParameter = null;
+            string topParameter = null;
+
+            if (!filters.ExactPackageId)
+            {
+                orderByParameter = BuildOrderBy(filters.OrderBy);
+                skipParameter = BuildSkip(skip);
+                topParameter = BuildTop(take);
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // The parenthesis right after the "/Packages" path in the URL are excluded if the filter, orderby, and
             // top parameters are not used. This is a quirk of the NuGet 2.x implementation.
@@ -269,11 +286,23 @@ namespace NuGet.Protocol
             return string.Format(CultureInfo.InvariantCulture, SkipFormat, skip);
         }
 
-        private string BuildFilter(string searchTerm, SearchFilterType? searchFilterType)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        private string BuildFilter(string searchTerm, SearchFilterType? searchFilterType, bool isExact)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             var pieces = new List<string>
             {
-                BuildFieldSearchFilter(searchTerm),
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                BuildFieldSearchFilter(searchTerm, isExact),
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
                 BuildPropertyFilter(searchFilterType)
             }.AsEnumerable();
 
@@ -359,12 +388,31 @@ namespace NuGet.Protocol
             return filter;
         }
 
-        private string BuildFieldSearchFilter(string searchTerm)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        private string BuildFieldSearchFilter(string searchTerm, bool isExact)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             if (searchTerm == null)
             {
                 return null;
             }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            if (isExact)
+            {
+                return string.Format(CultureInfo.InvariantCulture, ExactFilterFormat, searchTerm);
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             var searchTerms = searchTerm.Split();
 
