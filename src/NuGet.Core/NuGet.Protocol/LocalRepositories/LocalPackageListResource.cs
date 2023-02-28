@@ -57,6 +57,28 @@ namespace NuGet.Protocol
 
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public async override Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var searchFilter = new SearchFilter(prerelease);
+            searchFilter.ExactPackageId = true;
+
+            var result = await _localPackageSearchResource.SearchAsync(searchTerm, searchFilter, 0, int.MaxValue, logger, token);
+
+            return result.FirstOrDefault();
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         internal class EnumerableAsync<T> : IEnumerableAsync<T>
         {
             private readonly SearchFilter _filter;

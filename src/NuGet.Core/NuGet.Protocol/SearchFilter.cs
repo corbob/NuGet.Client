@@ -54,6 +54,19 @@ namespace NuGet.Protocol.Core.Types
         /// </summary>
         public bool IncludeDelisted { get; set; } = false;
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Determines whether or not an exact match is required on the Package Id that is being searched for.
+        /// </summary>
+        public bool ExactPackageId { get; set; } = false;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Restrict the search to certain package types.
         /// </summary>

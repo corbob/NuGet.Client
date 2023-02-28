@@ -17,6 +17,20 @@ namespace NuGet.Protocol.Core.Types
             ILogger log,
             CancellationToken token);
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public abstract Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger log,
+            CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public abstract string Source { get; }
     }
 }
