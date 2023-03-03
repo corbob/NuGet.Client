@@ -74,10 +74,18 @@ namespace NuGet.Protocol
                     //////////////////////////////////////////////////////////
                 }
 
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 // Collapse to the highest version per id, if necessary
                 var collapsedQuery = filters?.Filter == SearchFilterType.IsLatestVersion ||
                                      filters?.Filter == SearchFilterType.IsAbsoluteLatestVersion
-                                     ? CollapseToHighestVersion(query) : query;
+                                     ? CollapseToHighestVersion(query.OrderBy(p => p.Identity.Id)) : query;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 // execute the query
                 var packages = collapsedQuery
