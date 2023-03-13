@@ -145,6 +145,7 @@ NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceReques
 NuGet.Protocol.IHttpSource.ProcessStreamAsync<T>(NuGet.Protocol.HttpSourceRequest request, System.Func<System.IO.Stream, System.Threading.Tasks.Task<T>> processAsync, NuGet.Protocol.Core.Types.SourceCacheContext cacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
 NuGet.Protocol.IHttpSource.RetryHandler.get -> NuGet.Protocol.IHttpRetryHandler
 NuGet.Protocol.IHttpSource.RetryHandler.set -> void
+NuGet.Protocol.IV2FeedParser.FindPackagesByIdAsync(string id, bool includeUnlisted, bool includePrerelease, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<NuGet.Protocol.V2FeedPackageInfo>>
 NuGet.Protocol.IV2FeedParser.GetPackageVersionsAsync(string id, bool includeUnlisted, bool includePreRelease, NuGet.Protocol.Core.Types.SourceCacheContext sourceCacheContext, NuGet.Common.ILogger log, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.IReadOnlyList<NuGet.Protocol.V2FeedPackageInfo>>
 NuGet.Protocol.LocalPackageSearchMetadata.BugTrackerUrl.get -> System.Uri
 NuGet.Protocol.LocalPackageSearchMetadata.DocsUrl.get -> System.Uri

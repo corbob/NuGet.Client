@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
+using NuGet.Packaging;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 
@@ -52,13 +53,33 @@ namespace NuGet.Protocol
                 {
                     var supportsIsAbsoluteLatestVersion =
                         await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
-                    if (prerelease && supportsIsAbsoluteLatestVersion)
+
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
+                    if (prerelease)
                     {
-                        filter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion)
+                        if (supportsIsAbsoluteLatestVersion)
                         {
-                            OrderBy = SearchOrderBy.Id,
-                            IncludeDelisted = includeDelisted
-                        };
+                            filter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion)
+                            {
+                                OrderBy = SearchOrderBy.Id,
+                                IncludeDelisted = includeDelisted
+                            };
+                        }
+                        else
+                        {
+                            filter = new SearchFilter(includePrerelease: true, filter: null)
+                            {
+                                OrderBy = SearchOrderBy.Version,
+                                IncludeDelisted = includeDelisted
+                            };
+                        }
+
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
                     }
                     else
                     {
@@ -85,14 +106,33 @@ namespace NuGet.Protocol
                 {
                     var supportsIsAbsoluteLatestVersion =
                         await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
-                    if (prerelease && supportsIsAbsoluteLatestVersion)
+
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
+                    if (prerelease)
                     {
-                        filter = new SearchFilter(includePrerelease: true,
-                            filter: SearchFilterType.IsAbsoluteLatestVersion)
+                        if (supportsIsAbsoluteLatestVersion)
                         {
-                            IncludeDelisted = includeDelisted,
-                            OrderBy = SearchOrderBy.Id
-                        };
+                            filter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion)
+                            {
+                                IncludeDelisted = includeDelisted,
+                                OrderBy = SearchOrderBy.Id
+                            };
+                        }
+                        else
+                        {
+                            filter = new SearchFilter(includePrerelease: true, null)
+                            {
+                                IncludeDelisted = includeDelisted,
+                                OrderBy = SearchOrderBy.Version
+                            };
+                        }
+
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
                     }
                     else
                     {
@@ -121,7 +161,41 @@ namespace NuGet.Protocol
             CancellationToken token)
         {
             var metadataCache = new MetadataReferenceCache();
-            var searchFilter = new SearchFilter(prerelease);
+
+            var supportsIsAbsoluteLatestVersion = await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
+            SearchFilter searchFilter = null;
+
+            if (prerelease)
+            {
+                if (supportsIsAbsoluteLatestVersion)
+                {
+                    searchFilter = new SearchFilter(includePrerelease: true, filter: SearchFilterType.IsAbsoluteLatestVersion);
+                }
+                else
+                {
+                    // In this scenario, we can't do a IsLatestVersion or IsAbsoluteVersion query, which means that any query we
+                    // do will potentially result in more than one result, which is not desired.
+                    // Instead, use the FindPackageByIdAsync method, and then order the results by version, and return the
+                    // top result.
+                    var packages = await FindPackageByIdAsync(searchTerm, includeUnlisted: false, prerelease, sourceCacheContext: null, logger, token);
+
+                    searchFilter = new SearchFilter(includePrerelease: true, filter: null);
+                    searchFilter.OrderBy = SearchOrderBy.Version;
+
+                    if (packages.Count == 0)
+                    {
+                        return null;
+                    }
+
+                    var highestVersionPackage = packages.OrderByDescending(p => p.Version).FirstOrDefault();
+                    return V2FeedUtilities.CreatePackageSearchResult(highestVersionPackage, metadataCache, searchFilter, (V2FeedParser)_feedParser, logger, token);
+                }
+            }
+            else
+            {
+                searchFilter = new SearchFilter(includePrerelease: false, filter: SearchFilterType.IsLatestVersion);
+            }
+
             searchFilter.ExactPackageId = true;
 
             var pageOfResults = await _feedParser.GetPackagesPageAsync(searchTerm, searchFilter, 0, 1, logger, token);
@@ -132,6 +206,18 @@ namespace NuGet.Protocol
             }
 
             return V2FeedUtilities.CreatePackageSearchResult(pageOfResults.Items[0], metadataCache, searchFilter, (V2FeedParser)_feedParser, logger, token);
+        }
+
+        private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageByIdAsync(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            {
+                return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+            else
+            {
+                return await _feedParser.GetPackageVersionsAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
         }
 
         //////////////////////////////////////////////////////////
