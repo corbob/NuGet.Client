@@ -56,6 +56,9 @@ namespace NuGet.Protocol
         private const string SearchEndpointFormat = "/Search(){0}?{1}{2}searchTerm='{3}'&targetFramework='{4}'&includePrerelease={5}&$skip={6}&$top={7}&" + SemVerLevel;
         private const string CountQueryString = "/$count";
         private const string ExactFilterFormat = "tolower(Id)%20eq%20'{0}'";
+        private const string ByIdOnlyFormat = "substringof('{0}',tolower(Id))";
+        private const string ByTagOnlyFormat = "substringof('{0}',Tags)";
+        private const string IdStartsWithFormat = "startswith(tolower(Id),'chocolatey')";
 
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
@@ -119,14 +122,7 @@ namespace NuGet.Protocol
 
             var orderBy = BuildOrderBy(filters.OrderBy);
 
-            var filter = BuildPropertyFilter(filters.Filter);
-            if (filter != null)
-            {
-                filter = string.Format(
-                    CultureInfo.InvariantCulture,
-                    FilterFormat,
-                    filter);
-            }
+            var filter = BuildFilter(searchTerm, filters, includePropertyClauses: false);
 
             var uri = string.Format(
                 CultureInfo.InvariantCulture,
@@ -192,7 +188,7 @@ namespace NuGet.Protocol
             // Start - Chocolatey Specific Modification
             //////////////////////////////////////////////////////////
 
-            var filterParameter = BuildFilter(searchTerm, filters.Filter, filters.ExactPackageId);
+            var filterParameter = BuildFilter(searchTerm, filters, includePropertyClauses: true);
 
             string orderByParameter = null;
             string skipParameter = null;
@@ -289,7 +285,7 @@ namespace NuGet.Protocol
         //////////////////////////////////////////////////////////
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
-        private string BuildFilter(string searchTerm, SearchFilterType? searchFilterType, bool isExact)
+        private string BuildFilter(string searchTerm, SearchFilter searchFilter, bool includePropertyClauses)
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
@@ -299,11 +295,11 @@ namespace NuGet.Protocol
                 //////////////////////////////////////////////////////////
                 // Start - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
-                BuildFieldSearchFilter(searchTerm, isExact),
+                BuildFieldSearchFilter(searchTerm, searchFilter, includePropertyClauses),
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
-                BuildPropertyFilter(searchFilterType)
+                BuildPropertyFilter(searchFilter.Filter)
             }.AsEnumerable();
 
             pieces = pieces.Where(p => p != null);
@@ -391,7 +387,7 @@ namespace NuGet.Protocol
         //////////////////////////////////////////////////////////
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
-        private string BuildFieldSearchFilter(string searchTerm, bool isExact)
+        private string BuildFieldSearchFilter(string searchTerm, SearchFilter searchFilter, bool includePropertyClauses)
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
@@ -405,9 +401,40 @@ namespace NuGet.Protocol
             // Start - Chocolatey Specific Modification
             //////////////////////////////////////////////////////////
 
-            if (isExact)
+            if (searchFilter.ExactPackageId)
             {
                 return string.Format(CultureInfo.InvariantCulture, ExactFilterFormat, searchTerm);
+            }
+
+            var idSearchFilters = new List<string>();
+
+            if (searchFilter.IdStartsWith)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, IdStartsWithFormat, searchTerm));
+            }
+            else if (searchFilter.ByIdOnly)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, ByIdOnlyFormat, searchTerm));
+            }
+
+            if (searchFilter.ByTagOnly)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, ByTagOnlyFormat, searchTerm));
+            }
+
+            if (idSearchFilters.Count == 1)
+            {
+                return idSearchFilters[0];
+            }
+            else if (idSearchFilters.Count > 1)
+            {
+                var idFilter = idSearchFilters.Aggregate((a, b) => string.Format(CultureInfo.InvariantCulture, AndFormat, a, b));
+                return idFilter;
+            }
+
+            if (!includePropertyClauses)
+            {
+                return string.Empty;
             }
 
             //////////////////////////////////////////////////////////

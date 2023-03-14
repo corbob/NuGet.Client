@@ -63,6 +63,12 @@ namespace NuGet.Protocol.Core.Types
         /// </summary>
         public bool ExactPackageId { get; set; } = false;
 
+        public bool ByIdOnly { get; set; } = false;
+
+        public bool ByTagOnly { get; set; } = false;
+
+        public bool IdStartsWith { get; set; } = false;
+
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
