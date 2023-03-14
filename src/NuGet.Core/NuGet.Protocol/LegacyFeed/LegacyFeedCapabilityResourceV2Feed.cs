@@ -50,6 +50,21 @@ namespace NuGet.Protocol
             return capabilities.SupportsSearch;
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<bool> SupportsFindPackagesByIdAsync(ILogger log, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+
+            return capabilities.SupportsFindPackageById;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private async Task<Capabilities> GetCachedCapabilitiesAsync(ILogger log, CancellationToken token)
         {
             var task = CachedCapabilities.GetOrAdd(
@@ -87,6 +102,22 @@ namespace NuGet.Protocol
                 capabilities.SupportsSearch = metadata
                     .SupportedMethodNames
                     .Contains("Search");
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                capabilities.SupportsFindPackageById = metadata
+                    .SupportedMethodNames
+                    .Contains("FindPackagesById");
+
+                capabilities.SupportsGetUpdates = metadata
+                    .SupportedMethodNames
+                    .Contains("GetUpdates");
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             }
             catch
             {
@@ -114,6 +145,18 @@ namespace NuGet.Protocol
         private class Capabilities
         {
             public string MetadataUri { get; set; }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            public bool SupportsFindPackageById { get; set; }
+            public bool SupportsGetUpdates { get; set; }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             public bool SupportsIsAbsoluteLatestVersion { get; set; }
             public bool SupportsSearch { get; set; }
         }

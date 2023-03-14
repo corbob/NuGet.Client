@@ -13,7 +13,7 @@
             "src\\NuGet.Core\\NuGet.ProjectModel\\NuGet.ProjectModel.csproj",
             "src\\NuGet.Core\\NuGet.Resolver\\NuGet.Resolver.csproj",
             "src\\NuGet.Core\\NuGet.Versioning\\NuGet.Versioning.csproj",
-            "src\\NuGet.Core\\NuGet.Credential\\NuGet.Credentials.csproj",
+            "src\\NuGet.Core\\NuGet.Credentials\\NuGet.Credentials.csproj",
             "src\\NuGet.Core\\NuGet.LibraryModel\\NuGet.LibraryModel.csproj",
             "test\\NuGet.Core.Tests\\NuGet.Commands.Test\\NuGet.Commands.Test.csproj",
             "test\\NuGet.Core.Tests\\NuGet.Common.Test\\NuGet.Common.Test.csproj",

@@ -28,7 +28,13 @@ namespace NuGet.Protocol
         private readonly FrameworkReducer _frameworkReducer = new FrameworkReducer();
         private readonly SourceRepository _source;
 
-        public DependencyInfoResourceV2Feed(V2FeedParser feedParser, SourceRepository source)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly ILegacyFeedCapabilityResource _feedCapabilities;
+
+        public DependencyInfoResourceV2Feed(V2FeedParser feedParser, ILegacyFeedCapabilityResource feedCapabilities, SourceRepository source)
         {
             if (feedParser == null)
             {
@@ -37,7 +43,12 @@ namespace NuGet.Protocol
 
             _feedParser = feedParser;
             _source = source;
+            _feedCapabilities = feedCapabilities;
         }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         public override async Task<SourcePackageDependencyInfo> ResolvePackage(
             PackageIdentity package,
@@ -78,7 +89,13 @@ namespace NuGet.Protocol
 
             try
             {
-                var packages = await _feedParser.FindPackagesByIdAsync(packageId, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                var packages = await FindPackageById(packageId, includeUnlisted: true, includePrerelease: true, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 var results = new List<SourcePackageDependencyInfo>();
 
@@ -112,7 +129,7 @@ namespace NuGet.Protocol
 
             try
             {
-                var packages = await _feedParser.FindPackagesByIdAsync(packageId, true, includePrerelease, sourceCacheContext, log, token);
+                var packages = await FindPackageById(packageId, true, includePrerelease, sourceCacheContext, log, token);
 
                 var results = new List<SourcePackageDependencyInfo>();
 
@@ -170,5 +187,25 @@ namespace NuGet.Protocol
 
             return result;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageById(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            {
+                return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+            else
+            {
+                return await _feedParser.GetPackageVersionsAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

@@ -6,7 +6,12 @@
 //////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
+using NuGet.Common;
+using NuGet.Protocol.Core.Types;
 
 namespace NuGet.Protocol
 {
@@ -43,6 +48,34 @@ namespace NuGet.Protocol
         private static readonly XName _xnamePackageScanResultDate = XName.Get("PackageScanResultDate", DataServicesNS);
         private static readonly XName _xnamePackageScanFlagResult = XName.Get("PackageScanFlagResult", DataServicesNS);
 #pragma warning restore IDE1006 // Naming Styles
+
+        public Task<IReadOnlyList<V2FeedPackageInfo>> GetPackageVersionsAsync(string id, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            return GetPackageVersionsAsync(id, includeUnlisted: true, includePreRelease: true, sourceCacheContext: sourceCacheContext, log: log, token: token);
+        }
+
+        public async Task<IReadOnlyList<V2FeedPackageInfo>> GetPackageVersionsAsync(string id, bool includeUnlisted, bool includePreRelease, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            var filter = new SearchFilter(includePreRelease, null)
+            {
+                ExactPackageId = true,
+                IncludeDelisted = includeUnlisted,
+                OrderBy = SearchOrderBy.Version
+            };
+
+            var uri = _queryBuilder.BuildGetPackagesUri(id, filter, null, null);
+
+            var packages = await QueryV2FeedAsync(
+                uri,
+                id,
+                max: -1,
+                ignoreNotFounds: true,
+                sourceCacheContext: sourceCacheContext,
+                log: log,
+                token: token);
+
+            return packages.Items;
+        }
 
 
         /// <summary>

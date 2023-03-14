@@ -19,7 +19,13 @@ namespace NuGet.Protocol
         private readonly V2FeedParser _feedParser;
         private readonly SourceRepository _source;
 
-        public MetadataResourceV2Feed(V2FeedParser feedParser, SourceRepository source)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly ILegacyFeedCapabilityResource _feedCapabilities;
+
+        public MetadataResourceV2Feed(V2FeedParser feedParser, ILegacyFeedCapabilityResource feedCapabilities, SourceRepository source)
         {
             if (feedParser == null)
             {
@@ -28,7 +34,12 @@ namespace NuGet.Protocol
 
             _feedParser = feedParser;
             _source = source;
+            _feedCapabilities = feedCapabilities;
         }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         public override async Task<IEnumerable<KeyValuePair<string, NuGetVersion>>> GetLatestVersions(IEnumerable<string> packageIds, bool includePrerelease, bool includeUnlisted,
             SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
@@ -71,7 +82,13 @@ namespace NuGet.Protocol
 
             try
             {
-                var packages = await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                var packages = await FindPackageById(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 return packages.Select(p => p.Version).ToArray();
             }
@@ -105,5 +122,25 @@ namespace NuGet.Protocol
 
             return versions.Any();
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageById(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            {
+                return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+            else
+            {
+                return await _feedParser.GetPackageVersionsAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }
