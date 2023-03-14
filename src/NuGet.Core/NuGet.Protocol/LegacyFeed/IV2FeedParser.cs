@@ -1,6 +1,15 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+
+using System.Collections.Generic;
+
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
@@ -25,5 +34,21 @@ namespace NuGet.Protocol
             int take,
             ILogger log,
             CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        Task<IReadOnlyList<V2FeedPackageInfo>> GetPackageVersionsAsync(
+            string id,
+            bool includeUnlisted,
+            bool includePreRelease,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

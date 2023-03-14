@@ -329,7 +329,6 @@ NuGet.Protocol.Core.Types.VersionInfo.VersionInfo(NuGet.Versioning.NuGetVersion 
 NuGet.Protocol.Core.Types.VersionInfo.VersionInfo(NuGet.Versioning.NuGetVersion version, long? downloadCount) -> void
 NuGet.Protocol.Core.Types.VersionInfo.VersionInfo(NuGet.Versioning.NuGetVersion version, string downloadCount) -> void
 NuGet.Protocol.DependencyInfoResourceV2Feed
-NuGet.Protocol.DependencyInfoResourceV2Feed.DependencyInfoResourceV2Feed(NuGet.Protocol.V2FeedParser feedParser, NuGet.Protocol.Core.Types.SourceRepository source) -> void
 NuGet.Protocol.DependencyInfoResourceV2FeedProvider
 NuGet.Protocol.DependencyInfoResourceV2FeedProvider.DependencyInfoResourceV2FeedProvider() -> void
 NuGet.Protocol.DependencyInfoResourceV3
@@ -670,7 +669,6 @@ NuGet.Protocol.MetadataReferenceCache.GetString(string s) -> string
 NuGet.Protocol.MetadataReferenceCache.GetVersion(string s) -> NuGet.Versioning.NuGetVersion
 NuGet.Protocol.MetadataReferenceCache.MetadataReferenceCache() -> void
 NuGet.Protocol.MetadataResourceV2Feed
-NuGet.Protocol.MetadataResourceV2Feed.MetadataResourceV2Feed(NuGet.Protocol.V2FeedParser feedParser, NuGet.Protocol.Core.Types.SourceRepository source) -> void
 NuGet.Protocol.MetadataResourceV2FeedProvider
 NuGet.Protocol.MetadataResourceV2FeedProvider.MetadataResourceV2FeedProvider() -> void
 NuGet.Protocol.MetadataResourceV3
@@ -708,7 +706,6 @@ NuGet.Protocol.PackageDetailsUriResourceV3.GetUri(string id, NuGet.Versioning.Nu
 NuGet.Protocol.PackageDetailsUriResourceV3Provider
 NuGet.Protocol.PackageDetailsUriResourceV3Provider.PackageDetailsUriResourceV3Provider() -> void
 NuGet.Protocol.PackageMetadataResourceV2Feed
-NuGet.Protocol.PackageMetadataResourceV2Feed.PackageMetadataResourceV2Feed(NuGet.Protocol.HttpSourceResource httpSourceResource, string baseAddress, NuGet.Configuration.PackageSource packageSource) -> void
 NuGet.Protocol.PackageMetadataResourceV2FeedProvider
 NuGet.Protocol.PackageMetadataResourceV2FeedProvider.PackageMetadataResourceV2FeedProvider() -> void
 NuGet.Protocol.PackageMetadataResourceV3
