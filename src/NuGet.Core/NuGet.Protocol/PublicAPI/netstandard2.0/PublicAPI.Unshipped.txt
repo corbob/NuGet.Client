@@ -124,8 +124,14 @@ NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetada
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.ReleaseNotes.set -> void
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.get -> int?
 NuGet.Protocol.Core.Types.PackageSearchMetadataBuilder.ClonedPackageSearchMetadata.VersionDownloadCount.set -> void
+NuGet.Protocol.Core.Types.SearchFilter.ByIdOnly.get -> bool
+NuGet.Protocol.Core.Types.SearchFilter.ByIdOnly.set -> void
+NuGet.Protocol.Core.Types.SearchFilter.ByTagOnly.get -> bool
+NuGet.Protocol.Core.Types.SearchFilter.ByTagOnly.set -> void
 NuGet.Protocol.Core.Types.SearchFilter.ExactPackageId.get -> bool
 NuGet.Protocol.Core.Types.SearchFilter.ExactPackageId.set -> void
+NuGet.Protocol.Core.Types.SearchFilter.IdStartsWith.get -> bool
+NuGet.Protocol.Core.Types.SearchFilter.IdStartsWith.set -> void
 NuGet.Protocol.Core.Types.SearchOrderBy.DownloadCount = 1 -> NuGet.Protocol.Core.Types.SearchOrderBy
 NuGet.Protocol.Core.Types.SearchOrderBy.DownloadCountAndVersion = 3 -> NuGet.Protocol.Core.Types.SearchOrderBy
 NuGet.Protocol.Core.Types.SearchOrderBy.Version = 2 -> NuGet.Protocol.Core.Types.SearchOrderBy
