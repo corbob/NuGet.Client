@@ -39,6 +39,14 @@ namespace NuGet.Protocol
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
+        Task<IReadOnlyList<V2FeedPackageInfo>> FindPackagesByIdAsync(
+            string id,
+            bool includeUnlisted,
+            bool includePrerelease,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token);
+
         Task<IReadOnlyList<V2FeedPackageInfo>> GetPackageVersionsAsync(
             string id,
             bool includeUnlisted,
