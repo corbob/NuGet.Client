@@ -434,7 +434,7 @@ namespace NuGet.Protocol
 
             if (!includePropertyClauses)
             {
-                return string.Empty;
+                return null;
             }
 
             //////////////////////////////////////////////////////////
