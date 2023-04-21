@@ -167,6 +167,31 @@
 
   <!--
     ============================================================
+    Start Chocolatey Specific Modification
+    ============================================================
+  -->
+
+  <!--
+    ============================================================
+    Build Chocolatey Components
+    ============================================================
+  -->
+  <Target Name="BuildChocolatey" AfterTargets="BuildVS" Condition=" '$(ChocolateyBuild)' == 'true' ">
+    <Message Text="Building Chocolatey Components" Importance="high" />
+
+    <MSBuild Projects="@(SolutionProjects)"
+             Targets="Build"
+             Properties="$(CommonMSBuildProperties)" />
+  </Target>
+
+  <!--
+    ============================================================
+    End Chocolatey Specific Modification
+    ============================================================
+  -->
+
+  <!--
+    ============================================================
     Build XPLAT
     ============================================================
   -->
@@ -185,7 +210,20 @@
     BuildVS runs the NoVSIX targets before this one.
     ============================================================
   -->
-  <Target Name="BuildVSIX" AfterTargets= "BuildVS" Condition=" '$(IsXPlat)' != 'true' AND '$(BuildRTM)' != 'true'">
+
+  <!--
+    ============================================================
+    Start Chocolatey Specific Modification
+    ============================================================
+  -->
+
+  <Target Name="BuildVSIX" AfterTargets= "BuildVS" Condition=" '$(IsXPlat)' != 'true' AND '$(BuildRTM)' != 'true' AND '$(ChocolateyBuild)' != 'true' ">
+
+  <!--
+    ============================================================
+    End Chocolatey Specific Modification
+    ============================================================
+  -->
     <Message Text="Building the VSIX" Importance="high" />
 
     <MSBuild Projects="$(VSIXProject)"

@@ -55,7 +55,11 @@ param (
     [switch]$PackageEndToEnd,
     [switch]$SkipDelaySigning,
     [switch]$Binlog,
-    [switch]$IncludeApex
+    [switch]$IncludeApex,
+    ##################################
+    # Chocolatey Specific Modification
+    ##################################
+    [switch]$ChocolateyBuild
 )
 
 . "$PSScriptRoot\build\common.ps1"
@@ -111,7 +115,13 @@ Invoke-BuildStep 'Running Restore' {
     Trace-Log ". `"$MSBuildExe`" $restoreArgs"
     & $MSBuildExe @restoreArgs
 
-    $restoreArgs = "build\build.proj", "/t:RestoreVS", "/p:Configuration=$Configuration", "/p:ReleaseLabel=$ReleaseLabel", "/p:IncludeApex=$IncludeApex", "/v:m", "/m"
+    ########################################
+    # Start Chocolatey Specific Modification
+    ########################################
+    $restoreArgs = "build\build.proj", "/t:RestoreVS", "/p:Configuration=$Configuration", "/p:ReleaseLabel=$ReleaseLabel", "/p:IncludeApex=$IncludeApex", "/p:ChocolateyBuild=$ChocolateyBuild", "/v:m", "/m"
+    ########################################
+    # End Chocolatey Specific Modification
+    ########################################
 
     if ($BuildNumber)
     {
@@ -142,7 +152,13 @@ Invoke-BuildStep 'Running Restore' {
 
 Invoke-BuildStep $VSMessage {
 
-    $buildArgs = 'build\build.proj', "/t:$VSTarget", "/p:Configuration=$Configuration", "/p:ReleaseLabel=$ReleaseLabel", "/p:IncludeApex=$IncludeApex", '/v:m', '/m'
+    ########################################
+    # Start Chocolatey Specific Modification
+    ########################################
+    $buildArgs = 'build\build.proj', "/t:$VSTarget", "/p:Configuration=$Configuration", "/p:ReleaseLabel=$ReleaseLabel", "/p:IncludeApex=$IncludeApex", "/p:ChocolateyBuild=$ChocolateyBuild", '/v:m', '/m'
+    ########################################
+    # End Chocolatey Specific Modification
+    ########################################
 
     if ($BuildNumber)
     {
@@ -191,7 +207,13 @@ Invoke-BuildStep 'Creating the EndToEnd test package' {
 Invoke-BuildStep 'Running Restore RTM' {
 
     # Restore for VS
-    $restoreArgs = "build\build.proj", "/t:RestoreVS", "/p:Configuration=$Configuration", "/p:BuildRTM=true", "/p:ReleaseLabel=$ReleaseLabel", "/p:ExcludeTestProjects=true", "/v:m", "/m"
+    ########################################
+    # Start Chocolatey Specific Modification
+    ########################################
+    $restoreArgs = "build\build.proj", "/t:RestoreVS", "/p:Configuration=$Configuration", "/p:BuildRTM=true", "/p:ReleaseLabel=$ReleaseLabel", "/p:ExcludeTestProjects=true", "/p:ChocolateyBuild=$ChocolateyBuild", "/v:m", "/m"
+    ########################################
+    # End Chocolatey Specific Modification
+    ########################################
 
     if ($BuildNumber)
     {
@@ -224,7 +246,13 @@ Invoke-BuildStep 'Running Restore RTM' {
 Invoke-BuildStep 'Packing RTM' {
 
     # Build and (If not $SkipUnitTest) Pack, Core unit tests, and Unit tests for VS
-    $packArgs = "build\build.proj", "/t:BuildVS`;Pack", "/p:Configuration=$Configuration", "/p:BuildRTM=true", "/p:ReleaseLabel=$ReleaseLabel", "/p:ExcludeTestProjects=true", "/v:m", "/m"
+    ########################################
+    # Start Chocolatey Specific Modification
+    ########################################
+    $packArgs = "build\build.proj", "/t:BuildVS`;Pack", "/p:Configuration=$Configuration", "/p:BuildRTM=true", "/p:ReleaseLabel=$ReleaseLabel", "/p:ExcludeTestProjects=true", "/p:ChocolateyBuild=$ChocolateyBuild", "/v:m", "/m"
+    ########################################
+    # End Chocolatey Specific Modification
+    ########################################
 
     if ($BuildNumber)
     {

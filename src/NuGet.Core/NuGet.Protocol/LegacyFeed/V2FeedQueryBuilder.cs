@@ -53,8 +53,8 @@ namespace NuGet.Protocol
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
-        private const string SearchEndpointFormat = "/Search(){0}?{1}{2}searchTerm='{3}'&targetFramework='{4}'&includePrerelease={5}&$skip={6}&$top={7}&" + SemVerLevel;
-        private const string CountQueryString = "/$count";
+        private const string SearchEndpointFormat = "/Search()?{0}{1}searchTerm='{2}'&targetFramework='{3}'&includePrerelease={4}&$skip={5}&$top={6}&" + SemVerLevel;
+        private const string CountEndpointFormat = "/Search()/$count?{0}{1}searchTerm='{2}'&targetFramework='{3}'&includePrerelease={4}&" + SemVerLevel;
         private const string ExactFilterFormat = "tolower(Id)%20eq%20'{0}'";
         private const string ByIdOnlyFormat = "substringof('{0}',tolower(Id))";
         private const string ByTagOnlyFormat = "substringof('{0}',Tags)";
@@ -124,27 +124,38 @@ namespace NuGet.Protocol
 
             var filter = BuildFilter(searchTerm, filters, includePropertyClauses: false);
 
-            var uri = string.Format(
-                CultureInfo.InvariantCulture,
-                SearchEndpointFormat,
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
-                //////////////////////////////////////////////////////////
-                // Start - Chocolatey Specific Modification
-                //////////////////////////////////////////////////////////
-                isCount ? CountQueryString : string.Empty,
-                //////////////////////////////////////////////////////////
-                // End - Chocolatey Specific Modification
-                //////////////////////////////////////////////////////////
+            if (isCount)
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    CountEndpointFormat,
+                    filter != null ? filter + QueryDelimiter : string.Empty,
+                    orderBy != null ? orderBy + QueryDelimiter : string.Empty,
+                    UriUtility.UrlEncodeOdataParameter(searchTerm),
+                    UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
+                    filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant());
+            }
+            else
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    SearchEndpointFormat,
+                    filter != null ? filter + QueryDelimiter : string.Empty,
+                    orderBy != null ? orderBy + QueryDelimiter : string.Empty,
+                    UriUtility.UrlEncodeOdataParameter(searchTerm),
+                    UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
+                    filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant(),
+                    skip,
+                    take);
+            }
 
-                filter != null ? filter + QueryDelimiter : string.Empty,
-                orderBy != null ? orderBy + QueryDelimiter : string.Empty,
-                UriUtility.UrlEncodeOdataParameter(searchTerm),
-                UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
-                filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant(),
-                skip,
-                take);
-
-            return uri;
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         public string BuildFindPackagesByIdUri(string id)
