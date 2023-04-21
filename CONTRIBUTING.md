@@ -77,7 +77,9 @@ NuGet members may contribute directly to the main remote.
 
 1. Build with
 
-    `.\build.ps1 -SkipUnitTest`
+    `.\build.ps1 -SkipUnitTest -ChocolateyBuild`
+
+   **NOTE:** The addition of the -ChocolateyBuild paremeter is to limit the build on _only_ the projects that are required by Chocolatey.
 
    Or Build and Unit test with
 
