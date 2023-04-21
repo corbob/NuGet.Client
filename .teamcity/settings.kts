@@ -51,7 +51,7 @@ object ChocolateyNugetClient : BuildType({
             name = "Build"
             scriptMode = script {
                 content = """
-                    .\build.ps1 -CI -SkipUnitTest -BuildNumber %build.counter% -ReleaseLabel beta -BuildDate (Get-Date -Format "yyyyMMdd")
+                    .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild -BuildNumber %build.counter% -ReleaseLabel beta -BuildDate (Get-Date -Format "yyyyMMdd")
                 """.trimIndent()
             }
         }

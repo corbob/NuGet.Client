@@ -13,4 +13,4 @@ jobs:
     - name: Configure .Net and other dependencies
       run: .\configure.ps1
     - name: Build
-      run: .\build.ps1 -CI -SkipUnitTest
+      run: .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild
