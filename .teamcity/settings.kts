@@ -67,11 +67,8 @@ object ChocolateyNugetClient : BuildType({
         }
         powerShell {
             conditions {
-                equals("teamcity.build.branch", "develop")
-                contains("teamcity.build.branch", "release")
-                contains("teamcity.build.branch", "hotfix")
-                equals("teamcity.build.branch", "master")
-                contains("teamcity.build.branch", "tags")
+                doesNotContain("teamcity.build.branch", "pull")
+                doesNotContain("teamcity.build.branch", "feature")
             }
             name = "Publish NuGet Packages"
             scriptMode = script {
