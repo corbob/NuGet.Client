@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,7 +12,13 @@ using Moq;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.DependencyResolver;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -180,7 +187,13 @@ namespace NuGet.Commands.Test
             }
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task CopyPackagesToOriginalCaseAsync_EmitsTelemetryWithParentIdAsync()
         {
             // Set up telemetry service

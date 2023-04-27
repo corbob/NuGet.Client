@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -15,7 +16,13 @@ static internal class ODataServiceDocumentUtils
 {
     public static async Task<ODataServiceDocumentResourceV2> CreateODataServiceDocumentResourceV2(
         string url,
-        HttpSource client,
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        IHttpSource client,
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         DateTime utcNow,
         ILogger log,
         CancellationToken token)

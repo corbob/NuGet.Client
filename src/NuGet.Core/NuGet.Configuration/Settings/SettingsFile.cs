@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -109,10 +110,26 @@ namespace NuGet.Configuration
             IsReadOnly = IsMachineWide || isReadOnly;
 
             XDocument config = null;
-            ExecuteSynchronized(() =>
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            // As Chocolatey, we never want to create the NuGet.Config file, as this is not used by Chocolatey at all.
+            // As such, rather than GetOrCreateDocument, if the filepath doesn't exist, simply return the default empty
+            // XDocument, which is exactly what would have been returned after creating the file.
+            if (File.Exists(ConfigFilePath))
             {
-                config = FileSystemUtility.GetOrCreateDocument(CreateDefaultConfig(), ConfigFilePath);
-            });
+                ExecuteSynchronized(() => config = FileSystemUtility.GetOrCreateDocument(CreateDefaultConfig(), ConfigFilePath));
+            }
+            else
+            {
+                config = CreateDefaultConfig();
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             _xDocument = config;
 
@@ -126,6 +143,17 @@ namespace NuGet.Configuration
         /// <returns>null if no section with the given name was found</returns>
         public SettingSection GetSection(string sectionName)
         {
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHOCOLATEY_VERSION")))
+            {
+                return null;
+            }
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             return _rootElement.GetSection(sectionName);
         }
 
@@ -177,6 +205,18 @@ namespace NuGet.Configuration
         /// </remarks>
         internal bool TryGetSection(string sectionName, out SettingSection section)
         {
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHOCOLATEY_VERSION")))
+            {
+                section = null;
+                return false;
+            }
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             return _rootElement.Sections.TryGetValue(sectionName, out section);
         }
 

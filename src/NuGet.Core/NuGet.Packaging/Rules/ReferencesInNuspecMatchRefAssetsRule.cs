@@ -1,14 +1,22 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 
 namespace NuGet.Packaging.Rules
 {
@@ -137,7 +145,7 @@ namespace NuGet.Packaging.Rules
                 {
                     foreach (var item in file.MissingItems)
                     {
-                        message.AppendLine(string.Format(_addToRefFormat, item, file.Tfm));
+                        message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToRefFormat, item, file.Tfm));
                     }
                 }
 
@@ -147,11 +155,11 @@ namespace NuGet.Packaging.Rules
                     {
                         if (reference.Tfm.Equals("any"))
                         {
-                            message.AppendLine(string.Format(_addToNuspecNoTfmFormat, item));
+                            message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToNuspecNoTfmFormat, item));
                         }
                         else
                         {
-                            message.AppendLine(string.Format(_addToNuspecFormat, item, reference.Tfm));
+                            message.AppendLine(string.Format(CultureInfo.CurrentCulture, _addToNuspecFormat, item, reference.Tfm));
                         }
                     }
                 }

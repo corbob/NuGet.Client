@@ -168,9 +168,6 @@
   <data name="Label_FileConflictAction" xml:space="preserve">
     <value>File conflict action:</value>
   </data>
-  <data name="Label_Filter" xml:space="preserve">
-    <value>Filter:</value>
-  </data>
   <data name="Label_Options" xml:space="preserve">
     <value>Options</value>
   </data>
@@ -233,9 +230,6 @@
   </data>
   <data name="Text_ErrorOccurred" xml:space="preserve">
     <value>Error occurred</value>
-  </data>
-  <data name="Label_Solution" xml:space="preserve">
-    <value>Solution '{0}'</value>
   </data>
   <data name="WindowTitle_PreviewChanges" xml:space="preserve">
     <value>Preview Changes</value>
@@ -562,7 +556,7 @@
     <value>Can not access NuGet.Config, Please check NuGet.Config</value>
   </data>
   <data name="ShowMessage_LocalsCommandFailure" xml:space="preserve">
-    <value>NuGet cache(s) clear failed at {0}. 
+    <value>NuGet storage clear failed at {0}. 
 Error: {1}
 Please see https://aka.ms/troubleshoot_nuget_cache for more help.</value>
     <comment>{0} :error message;
@@ -570,11 +564,11 @@ Please see https://aka.ms/troubleshoot_nuget_cache for more help.</value>
 </comment>
   </data>
   <data name="ShowMessage_LocalsCommandSuccess" xml:space="preserve">
-    <value>NuGet cache(s) cleared at {0}</value>
+    <value>NuGet storage cleared at {0}</value>
     <comment>{0} for date and time string</comment>
   </data>
   <data name="ShowMessage_LocalsCommandWorking" xml:space="preserve">
-    <value>Clearing all NuGet cache(s). </value>
+    <value>Clearing all NuGet storage. </value>
   </data>
   <data name="ShowWarning_InvalidSource" xml:space="preserve">
     <value>The source specified is invalid. Please provide a valid source.</value>
@@ -648,9 +642,6 @@ Please see https://aka.ms/troubleshoot_nuget_cache for more help.</value>
   </data>
   <data name="Error_ProjectNotInCache" xml:space="preserve">
     <value>Project {0} does not exist in the project system cache.</value>
-  </data>
-  <data name="Button_Upgrade" xml:space="preserve">
-    <value>Upgrade</value>
   </data>
   <data name="Text_UpgradeNuGetProjectDescription" xml:space="preserve">
     <value>Migrate this project from packages.config to PackageReference format.</value>

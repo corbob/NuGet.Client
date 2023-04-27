@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -15,8 +16,21 @@ using Xunit;
 
 namespace NuGet.Packaging.Test
 {
-    public class PackageFolderReaderTests
+    public class PackageFolderReaderTests : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+
+        public PackageFolderReaderTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
+
         // verify a zip package reader, and folder package reader handle reference items the same
         [Fact]
         public void PackageFolderReader_Basic()

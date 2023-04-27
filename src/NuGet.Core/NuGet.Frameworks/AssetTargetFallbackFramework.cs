@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,12 +8,30 @@ using System.Linq;
 using NuGet.Shared;
 
 #if IS_NET40_CLIENT
-using FallbackList = System.Collections.Generic.IList<NuGet.Frameworks.NuGetFramework>;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using FallbackList = System.Collections.Generic.IList<Chocolatey.NuGet.Frameworks.NuGetFramework>;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 #else
-using FallbackList = System.Collections.Generic.IReadOnlyList<NuGet.Frameworks.NuGetFramework>;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using FallbackList = System.Collections.Generic.IReadOnlyList<Chocolatey.NuGet.Frameworks.NuGetFramework>;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 #endif
 
-namespace NuGet.Frameworks
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+namespace Chocolatey.NuGet.Frameworks
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 {
     /// <summary>
     /// AssetTargetFallbackFramework only fallback when zero assets are selected. These do not 

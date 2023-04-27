@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,7 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
@@ -75,7 +82,7 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = string.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, package, _localResource.Root);
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, package, _localResource.Root);
 
                 throw new FatalProtocolException(error, ex);
             }
@@ -125,7 +132,7 @@ namespace NuGet.Protocol
             {
                 // Wrap exceptions coming from the server with a user friendly message
                 var error = string.Format(
-                    CultureInfo.CurrentUICulture,
+                    CultureInfo.CurrentCulture,
                     Strings.Protocol_PackageMetadataError,
                     packageId,
                     _localResource.Root);
@@ -135,6 +142,75 @@ namespace NuGet.Protocol
 
             return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results);
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve dependency info for a single package.
+        /// </summary>
+        /// <param name="packageId">package id</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="projectFramework">project target framework. This is used for finding the dependency group</param>
+        /// <param name="token">cancellation token</param>
+        public override Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(
+            string packageId,
+            bool includePrerelease,
+            NuGetFramework projectFramework,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            if (packageId == null)
+            {
+                throw new ArgumentNullException(nameof(packageId));
+            }
+
+            if (projectFramework == null)
+            {
+                throw new ArgumentNullException(nameof(projectFramework));
+            }
+
+            var results = new List<SourcePackageDependencyInfo>();
+
+            try
+            {
+                // Retrieve all packages
+                foreach (var package in _localResource.FindPackagesById(packageId, log, token))
+                {
+                    // Filter based on whether or not prerelease packages are included
+                    if (package.Identity.Version.IsPrerelease && !includePrerelease)
+                    {
+                        continue;
+                    }
+
+                    // Convert to dependency info type
+                    results.Add(CreateDependencyInfo(package, projectFramework));
+                }
+            }
+            catch (NuGetProtocolException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(
+                    CultureInfo.CurrentCulture,
+                    Strings.Protocol_PackageMetadataError,
+                    packageId,
+                    _localResource.Root);
+
+                throw new FatalProtocolException(error, ex);
+            }
+
+            return Task.FromResult<IEnumerable<SourcePackageDependencyInfo>>(results);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Convert a package into a PackageDependencyInfo

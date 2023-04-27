@@ -1,0 +1,18 @@
+NuGet.ProjectModel.CentralTransitiveDependencyGroup.CentralTransitiveDependencyGroup(NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> transitiveDependencies) -> void
+NuGet.ProjectModel.LockFile.GetTarget(NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> NuGet.ProjectModel.LockFileTarget
+NuGet.ProjectModel.LockFileDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
+NuGet.ProjectModel.LockFileTarget.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.PackageSpecReferenceDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
+NuGet.ProjectModel.PackagesLockFileTarget.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.FrameworkName.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectRestoreMetadataFrameworkInfo(NuGet.Frameworks.NuGetFramework frameworkName) -> void
+NuGet.ProjectModel.TargetFrameworkInformation.FrameworkName.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.TargetFrameworkInformation.Imports.get -> System.Collections.Generic.IList<NuGet.Frameworks.NuGetFramework>
+NuGet.ProjectModel.ToolPathResolver.GetBestToolDirectoryPath(string packageId, NuGet.Versioning.VersionRange versionRange, NuGet.Frameworks.NuGetFramework framework) -> string
+NuGet.ProjectModel.ToolPathResolver.GetLockFilePath(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework framework) -> string
+NuGet.ProjectModel.ToolPathResolver.GetToolDirectoryPath(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework framework) -> string
+static NuGet.ProjectModel.PackageSpecExtensions.GetRestoreMetadataFramework(this NuGet.ProjectModel.PackageSpec project, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo
+static NuGet.ProjectModel.PackageSpecExtensions.GetTargetFramework(this NuGet.ProjectModel.PackageSpec project, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.TargetFrameworkInformation
+static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageDependency dependency, System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
+static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageIdentity identity, System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
+static readonly NuGet.ProjectModel.LockFile.ToolFramework -> NuGet.Frameworks.NuGetFramework

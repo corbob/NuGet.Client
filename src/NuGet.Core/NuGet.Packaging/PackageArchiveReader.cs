@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,7 +12,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Packaging.Signing;
 
@@ -524,7 +531,7 @@ namespace NuGet.Packaging
                 // Please note: Linux/MAC case sensitive for env var name.
                 string signVerifyEnvVariable = _environmentVariableReader.GetEnvironmentVariable("DOTNET_NUGET_SIGNATURE_VERIFICATION");
 
-                bool canVerify = RuntimeEnvironmentHelper.IsLinux;
+                bool canVerify = false;
 
                 if (!string.IsNullOrEmpty(signVerifyEnvVariable))
                 {

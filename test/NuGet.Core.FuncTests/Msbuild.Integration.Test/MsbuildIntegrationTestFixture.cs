@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -100,7 +101,13 @@ namespace Msbuild.Integration.Test
         /// </summary>
         internal CommandRunnerResult RunMsBuild(string workingDirectory, string args, bool ignoreExitCode = false)
         {
-            var restoreDllPath = Path.Combine(_testDir, "NuGet.Build.Tasks.dll");
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            var restoreDllPath = Path.Combine(_testDir, "Chocolatey.NuGet.Build.Tasks.dll");
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             var nugetRestoreTargetsPath = Path.Combine(_testDir, "NuGet.targets");
             // Uncomment to debug the msbuild call
             // _processEnvVars.Add("DEBUG_RESTORE_TASK", "true");

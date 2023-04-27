@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,16 +12,34 @@ using NuGet.Packaging.Core;
 
 namespace NuGet.Protocol.Core.Types
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// Helper class allowing creation/alteration of immutable package metadata objects.
     /// </summary>
-    public class PackageSearchMetadataBuilder
+    public partial class PackageSearchMetadataBuilder
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private readonly IPackageSearchMetadata _metadata;
         private AsyncLazy<IEnumerable<VersionInfo>> _lazyVersionsFactory;
         private AsyncLazy<PackageDeprecationMetadata> _lazyDeprecationFactory;
 
-        public class ClonedPackageSearchMetadata : IPackageSearchMetadata
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public partial class ClonedPackageSearchMetadata : IPackageSearchMetadata
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         {
             private static readonly AsyncLazy<IEnumerable<VersionInfo>> LazyEmptyVersionInfo =
                 AsyncLazy.New(Enumerable.Empty<VersionInfo>());
@@ -116,7 +135,52 @@ namespace NuGet.Protocol.Core.Types
                 PackagePath =
                     (_metadata as LocalPackageSearchMetadata)?.PackagePath ??
                     (_metadata as ClonedPackageSearchMetadata)?.PackagePath,
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                PackageHash = _metadata.PackageHash,
+                PackageHashAlgorithm = _metadata.PackageHashAlgorithm,
+                PackageSize = _metadata.PackageSize,
+                VersionDownloadCount = _metadata.VersionDownloadCount,
+                IsApproved = _metadata.IsApproved,
+                PackageStatus = _metadata.PackageStatus,
+                PackageSubmittedStatus = _metadata.PackageSubmittedStatus,
+                PackageTestResultStatus = _metadata.PackageTestResultStatus,
+                PackageTestResultStatusDate = _metadata.PackageTestResultStatusDate,
+                PackageValidationResultStatus = _metadata.PackageValidationResultStatus,
+                PackageValidationResultDate = _metadata.PackageValidationResultDate,
+                PackageCleanupResultDate = _metadata.PackageCleanupResultDate,
+                PackageReviewedDate = _metadata.PackageReviewedDate,
+                PackageApprovedDate = _metadata.PackageApprovedDate,
+                PackageReviewer = _metadata.PackageReviewer,
+                DownloadCache = _metadata.DownloadCache,
+                IsDownloadCacheAvailable = _metadata.IsDownloadCacheAvailable,
+                DownloadCacheDate = _metadata.DownloadCacheDate,
+                ReleaseNotes = _metadata.ReleaseNotes,
+                ProjectSourceUrl = _metadata.ProjectSourceUrl,
+                PackageSourceUrl = _metadata.PackageSourceUrl,
+                DocsUrl = _metadata.DocsUrl,
+                MailingListUrl = _metadata.MailingListUrl,
+                BugTrackerUrl = _metadata.BugTrackerUrl,
+                DownloadCacheStatus = _metadata.DownloadCacheStatus,
+                PackageScanStatus = _metadata.PackageScanStatus,
+                PackageScanResultDate = _metadata.PackageScanResultDate,
+                PackageScanFlagResult = _metadata.PackageScanFlagResult,
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             };
+
+            if (_metadata is PackageSearchMetadataV2Feed)
+            {
+                var metaDataV2 = (PackageSearchMetadataV2Feed)_metadata;
+                clonedMetadata.IsLatestVersion = metaDataV2.IsLatestVersion;
+                clonedMetadata.IsAbsoluteLatestVersion = metaDataV2.IsAbsoluteLatestVersion;
+                clonedMetadata.IsPrerelease = metaDataV2.IsPrerelease;
+            }
 
             return clonedMetadata;
         }

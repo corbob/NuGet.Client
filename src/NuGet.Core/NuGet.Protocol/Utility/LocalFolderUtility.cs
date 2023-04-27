@@ -543,6 +543,23 @@ namespace NuGet.Protocol
             {
                 return new PackageIdentity(id, version);
             }
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHOCOLATEY_VERSION"))
+                && file != null
+                && file.Extension.Equals(PackagingCoreConstants.NupkgExtension, StringComparison.OrdinalIgnoreCase))
+            {
+                var localPackage = GetPackageFromNupkg(file);
+
+                if (localPackage?.Identity != null && localPackage.Identity.Id.Equals(id, StringComparison.OrdinalIgnoreCase))
+                {
+                    return localPackage.Identity;
+                }
+            }
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             return null;
         }

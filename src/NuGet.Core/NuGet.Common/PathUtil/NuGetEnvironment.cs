@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace NuGet.Common
 {
@@ -21,6 +22,79 @@ namespace NuGet.Common
 
         public static string GetFolderPath(NuGetFolderPath folder)
         {
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CHOCOLATEY_VERSION")))
+            {
+#pragma warning disable RS0030 // Do not used banned APIs
+                // This is the only place in the product code we can use GetTempPath().
+                // Because $env:temp is set to the config cacheLocation by Chocolatey, this is inside the Chocolatey cacheLocation when run by Chocolatey
+                var tempPath = Path.GetTempPath();
+#pragma warning restore RS0030 // Do not used banned APIs
+
+                var invalidFolder = Path.Combine(tempPath, "chocolatey-invalid");
+                switch (folder)
+                {
+                    case NuGetFolderPath.MachineWideSettingsBaseDirectory:
+                        return invalidFolder;
+
+                    case NuGetFolderPath.MachineWideConfigDirectory:
+                        return Path.Combine(invalidFolder, "config");
+
+                    case NuGetFolderPath.UserSettingsDirectory:
+                        return Path.Combine(invalidFolder, "user-settings");
+
+                    case NuGetFolderPath.HttpCacheDirectory:
+                        return Path.Combine(invalidFolder, "http-cache");
+
+                    case NuGetFolderPath.NuGetHome:
+                        return Path.Combine(invalidFolder, "home");
+
+                    case NuGetFolderPath.DefaultMsBuildPath:
+                        return Path.Combine(invalidFolder, "msbuild");
+
+                    case NuGetFolderPath.Temp:
+                        {
+                            var nuGetScratch = Path.Combine(tempPath, "ChocolateyScratch");
+
+                            // On Windows and Mac the temp directories are per-user, but on Linux it's /tmp for everyone
+                            if (RuntimeEnvironmentHelper.IsLinux)
+                            {
+                                // ConcurrencyUtility uses the lock subdirectory, so make sure it exists, and create with world write
+                                string lockPath = Path.Combine(nuGetScratch, "lock");
+                                if (!Directory.Exists(lockPath))
+                                {
+                                    void CreateSharedDirectory(string path)
+                                    {
+                                        Directory.CreateDirectory(path);
+                                        if (chmod(path, 0x1ff) == -1) // 0x1ff == 777 permissions
+                                        {
+                                            // it's very unlikely we can't set the permissions of a directory we just created
+                                            var errno = Marshal.GetLastWin32Error(); // fetch the errno before running any other operation
+                                            throw new InvalidOperationException($"Unable to set permission while creating {path}, errno={errno}.");
+                                        }
+                                    }
+
+                                    CreateSharedDirectory(nuGetScratch);
+                                    CreateSharedDirectory(lockPath);
+                                }
+                            }
+
+                            return nuGetScratch;
+                        }
+
+                    case NuGetFolderPath.NuGetPluginsCacheDirectory:
+                        return Path.Combine(invalidFolder, "plugins-cache");
+
+                    default:
+                        return null;
+                }
+            }
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             switch (folder)
             {
                 case NuGetFolderPath.MachineWideSettingsBaseDirectory:
@@ -57,16 +131,36 @@ namespace NuGet.Common
                         ".nuget");
 
                 case NuGetFolderPath.HttpCacheDirectory:
-                    return Path.Combine(
-                        GetFolderPath(SpecialFolder.LocalApplicationData),
-                        "NuGet",
-                        "v3-cache");
+                    if (RuntimeEnvironmentHelper.IsWindows)
+                    {
+                        return Path.Combine(
+                            GetFolderPath(SpecialFolder.LocalApplicationData),
+                            "NuGet",
+                            "v3-cache");
+                    }
+                    else
+                    {
+                        return Path.Combine(
+                            GetFolderPath(SpecialFolder.LocalApplicationData),
+                            "NuGet",
+                            "http-cache");
+                    }
 
                 case NuGetFolderPath.NuGetPluginsCacheDirectory:
-                    return Path.Combine(
-                        GetFolderPath(SpecialFolder.LocalApplicationData),
-                        "NuGet",
-                        "plugins-cache");
+                    if (RuntimeEnvironmentHelper.IsWindows)
+                    {
+                        return Path.Combine(
+                            GetFolderPath(SpecialFolder.LocalApplicationData),
+                            "NuGet",
+                            "plugins-cache");
+                    }
+                    else
+                    {
+                        return Path.Combine(
+                            GetFolderPath(SpecialFolder.LocalApplicationData),
+                            "NuGet",
+                            "plugin-cache");
+                    }
 
                 case NuGetFolderPath.DefaultMsBuildPath:
                     var programFilesPath = GetFolderPath(SpecialFolder.ProgramFilesX86);
@@ -83,7 +177,34 @@ namespace NuGet.Common
                         var nuGetScratch = Environment.GetEnvironmentVariable("NUGET_SCRATCH");
                         if (string.IsNullOrEmpty(nuGetScratch))
                         {
-                            nuGetScratch = Path.Combine(Path.GetTempPath(), "NuGetScratch");
+#pragma warning disable RS0030 // Do not used banned APIs
+                            // This is the only place in the product code we can use GetTempPath().
+                            var tempPath = Path.GetTempPath();
+#pragma warning restore RS0030 // Do not used banned APIs
+                            nuGetScratch = Path.Combine(tempPath, "NuGetScratch");
+
+                            // On Windows and Mac the temp directories are per-user, but on Linux it's /tmp for everyone
+                            if (RuntimeEnvironmentHelper.IsLinux)
+                            {
+                                // ConcurrencyUtility uses the lock subdirectory, so make sure it exists, and create with world write
+                                string lockPath = Path.Combine(nuGetScratch, "lock");
+                                if (!Directory.Exists(lockPath))
+                                {
+                                    void CreateSharedDirectory(string path)
+                                    {
+                                        Directory.CreateDirectory(path);
+                                        if (chmod(path, 0x1ff) == -1) // 0x1ff == 777 permissions
+                                        {
+                                            // it's very unlikely we can't set the permissions of a directory we just created
+                                            var errno = Marshal.GetLastWin32Error(); // fetch the errno before running any other operation
+                                            throw new InvalidOperationException($"Unable to set permission while creating {path}, errno={errno}.");
+                                        }
+                                    }
+
+                                    CreateSharedDirectory(nuGetScratch);
+                                    CreateSharedDirectory(lockPath);
+                                }
+                            }
                         }
                         return nuGetScratch;
                     }
@@ -92,6 +213,10 @@ namespace NuGet.Common
                     return null;
             }
         }
+
+        /// <summary>Only to be used for creating directories under /tmp on Linux. Do not use elsewhere.</summary>
+        [DllImport("libc", SetLastError = true, CharSet = CharSet.Ansi)]
+        private static extern int chmod(string pathname, int mode);
 
 #if IS_CORECLR
 

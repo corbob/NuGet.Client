@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -27,12 +28,28 @@ namespace NuGet.Protocol
         private readonly ConcurrentDictionary<string, NuspecReader> _nuspecReaders =
             new ConcurrentDictionary<string, NuspecReader>();
 
-        private readonly HttpSource _httpSource;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _httpSource;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly EnhancedHttpRetryHelper _enhancedHttpRetryHelper;
 
-        public FindPackagesByIdNupkgDownloader(HttpSource httpSource) : this(httpSource, EnvironmentVariableWrapper.Instance) { }
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
-        internal FindPackagesByIdNupkgDownloader(HttpSource httpSource, IEnvironmentVariableReader environmentVariableReader)
+        public FindPackagesByIdNupkgDownloader(IHttpSource httpSource) : this(httpSource, EnvironmentVariableWrapper.Instance) { }
+
+        internal FindPackagesByIdNupkgDownloader(IHttpSource httpSource, IEnvironmentVariableReader environmentVariableReader)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             if (httpSource == null)
             {

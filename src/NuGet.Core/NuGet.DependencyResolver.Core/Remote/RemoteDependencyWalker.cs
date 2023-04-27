@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,7 +9,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.RuntimeModel;
@@ -250,7 +257,7 @@ namespace NuGet.DependencyResolver
         /// <summary>
         /// Walks up the package dependency graph to check for cycle, potentially degraded package versions <see cref="DependencyResult"/>.
         /// Cycle: A -> B -> A (cycle)
-        /// Downgrade: B depends up on D 1.0. Hence this method returns a downgrade while processing D 2.0 package. 
+        /// Downgrade: B depends up on D 1.0. Hence this method returns a downgrade while processing D 2.0 package.
         /// A -> B -> C -> D 2.0 (downgrade)
         ///        -> D 1.0
         /// </summary>
@@ -267,7 +274,7 @@ namespace NuGet.DependencyResolver
             //Walk up the tree starting from the grand parent upto root
             while (edge != null)
             {
-                (DependencyResult? dependencyResult, LibraryDependency conflictingDependency) = CalculateDependencyResult(edge.Item, edge.Edge, dependency.LibraryRange);
+                (DependencyResult? dependencyResult, LibraryDependency conflictingDependency) = CalculateDependencyResult(edge.Item, edge.Edge, dependency.LibraryRange, edge.OuterEdge == null);
 
                 if (dependencyResult.HasValue)
                     return (dependencyResult.Value, conflictingDependency);
@@ -287,7 +294,7 @@ namespace NuGet.DependencyResolver
 
             return library =>
             {
-                (DependencyResult? dependencyResult, LibraryDependency conflictingDependency) = CalculateDependencyResult(item, dependency, library);
+                (DependencyResult? dependencyResult, LibraryDependency conflictingDependency) = CalculateDependencyResult(item, dependency, library, node.OuterNode == null);
 
                 if (dependencyResult.HasValue)
                     return (dependencyResult.Value, conflictingDependency);
@@ -297,7 +304,7 @@ namespace NuGet.DependencyResolver
         }
 
         private static (DependencyResult? dependencyResult, LibraryDependency conflictingDependency) CalculateDependencyResult(
-            GraphItem<RemoteResolveResult> item, LibraryDependency parentDependency, LibraryRange childDependencyLibrary)
+            GraphItem<RemoteResolveResult> item, LibraryDependency parentDependency, LibraryRange childDependencyLibrary, bool isRoot)
         {
             if (StringComparer.OrdinalIgnoreCase.Equals(item.Data.Match.Library.Name, childDependencyLibrary.Name))
             {
@@ -306,6 +313,12 @@ namespace NuGet.DependencyResolver
 
             foreach (LibraryDependency d in item.Data.Dependencies)
             {
+                // Central transitive dependencies should be considered only for root nodes
+                if (!isRoot && d.ReferenceType == LibraryDependencyReferenceType.None)
+                {
+                    continue;
+                }
+
                 if (d != parentDependency && childDependencyLibrary.IsEclipsedBy(d.LibraryRange))
                 {
                     if (d.LibraryRange.VersionRange != null &&

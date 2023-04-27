@@ -13,8 +13,10 @@ NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.BeginOperationAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.EndOperationAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.ExecuteActionsAsync(System.Collections.Generic.IReadOnlyList<NuGet.VisualStudio.Internal.Contracts.ProjectAction!>! actions, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask
+NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstallActionsAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, NuGet.Packaging.Core.PackageIdentity! packageIdentity, NuGet.PackageManagement.VersionConstraints versionConstraints, bool includePrelease, NuGet.Resolver.DependencyBehavior dependencyBehavior, System.Collections.Generic.IReadOnlyList<string!>! packageSourceNames, NuGet.Versioning.VersionRange! versionRange, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<NuGet.VisualStudio.Internal.Contracts.ProjectAction!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstallActionsAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, NuGet.Packaging.Core.PackageIdentity! packageIdentity, NuGet.PackageManagement.VersionConstraints versionConstraints, bool includePrelease, NuGet.Resolver.DependencyBehavior dependencyBehavior, System.Collections.Generic.IReadOnlyList<string!>! packageSourceNames, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<NuGet.VisualStudio.Internal.Contracts.ProjectAction!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstalledAndTransitivePackagesAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.IInstalledAndTransitivePackages!>
+NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstalledAndTransitivePackagesAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, bool includeTransitiveOrigins, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.IInstalledAndTransitivePackages!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstalledPackagesAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetInstalledPackagesDependencyInfoAsync(string! projectId, bool includeUnresolved, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.Packaging.Core.PackageDependencyInfo!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetMetadataAsync(string! projectId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo!>
@@ -22,7 +24,7 @@ NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetPackageFold
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetProjectAsync(string! projectId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetProjectsAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetProjectsWithDeprecatedDotnetFrameworkAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>!>
-NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetTargetFrameworksAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.Frameworks.NuGetFramework!>!>
+NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetTargetFrameworksAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<Chocolatey.NuGet.Frameworks.NuGetFramework!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetUninstallActionsAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, NuGet.Packaging.Core.PackageIdentity! packageIdentity, bool removeDependencies, bool forceRemove, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<NuGet.VisualStudio.Internal.Contracts.ProjectAction!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.GetUpdateActionsAsync(System.Collections.Generic.IReadOnlyCollection<string!>! projectIds, System.Collections.Generic.IReadOnlyCollection<NuGet.Packaging.Core.PackageIdentity!>! packageIdentities, NuGet.PackageManagement.VersionConstraints versionConstraints, bool includePrelease, NuGet.Resolver.DependencyBehavior dependencyBehavior, System.Collections.Generic.IReadOnlyList<string!>! packageSourceNames, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyList<NuGet.VisualStudio.Internal.Contracts.ProjectAction!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetProjectManagerService.TryGetInstalledPackageFilePathAsync(string! projectId, NuGet.Packaging.Core.PackageIdentity! packageIdentity, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<(bool, string?)>
@@ -49,6 +51,8 @@ NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetDeprecationMetadata
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetPackageMetadataAsync(NuGet.Packaging.Core.PackageIdentity! identity, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, bool includePrerelease, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<(NuGet.VisualStudio.Internal.Contracts.PackageSearchMetadataContextInfo!, NuGet.VisualStudio.Internal.Contracts.PackageDeprecationMetadataContextInfo?)>
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetPackageMetadataListAsync(string! id, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, bool includePrerelease, bool includeUnlisted, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSearchMetadataContextInfo!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetPackageVersionsAsync(NuGet.Packaging.Core.PackageIdentity! identity, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, bool includePrerelease, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.VersionInfoContextInfo!>!>
+NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetPackageVersionsAsync(NuGet.Packaging.Core.PackageIdentity! identity, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, bool includePrerelease, bool isTransitive, System.Collections.Generic.IEnumerable<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>! projects, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.VersionInfoContextInfo!>!>
+NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetPackageVersionsAsync(NuGet.Packaging.Core.PackageIdentity! identity, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, bool includePrerelease, bool isTransitive, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.VersionInfoContextInfo!>!>
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.GetTotalCountAsync(int maxCount, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>! projectContextInfos, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, System.Collections.Generic.IReadOnlyCollection<string!>! targetFrameworks, NuGet.Protocol.Core.Types.SearchFilter! searchFilter, NuGet.VisualStudio.Internal.Contracts.ItemFilter itemFilter, bool isSolution, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.RefreshSearchAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.SearchResultContextInfo!>
 NuGet.VisualStudio.Internal.Contracts.INuGetSearchService.SearchAsync(System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.IProjectContextInfo!>! projectContextInfos, System.Collections.Generic.IReadOnlyCollection<NuGet.VisualStudio.Internal.Contracts.PackageSourceContextInfo!>! packageSources, System.Collections.Generic.IReadOnlyCollection<string!>! targetFrameworks, string! searchText, NuGet.Protocol.Core.Types.SearchFilter! searchFilter, NuGet.VisualStudio.Internal.Contracts.ItemFilter itemFilter, bool isSolution, bool useRecommender, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<NuGet.VisualStudio.Internal.Contracts.SearchResultContextInfo!>
@@ -70,7 +74,7 @@ NuGet.VisualStudio.Internal.Contracts.INuGetSourcesService.SavePackageSourceCont
 NuGet.VisualStudio.Internal.Contracts.INuGetSourcesService.SavePackageSourcesAsync(System.Collections.Generic.IReadOnlyList<NuGet.Configuration.PackageSource!>! sources, NuGet.Configuration.PackageSourceUpdateOptions! packageSourceUpdateOptions, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask
 NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo
 NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.AllowedVersions.get -> NuGet.Versioning.VersionRange?
-NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.Framework.get -> NuGet.Frameworks.NuGetFramework?
+NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework?
 NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.Identity.get -> NuGet.Packaging.Core.PackageIdentity!
 NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.IsAutoReferenced.get -> bool
 NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo.IsDevelopmentDependency.get -> bool
@@ -83,8 +87,8 @@ NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo
 NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.FullPath.get -> string?
 NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.Name.get -> string?
 NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.ProjectId.get -> string?
-NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.SupportedFrameworks.get -> System.Collections.Generic.IReadOnlyCollection<NuGet.Frameworks.NuGetFramework!>?
-NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.TargetFramework.get -> NuGet.Frameworks.NuGetFramework?
+NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.SupportedFrameworks.get -> System.Collections.Generic.IReadOnlyCollection<Chocolatey.NuGet.Frameworks.NuGetFramework!>?
+NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.TargetFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework?
 NuGet.VisualStudio.Internal.Contracts.IProjectMetadataContextInfo.UniqueName.get -> string?
 NuGet.VisualStudio.Internal.Contracts.ITransitivePackageReferenceContextInfo
 NuGet.VisualStudio.Internal.Contracts.ITransitivePackageReferenceContextInfo.TransitiveOrigins.get -> System.Collections.Generic.IEnumerable<NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo!>!
@@ -124,12 +128,12 @@ NuGet.VisualStudio.Internal.Contracts.PackageDeprecationMetadataContextInfo.Pack
 NuGet.VisualStudio.Internal.Contracts.PackageDeprecationMetadataContextInfo.Reasons.get -> System.Collections.Generic.IReadOnlyCollection<string!>?
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.AllowedVersions.get -> NuGet.Versioning.VersionRange?
-NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.Framework.get -> NuGet.Frameworks.NuGetFramework?
+NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework?
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.Identity.get -> NuGet.Packaging.Core.PackageIdentity!
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.IsAutoReferenced.get -> bool
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.IsDevelopmentDependency.get -> bool
 NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.IsUserInstalled.get -> bool
-NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.PackageReferenceContextInfo(NuGet.Packaging.Core.PackageIdentity! identity, NuGet.Frameworks.NuGetFramework? framework) -> void
+NuGet.VisualStudio.Internal.Contracts.PackageReferenceContextInfo.PackageReferenceContextInfo(NuGet.Packaging.Core.PackageIdentity! identity, Chocolatey.NuGet.Frameworks.NuGetFramework? framework) -> void
 NuGet.VisualStudio.Internal.Contracts.PackageSearchMetadataContextInfo
 NuGet.VisualStudio.Internal.Contracts.PackageSearchMetadataContextInfo.Authors.get -> string?
 NuGet.VisualStudio.Internal.Contracts.PackageSearchMetadataContextInfo.DependencySets.get -> System.Collections.Generic.IReadOnlyCollection<NuGet.Packaging.PackageDependencyGroup!>?
@@ -193,8 +197,8 @@ NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo
 NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.FullPath.get -> string?
 NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.Name.get -> string?
 NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.ProjectId.get -> string?
-NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.SupportedFrameworks.get -> System.Collections.Generic.IReadOnlyCollection<NuGet.Frameworks.NuGetFramework!>?
-NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.TargetFramework.get -> NuGet.Frameworks.NuGetFramework?
+NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.SupportedFrameworks.get -> System.Collections.Generic.IReadOnlyCollection<Chocolatey.NuGet.Frameworks.NuGetFramework!>?
+NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.TargetFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework?
 NuGet.VisualStudio.Internal.Contracts.ProjectMetadataContextInfo.UniqueName.get -> string?
 NuGet.VisualStudio.Internal.Contracts.RemoteError
 NuGet.VisualStudio.Internal.Contracts.RemoteError.ActivityLogMessage.get -> string?
@@ -222,31 +226,59 @@ NuGet.VisualStudio.Internal.Contracts.TransitivePackageReference.TransitiveOrigi
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReference.TransitivePackageReference(NuGet.Packaging.PackageReference! pr) -> void
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.AllowedVersions.get -> NuGet.Versioning.VersionRange?
-NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.Framework.get -> NuGet.Frameworks.NuGetFramework?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.Identity.get -> NuGet.Packaging.Core.PackageIdentity!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.IsAutoReferenced.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.IsDevelopmentDependency.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.IsUserInstalled.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.TransitiveOrigins.get -> System.Collections.Generic.IEnumerable<NuGet.VisualStudio.Internal.Contracts.IPackageReferenceContextInfo!>!
-NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.TransitivePackageReferenceContextInfo(NuGet.Packaging.Core.PackageIdentity! identity, NuGet.Frameworks.NuGetFramework? framework) -> void
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageReferenceContextInfo.TransitivePackageReferenceContextInfo(NuGet.Packaging.Core.PackageIdentity! identity, Chocolatey.NuGet.Frameworks.NuGetFramework? framework) -> void
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Authors.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.BugTrackerUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DependencySets.get -> System.Collections.Generic.IEnumerable<NuGet.Packaging.PackageDependencyGroup!>!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Description.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DocsUrl.get -> System.Uri!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DownloadCache.get -> System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.DownloadCache!>!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DownloadCacheDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DownloadCacheStatus.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.DownloadCount.get -> long?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.GetDeprecationMetadataAsync() -> System.Threading.Tasks.Task<NuGet.Protocol.PackageDeprecationMetadata!>!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.GetVersionsAsync() -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Protocol.Core.Types.VersionInfo!>!>!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.IconUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Identity.get -> NuGet.Packaging.Core.PackageIdentity!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.IsApproved.get -> bool
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.IsDownloadCacheAvailable.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.IsListed.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.LicenseMetadata.get -> NuGet.Packaging.LicenseMetadata!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.LicenseUrl.get -> System.Uri!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.MailingListUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Owners.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageApprovedDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageCleanupResultDate.get -> System.DateTime?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageDetailsUrl.get -> System.Uri!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageHash.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageHashAlgorithm.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackagePath.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageReviewedDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageReviewer.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageScanFlagResult.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageScanResultDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageScanStatus.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageSize.get -> long?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageSourceUrl.get -> System.Uri!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageStatus.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageSubmittedStatus.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageTestResultStatus.get -> string!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageTestResultStatusDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageValidationResultDate.get -> System.DateTime?
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PackageValidationResultStatus.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.PrefixReserved.get -> bool
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.ProjectSourceUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.ProjectUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Published.get -> System.DateTimeOffset?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.ReadmeUrl.get -> System.Uri!
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.ReleaseNotes.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.ReportAbuseUrl.get -> System.Uri!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.RequireLicenseAcceptance.get -> bool
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Summary.get -> string!
@@ -254,6 +286,7 @@ NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Tags.get -
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Title.get -> string!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.TransitiveOrigins.get -> System.Collections.Generic.IReadOnlyCollection<NuGet.Packaging.Core.PackageIdentity!>!
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.TransitivePackageSearchMetadata(NuGet.Protocol.Core.Types.IPackageSearchMetadata! package, System.Collections.Generic.IReadOnlyCollection<NuGet.Packaging.Core.PackageIdentity!>! transitiveOrigins) -> void
+NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.VersionDownloadCount.get -> int?
 NuGet.VisualStudio.Internal.Contracts.TransitivePackageSearchMetadata.Vulnerabilities.get -> System.Collections.Generic.IEnumerable<NuGet.Protocol.PackageVulnerabilityMetadata!>!
 NuGet.VisualStudio.Internal.Contracts.VersionInfoContextInfo
 NuGet.VisualStudio.Internal.Contracts.VersionInfoContextInfo.DownloadCount.get -> long?

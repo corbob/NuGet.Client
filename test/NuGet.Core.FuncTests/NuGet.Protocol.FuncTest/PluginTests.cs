@@ -50,7 +50,7 @@ namespace NuGet.Protocol.FuncTest
             }
         }
 
-        [PlatformFact(Platform.Windows)]
+        [PlatformFact(Platform.Windows, Skip = "https://github.com/NuGet/Home/issues/12122")]
         public async Task GetOrCreateAsync_WithUnhandledExceptionInPlugin_Throws()
         {
             using (var cancellationTokenSource = new CancellationTokenSource(TestTimeout))
@@ -108,7 +108,7 @@ namespace NuGet.Protocol.FuncTest
                 Assert.True(
                     Regex.IsMatch(
                         exception.Message,
-                        "^Plugin 'Plugin.Testable' failed within \\d.\\d{3} seconds with exit code -1.$"),
+                        "^Plugin 'Plugin.Testable' failed within \\d{2}.\\d{3} seconds with exit code -1.$"),
                     exception.Message);
             }
         }

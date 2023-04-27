@@ -1,8 +1,10 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -14,7 +16,13 @@ using Microsoft.VisualStudio.ProjectSystem.References;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.PackageManagement.VisualStudio.Exceptions;
 using NuGet.PackageManagement.VisualStudio.Utility;
@@ -85,7 +93,7 @@ namespace NuGet.PackageManagement.VisualStudio
                 if (shouldThrow)
                 {
                     throw new ProjectNotNominatedException(
-                        string.Format(Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
+                        string.Format(CultureInfo.CurrentCulture, Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
                 }
                 else
                 {
@@ -133,7 +141,7 @@ namespace NuGet.PackageManagement.VisualStudio
             if (!_projectSystemCache.TryGetProjectRestoreInfo(ProjectFullPath, out projectRestoreInfo, out additionalMessages))
             {
                 throw new ProjectNotNominatedException(
-                    string.Format(Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
+                    string.Format(CultureInfo.CurrentCulture, Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
             }
 
             // Apply ISettings when needed to the return values.
@@ -274,6 +282,7 @@ namespace NuGet.PackageManagement.VisualStudio
                 if (conditionalService == null)
                 {
                     throw new InvalidOperationException(string.Format(
+                        CultureInfo.CurrentCulture,
                         Strings.UnableToGetCPSPackageInstallationService,
                         ProjectFullPath));
                 }
@@ -363,7 +372,7 @@ namespace NuGet.PackageManagement.VisualStudio
             if (spec == null)
             {
                 throw new ProjectNotNominatedException(
-                    string.Format(Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
+                    string.Format(CultureInfo.CurrentCulture, Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
             }
 
             return Task.FromResult(NoOpRestoreUtilities.GetProjectCacheFilePath(cacheRoot: spec.RestoreMetadata.OutputPath));

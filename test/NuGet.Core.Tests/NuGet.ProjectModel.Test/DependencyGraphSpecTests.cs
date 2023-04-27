@@ -1,12 +1,20 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Test.Utility;
 using NuGet.Versioning;
@@ -14,7 +22,7 @@ using Xunit;
 
 namespace NuGet.ProjectModel.Test
 {
-    public class DependencyGraphSpecTests
+    public class DependencyGraphSpecTests : IDisposable
     {
         private const string DgSpecWithCentralDependencies = "DependencyGraphSpec_CentralVersionDependencies.json";
         private const string Project1Json = "project1.json";
@@ -25,6 +33,18 @@ namespace NuGet.ProjectModel.Test
 
         private const string PackageSpecName = "x";
         private const string PackageSpecPath = @"c:\fake\project.json";
+        private readonly CultureInfo _originalCulture;
+
+        public DependencyGraphSpecTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
 
         [Fact]
         public void GetParents_WhenCalledOnChild_ReturnsParents()

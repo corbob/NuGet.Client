@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,7 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
@@ -21,7 +28,13 @@ namespace NuGet.Protocol
         private readonly FrameworkReducer _frameworkReducer = new FrameworkReducer();
         private readonly SourceRepository _source;
 
-        public DependencyInfoResourceV2Feed(V2FeedParser feedParser, SourceRepository source)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly ILegacyFeedCapabilityResource _feedCapabilities;
+
+        public DependencyInfoResourceV2Feed(V2FeedParser feedParser, ILegacyFeedCapabilityResource feedCapabilities, SourceRepository source)
         {
             if (feedParser == null)
             {
@@ -30,7 +43,12 @@ namespace NuGet.Protocol
 
             _feedParser = feedParser;
             _source = source;
+            _feedCapabilities = feedCapabilities;
         }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         public override async Task<SourcePackageDependencyInfo> ResolvePackage(
             PackageIdentity package,
@@ -53,7 +71,7 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = String.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, package, _source);
+                var error = String.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, package, _source);
 
                 throw new FatalProtocolException(error, ex);
             }
@@ -71,7 +89,13 @@ namespace NuGet.Protocol
 
             try
             {
-                var packages = await _feedParser.FindPackagesByIdAsync(packageId, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                var packages = await FindPackageById(packageId, includeUnlisted: true, includePrerelease: true, sourceCacheContext, log, token);
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 var results = new List<SourcePackageDependencyInfo>();
 
@@ -84,11 +108,49 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = String.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+                var error = String.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
 
                 throw new FatalProtocolException(error, ex);
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(
+            string packageId,
+            bool includePrerelease,
+            NuGetFramework projectFramework,
+            SourceCacheContext sourceCacheContext,
+            ILogger log,
+            CancellationToken token)
+        {
+            token.ThrowIfCancellationRequested();
+
+            try
+            {
+                var packages = await FindPackageById(packageId, true, includePrerelease, sourceCacheContext, log, token);
+
+                var results = new List<SourcePackageDependencyInfo>();
+
+                foreach (var package in packages)
+                {
+                    results.Add(CreateDependencyInfo(package, projectFramework));
+                }
+                return results;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = String.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Convert a V2 feed package into a V3 PackageDependencyInfo
@@ -125,5 +187,25 @@ namespace NuGet.Protocol
 
             return result;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageById(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
+        {
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            {
+                return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+            else
+            {
+                return await _feedParser.GetPackageVersionsAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

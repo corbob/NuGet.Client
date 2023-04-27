@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -17,7 +18,16 @@ namespace NuGet.Protocol
 {
     public class PackageSearchResourceV3 : PackageSearchResource
     {
-        private readonly HttpSource _client;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _client;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly Uri[] _searchEndpoints;
 
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -31,16 +41,23 @@ namespace NuGet.Protocol
             _rawSearchResource = searchResource;
         }
 
-        internal PackageSearchResourceV3(HttpSource client, IEnumerable<Uri> searchEndpoints)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        internal PackageSearchResourceV3(IHttpSource client, IEnumerable<Uri> searchEndpoints)
             : base()
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _searchEndpoints = searchEndpoints?.ToArray() ?? throw new ArgumentNullException(nameof(searchEndpoints));
         }
 
         /// <summary>
-        /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result 
-        /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result. 
+        /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result
+        /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result.
         /// </summary>
         /// <param name="searchTerm">The term we're searching for.</param>
         /// <param name="filter">Filter for whether to include prerelease, delisted, supportedframework flags in query.</param>
@@ -118,9 +135,9 @@ namespace NuGet.Protocol
                 var queryUrl = new UriBuilder(endpoint.AbsoluteUri);
                 var queryString =
                     "q=" + searchTerm +
-                    "&skip=" + skip.ToString() +
-                    "&take=" + take.ToString() +
-                    "&prerelease=" + filters.IncludePrerelease.ToString().ToLowerInvariant();
+                    "&skip=" + skip.ToString(CultureInfo.CurrentCulture) +
+                    "&take=" + take.ToString(CultureInfo.CurrentCulture) +
+                    "&prerelease=" + filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant();
 
                 if (filters.IncludeDelisted)
                 {
@@ -133,7 +150,7 @@ namespace NuGet.Protocol
                     var frameworks =
                         string.Join("&",
                             filters.SupportedFrameworks.Select(
-                                fx => "supportedFramework=" + fx.ToString()));
+                                fx => "supportedFramework=" + fx.ToString(CultureInfo.InvariantCulture)));
                     queryString += "&" + frameworks;
                 }
 
@@ -185,7 +202,13 @@ namespace NuGet.Protocol
         }
 
         private async Task<T> Search<T>(
-            Func<HttpSource, Uri, Task<T>> getResultAsync,
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            Func<IHttpSource, Uri, Task<T>> getResultAsync,
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             string searchTerm,
             SearchFilter filters,
             int skip,
@@ -204,8 +227,8 @@ namespace NuGet.Protocol
         }
 
         /// <summary>
-        /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result 
-        /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result. 
+        /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result
+        /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result.
         /// </summary>
         /// <param name="searchTerm">The term we're searching for.</param>
         /// <param name="filters">Filter for whether to include prerelease, delisted, supportedframework flags in query.</param>
@@ -236,6 +259,36 @@ namespace NuGet.Protocol
                 cancellationToken);
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        internal async Task<long> Count(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            Common.ILogger log,
+            CancellationToken cancellationToken)
+        {
+            return await Search(
+                (httpSource, uri) => httpSource.ProcessHttpStreamAsync(
+                    new HttpSourceRequest(uri, Common.NullLogger.Instance),
+                    s => ProcessHttpStreamGetCountAsync(s, take, cancellationToken),
+                    Common.NullLogger.Instance,
+                    cancellationToken),
+                searchTerm,
+                filters,
+                skip,
+                take,
+                log,
+                cancellationToken);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         internal async Task<IEnumerable<PackageSearchMetadata>> ProcessHttpStreamTakeCountedItemAsync(HttpResponseMessage httpInitialResponse, int take, CancellationToken token)
         {
             if (take <= 0)
@@ -245,6 +298,24 @@ namespace NuGet.Protocol
 
             return (await ProcessHttpStreamWithoutBufferingAsync(httpInitialResponse, (uint)take, token)).Data;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        internal async Task<long> ProcessHttpStreamGetCountAsync(HttpResponseMessage httpInitialResponse, int take, CancellationToken token)
+        {
+            if (take <= 0)
+            {
+                return 0;
+            }
+
+            return (await ProcessHttpStreamWithoutBufferingAsync(httpInitialResponse, (uint)take, token)).TotalHits;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         private async Task<V3SearchResults> ProcessHttpStreamWithoutBufferingAsync(HttpResponseMessage httpInitialResponse, uint take, CancellationToken token)
         {
@@ -263,5 +334,51 @@ namespace NuGet.Protocol
                 return _newtonsoftConvertersSerializer.Deserialize<V3SearchResults>(jsonReader);
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<int> SearchCountAsync(string searchTerm, SearchFilter filters, Common.ILogger log, CancellationToken cancellationToken)
+        {
+            var skip = 0;
+            var take = 1;
+
+            long count = 0;
+            var metadataCache = new MetadataReferenceCache();
+
+            if (_client != null && _searchEndpoints != null)
+            {
+                count = await Search(
+                    (httpSource, uri) => httpSource.ProcessHttpStreamAsync(
+                        new HttpSourceRequest(uri, Common.NullLogger.Instance),
+                        s => ProcessHttpStreamGetCountAsync(s, take, cancellationToken),
+                        Common.NullLogger.Instance,
+                        cancellationToken),
+                    searchTerm,
+                    filters,
+                    skip,
+                    take,
+                    log,
+                    cancellationToken);
+            }
+            else
+            {
+                // TODO, fix this for raw search resource
+#pragma warning disable CS0618
+                //var searchResultJsonObjects = await _rawSearchResource.Search(searchTerm, filters, skip, take, Common.NullLogger.Instance, cancellationToken);
+#pragma warning restore CS0618
+                //count = searchResultJsonObjects.Select(s => s.FromJToken<long>())
+                //
+                // searchResultMetadata = searchResultJsonObjects
+                //    .Select(s => s.FromJToken<PackageSearchMetadata>());
+            }
+
+            return (int)count;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

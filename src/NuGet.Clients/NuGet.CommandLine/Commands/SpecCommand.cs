@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,7 +9,13 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Packaging.Licenses;
@@ -42,7 +49,13 @@ namespace NuGet.CommandLine
             string sampleTags = "Tag1 Tag2";
             string sampleReleaseNotes = "Summary of changes made in this release of the package.";
             string sampleDescription = "Package description";
-            NuGetFramework sampleTfm = NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard21;
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            NuGetFramework sampleTfm = FrameworkConstants.CommonFrameworks.NetStandard21;
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             PackageDependency sampleManifestDependency = new PackageDependency("SampleDependency", new VersionRange(new NuGetVersion("1.0.0")));
 
             var manifest = new Manifest(new ManifestMetadata());
@@ -168,10 +181,10 @@ namespace NuGet.CommandLine
 
         private static string AddCommentedIconAttribute(string content, string iconFile)
         {
-            string sampleIconFile = string.Format("    <!-- <icon>{0}</icon> -->", iconFile);
+            string sampleIconFile = string.Format(CultureInfo.CurrentCulture, "    <!-- <icon>{0}</icon> -->", iconFile);
 
             return content
-                .Replace($"</license>{Environment.NewLine}", string.Format("</license>{0}{1}{2}", Environment.NewLine, sampleIconFile, Environment.NewLine));
+                .Replace($"</license>{Environment.NewLine}", string.Format(CultureInfo.CurrentCulture, "</license>{0}{1}{2}", Environment.NewLine, sampleIconFile, Environment.NewLine));
         }
     }
 }

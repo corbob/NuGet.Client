@@ -1,3 +1,7 @@
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,6 +20,10 @@ namespace NuGet.CommandLine
             if (resourceType == null)
             {
                 throw new ArgumentNullException(nameof(resourceType));
+            }
+            if (string.IsNullOrEmpty(resourceNames))
+            {
+                throw new ArgumentException("Cannot be null or empty", nameof(resourceNames));
             }
 
             if (_cachedManagers == null)
@@ -45,11 +53,17 @@ namespace NuGet.CommandLine
             }
 
             var builder = new StringBuilder();
-            foreach (var resource in resourceNames.Split(';'))
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            foreach (var resource in resourceNames.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             {
-                var culture = LocalizedResourceManager.GetLanguageName();
-                string value = resourceManager.GetString(resource + '_' + culture, CultureInfo.InvariantCulture) ??
-                    resourceManager.GetString(resource, CultureInfo.InvariantCulture);
+                string value = LocalizedResourceManager.GetString(resource, resourceManager);
                 if (String.IsNullOrEmpty(value))
                 {
                     throw new InvalidOperationException(

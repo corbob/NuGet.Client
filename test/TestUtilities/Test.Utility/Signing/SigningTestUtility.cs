@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Pkcs;
@@ -169,7 +170,8 @@ namespace Test.Utility.Signing
                         IsCA = true
                     };
 
-                    cert = TestCertificate.Generate(actionGenerator, chainCertificateRequest).WithPrivateKeyAndTrust(StoreName.Root);
+                    cert = TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator, chainCertificateRequest)
+                        .WithPrivateKeyAndTrust(StoreName.Root);
                     issuer = cert;
                 }
                 else if (i < length - 1) // intermediate CA cert
@@ -183,7 +185,8 @@ namespace Test.Utility.Signing
                         Issuer = issuer.Source.Cert
                     };
 
-                    cert = TestCertificate.Generate(actionGenerator, chainCertificateRequest).WithPrivateKeyAndTrustForIntermediateCertificateAuthority();
+                    cert = TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator, chainCertificateRequest)
+                        .WithPrivateKeyAndTrustForIntermediateCertificateAuthority();
                     issuer = cert;
                 }
                 else // leaf cert
@@ -197,7 +200,8 @@ namespace Test.Utility.Signing
                         Issuer = issuer.Source.Cert
                     };
 
-                    cert = TestCertificate.Generate(leafGenerator, chainCertificateRequest).WithPrivateKeyAndTrustForLeafOrSelfIssued();
+                    cert = TestCertificate.Generate(X509StorePurpose.CodeSigning, leafGenerator, chainCertificateRequest)
+                        .WithPrivateKeyAndTrustForLeafOrSelfIssued();
                 }
 
                 certChain.Add(cert);
@@ -236,7 +240,10 @@ namespace Test.Utility.Signing
                         IsCA = true
                     };
 
-                    testCertificate = TestCertificate.Generate(actionGenerator, chainCertificateRequest);
+                    testCertificate = TestCertificate.Generate(
+                        X509StorePurpose.CodeSigning,
+                        actionGenerator,
+                        chainCertificateRequest);
 
                     testCertificates.Add(testCertificate);
 
@@ -253,7 +260,10 @@ namespace Test.Utility.Signing
                         Issuer = issuer
                     };
 
-                    testCertificate = TestCertificate.Generate(actionGenerator, chainCertificateRequest);
+                    testCertificate = TestCertificate.Generate(
+                        X509StorePurpose.CodeSigning,
+                        actionGenerator,
+                        chainCertificateRequest);
 
                     testCertificates.Add(testCertificate);
 
@@ -275,7 +285,10 @@ namespace Test.Utility.Signing
                         Issuer = issuer
                     };
 
-                    testCertificate = TestCertificate.Generate(leafGenerator, chainCertificateRequest);
+                    testCertificate = TestCertificate.Generate(
+                        X509StorePurpose.CodeSigning,
+                        leafGenerator,
+                        chainCertificateRequest);
 
                     certificate = testCertificate.PublicCertWithPrivateKey;
 
@@ -661,7 +674,7 @@ namespace Test.Utility.Signing
             // Code Sign EKU needs trust to a root authority
             // Add the cert to Root CA list in LocalMachine as it does not prompt a dialog
             // This makes all the associated tests to require admin privilege
-            return TestCertificate.Generate(actionGenerator).WithTrust();
+            return TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator).WithTrust();
         }
 
         public static TrustedTestCert<TestCertificate> GenerateTrustedTestCertificateExpired()
@@ -671,7 +684,7 @@ namespace Test.Utility.Signing
             // Code Sign EKU needs trust to a root authority
             // Add the cert to Root CA list in LocalMachine as it does not prompt a dialog
             // This makes all the associated tests to require admin privilege
-            return TestCertificate.Generate(actionGenerator).WithTrust();
+            return TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator).WithTrust();
         }
 
         public static TrustedTestCert<TestCertificate> GenerateTrustedTestCertificateNotYetValid()
@@ -681,7 +694,7 @@ namespace Test.Utility.Signing
             // Code Sign EKU needs trust to a root authority
             // Add the cert to Root CA list in LocalMachine as it does not prompt a dialog
             // This makes all the associated tests to require admin privilege
-            return TestCertificate.Generate(actionGenerator).WithTrust();
+            return TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator).WithTrust();
         }
 
         public static TrustedTestCert<TestCertificate> GenerateTrustedTestCertificateThatWillExpireSoon(TimeSpan expiresIn)
@@ -691,7 +704,7 @@ namespace Test.Utility.Signing
             // Code Sign EKU needs trust to a root authority
             // Add the cert to Root CA list in LocalMachine as it does not prompt a dialog
             // This makes all the associated tests to require admin privilege
-            return TestCertificate.Generate(actionGenerator).WithTrust();
+            return TestCertificate.Generate(X509StorePurpose.CodeSigning, actionGenerator).WithTrust();
         }
 
         public static bool AreVerifierSettingsEqual(SignedPackageVerifierSettings first, SignedPackageVerifierSettings second)
@@ -865,7 +878,7 @@ namespace Test.Utility.Signing
 
         public static string AddSignatureLogPrefix(string log, PackageIdentity package, string source)
         {
-            return $"{string.Format(SignatureLogPrefix, package.Id, package.Version, source)} {log}";
+            return $"{string.Format(CultureInfo.CurrentCulture, SignatureLogPrefix, package.Id, package.Version, source)} {log}";
         }
     }
 }

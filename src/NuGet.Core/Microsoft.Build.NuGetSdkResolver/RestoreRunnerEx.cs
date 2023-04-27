@@ -1,14 +1,22 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.ProjectModel;
 using NuGet.Protocol;
@@ -45,9 +53,9 @@ namespace NuGet.Commands
                 IgnoreFailedSources = true,
             })
             {
-                var projectDirectory = Path.Combine(NuGetEnvironment.GetFolderPath(NuGetFolderPath.Temp), Guid.NewGuid().ToString("N"));
+                var projectDirectory = Path.Combine(NuGetEnvironment.GetFolderPath(NuGetFolderPath.Temp), Guid.NewGuid().ToString("N", null));
 
-                var projectName = Guid.NewGuid().ToString("N");
+                var projectName = Guid.NewGuid().ToString("N", null);
 
                 var projectFullPath = Path.Combine(projectDirectory, $"{projectName}.proj");
 

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -9,7 +10,13 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using FluentAssertions;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging;
 using NuGet.ProjectModel;
 using NuGet.Test.Utility;
@@ -763,6 +770,48 @@ $@"<?xml version=""1.0"" encoding=""utf-8""?>
             }
 
             return Task.CompletedTask;
+        }
+
+        [PlatformFact(Platform.Windows)]
+        public void MsbuildRestore_StaticGraphEvaluation_HandlesInvalidProjectFileException()
+        {
+            // Arrange
+            using (var pathContext = new SimpleTestPathContext())
+            {
+                // Set up solution, project, and packages
+                var solution = new SimpleTestSolutionContext(pathContext.SolutionRoot);
+
+                var net461 = NuGetFramework.Parse("net461");
+
+                var projectA = new SimpleTestProjectContext("a", ProjectStyle.PackageReference, pathContext.SolutionRoot);
+
+                var projectB = new SimpleTestProjectContext("b", ProjectStyle.PackageReference, pathContext.SolutionRoot);
+
+                var projectAFrameworkContext = new SimpleTestProjectFrameworkContext(net461);
+
+                projectAFrameworkContext.ProjectReferences.Add(projectB);
+
+                var packageX = new SimpleTestPackageContext()
+                {
+                    Id = "x",
+                    Version = "1.0.0"
+                };
+                projectA.Frameworks.Add(projectAFrameworkContext);
+
+                projectA.AddPackageToAllFrameworks(packageX);
+
+                solution.Projects.Add(projectA);
+                solution.Create(pathContext.SolutionRoot);
+
+                File.Delete(projectB.ProjectPath);
+
+                var result = _msbuildFixture.RunMsBuild(pathContext.WorkingDirectory, $"/t:restore /p:RestoreUseStaticGraphEvaluation=true {projectA.ProjectPath}", ignoreExitCode: true);
+
+                // Assert
+                Assert.True(result.ExitCode == 1, result.AllOutput);
+
+                result.AllOutput.Should().Contain($"error MSB4025: The project file could not be loaded. Could not find file '{projectB.ProjectPath}'");
+            }
         }
 
         [PlatformTheory(Platform.Windows)]

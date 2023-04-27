@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,7 +12,13 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Signing;
 using NuGet.ProjectModel;
 using NuGet.Test.Utility;
@@ -377,7 +384,7 @@ namespace NuGet.CommandLine.FuncTest.Commands
         [Fact]
         public void GetCertificateChain_WithUntrustedRoot_Throws()
         {
-            using (var chainHolder = new X509ChainHolder())
+            using (X509ChainHolder chainHolder = X509ChainHolder.CreateForCodeSigning())
             using (var rootCertificate = SigningTestUtility.GetCertificate("root.crt"))
             using (var intermediateCertificate = SigningTestUtility.GetCertificate("intermediate.crt"))
             using (var leafCertificate = SigningTestUtility.GetCertificate("leaf.crt"))

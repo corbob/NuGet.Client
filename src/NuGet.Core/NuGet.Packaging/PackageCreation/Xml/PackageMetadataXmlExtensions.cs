@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -80,6 +81,27 @@ namespace NuGet.Packaging.Xml
             AddElementIfNotNull(elem, ns, "copyright", metadata.Copyright);
             AddElementIfNotNull(elem, ns, "language", metadata.Language);
             AddElementIfNotNull(elem, ns, "tags", metadata.Tags);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            AddElementIfNotNull(elem, ns, "projectSourceUrl", metadata.ProjectSourceUrl);
+            AddElementIfNotNull(elem, ns, "packageSourceUrl", metadata.PackageSourceUrl);
+            AddElementIfNotNull(elem, ns, "docsUrl", metadata.DocsUrl);
+            AddElementIfNotNull(elem, ns, "wikiUrl", metadata.WikiUrl);
+            AddElementIfNotNull(elem, ns, "mailingListUrl", metadata.MailingListUrl);
+            AddElementIfNotNull(elem, ns, "bugTrackerUrl", metadata.BugTrackerUrl);
+            AddElementIfNotEmpty(elem, ns, "replaces", metadata.Replaces, replaces => string.Join(",", replaces));
+            AddElementIfNotEmpty(elem, ns, "provides", metadata.Provides, provides => string.Join(",", provides));
+            AddElementIfNotEmpty(elem, ns, "conflicts", metadata.Conflicts, conflicts => string.Join(",", conflicts));
+            AddElementIfNotNull(elem, ns, "softwareDisplayName", metadata.SoftwareDisplayName);
+            AddElementIfNotNull(elem, ns, "softwareDisplayVersion", metadata.SoftwareDisplayVersion);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             if (metadata.Serviceable)
             {
                 elem.Add(new XElement(ns + "serviceable", metadata.Serviceable));

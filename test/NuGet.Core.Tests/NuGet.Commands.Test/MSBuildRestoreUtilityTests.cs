@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,7 +9,13 @@ using System.Linq;
 using FluentAssertions;
 using Moq;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.ProjectManagement;
 using NuGet.ProjectModel;
@@ -3519,6 +3526,95 @@ namespace NuGet.Commands.Test
 
                 Assert.True(project1Spec.RestoreMetadata.CentralPackageVersionsEnabled);
             }
+        }
+
+        [Fact]
+        public void MSBuildRestoreUtility_GetDependencySpec_HandlesDuplicatesWhenCPVMEnabled()
+        {
+            // Arrange
+            using var workingDir = TestDirectory.Create();
+            const string projectName = "acpvm";
+            const string projectUniqueName = "21031AA5-93B3-4230-BA20-0EF4CFCEDAAB";
+            var project1Root = Path.Combine(workingDir, projectName);
+            var project1Path = Path.Combine(project1Root, $"{projectName}.csproj");
+
+            var items = new List<IDictionary<string, string>>
+                {
+                    new Dictionary<string, string>()
+                    {
+                        { "Type", "ProjectSpec" },
+                        { "ProjectName", projectName },
+                        { "ProjectStyle", "PackageReference" },
+                        { "ProjectUniqueName", projectUniqueName },
+                        { "ProjectPath", project1Path },
+                        { "CrossTargeting", "true" },
+                        { "_CentralPackageVersionsEnabled", "true"}
+                    },
+                    new Dictionary<string, string>()
+                    {
+                        { "Type", "TargetFrameworkInformation" },
+                        { "AssetTargetFallback", "" },
+                        { "PackageTargetFallback", "" },
+                        { "ProjectUniqueName", projectUniqueName },
+                        { "TargetFramework", "netcoreapp3.0" },
+                        { "TargetFrameworkIdentifier", ".NETCoreApp" },
+                        { "TargetFrameworkVersion", "v3.0" },
+                        { "TargetFrameworkMoniker", "NETCoreApp,Version=3.0" },
+                        { "TargetPlatformIdentifier", "" },
+                        { "TargetPlatformMoniker", "" },
+                        { "TargetPlatformVersion", "" },
+                    },
+                    // Package reference
+                    new Dictionary<string, string>()
+                    {
+                        { "Type", "Dependency" },
+                        { "ProjectUniqueName", projectUniqueName },
+                        { "Id", "x" },
+                        { "TargetFrameworks", "netcoreapp3.0" },
+                        { "IncludeAssets", "build;compile" },
+                        { "CrossTargeting", "true" },
+                    },
+                    // Duplicate central package versions
+                    new Dictionary<string, string>()
+                    {
+                        { "Type", "CentralPackageVersion" },
+                        { "ProjectUniqueName", projectUniqueName },
+                        { "Id", "x" },
+                        { "VersionRange", "1.0.0" },
+                        { "TargetFrameworks", "netcoreapp3.0" },
+                    },
+                    new Dictionary<string, string>()
+                    {
+                        { "Type", "CentralPackageVersion" },
+                        { "ProjectUniqueName", projectUniqueName },
+                        { "Id", "x" },
+                        { "VersionRange", "2.0.0" },
+                        { "TargetFrameworks", "netcoreapp3.0" },
+                    }
+                };
+
+            var wrappedItems = items.Select(CreateItems).ToList();
+
+            // Act
+            var dgSpec = MSBuildRestoreUtility.GetDependencySpec(wrappedItems);
+            var project1Spec = dgSpec.Projects.Single(e => e.Name == projectName);
+
+            // Assert
+            Assert.Equal(1, project1Spec.TargetFrameworks.Count());
+            Assert.Equal(1, project1Spec.TargetFrameworks.First().Dependencies.Count);
+            Assert.Equal(1, project1Spec.TargetFrameworks.First().CentralPackageVersions.Count);
+
+            var dependencyX = project1Spec.TargetFrameworks.First().Dependencies.Where(d => d.Name == "x").First();
+
+            Assert.Equal("[2.0.0, )", dependencyX.LibraryRange.VersionRange.ToNormalizedString());
+            Assert.Equal(LibraryIncludeFlags.Compile | LibraryIncludeFlags.Build, dependencyX.IncludeType);
+
+            var centralDependencyX = project1Spec.TargetFrameworks.First().CentralPackageVersions["x"];
+
+            Assert.Equal("x", centralDependencyX.Name);
+            Assert.Equal("[2.0.0, )", centralDependencyX.VersionRange.ToNormalizedString());
+
+            Assert.True(project1Spec.RestoreMetadata.CentralPackageVersionsEnabled);
         }
 
         [Fact]

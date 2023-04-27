@@ -52,7 +52,7 @@ NuGet.ProjectModel.CacheFile.Version.get -> int
 NuGet.ProjectModel.CacheFile.Version.set -> void
 NuGet.ProjectModel.CacheFileFormat
 NuGet.ProjectModel.CentralTransitiveDependencyGroup
-NuGet.ProjectModel.CentralTransitiveDependencyGroup.CentralTransitiveDependencyGroup(NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> transitiveDependencies) -> void
+NuGet.ProjectModel.CentralTransitiveDependencyGroup.CentralTransitiveDependencyGroup(Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency> transitiveDependencies) -> void
 NuGet.ProjectModel.CentralTransitiveDependencyGroup.Equals(NuGet.ProjectModel.CentralTransitiveDependencyGroup other) -> bool
 NuGet.ProjectModel.CentralTransitiveDependencyGroup.FrameworkName.get -> string
 NuGet.ProjectModel.CentralTransitiveDependencyGroup.TransitiveDependencies.get -> System.Collections.Generic.IEnumerable<NuGet.LibraryModel.LibraryDependency>
@@ -68,6 +68,7 @@ NuGet.ProjectModel.DependencyGraphSpec.GetParents(string rootUniqueName) -> Syst
 NuGet.ProjectModel.DependencyGraphSpec.GetProjectSpec(string projectUniqueName) -> NuGet.ProjectModel.PackageSpec
 NuGet.ProjectModel.DependencyGraphSpec.Projects.get -> System.Collections.Generic.IReadOnlyList<NuGet.ProjectModel.PackageSpec>
 NuGet.ProjectModel.DependencyGraphSpec.Restore.get -> System.Collections.Generic.IReadOnlyList<string>
+NuGet.ProjectModel.DependencyGraphSpec.Save(System.IO.Stream stream) -> void
 NuGet.ProjectModel.DependencyGraphSpec.Save(string path) -> void
 NuGet.ProjectModel.DependencyGraphSpec.WithPackageSpecs(System.Collections.Generic.IEnumerable<NuGet.ProjectModel.PackageSpec> packageSpecs) -> NuGet.ProjectModel.DependencyGraphSpec
 NuGet.ProjectModel.DependencyGraphSpec.WithProjectClosure(string projectUniqueName) -> NuGet.ProjectModel.DependencyGraphSpec
@@ -141,7 +142,7 @@ NuGet.ProjectModel.LockFile.CentralTransitiveDependencyGroups.get -> System.Coll
 NuGet.ProjectModel.LockFile.CentralTransitiveDependencyGroups.set -> void
 NuGet.ProjectModel.LockFile.Equals(NuGet.ProjectModel.LockFile other) -> bool
 NuGet.ProjectModel.LockFile.GetLibrary(string name, NuGet.Versioning.NuGetVersion version) -> NuGet.ProjectModel.LockFileLibrary
-NuGet.ProjectModel.LockFile.GetTarget(NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> NuGet.ProjectModel.LockFileTarget
+NuGet.ProjectModel.LockFile.GetTarget(Chocolatey.NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> NuGet.ProjectModel.LockFileTarget
 NuGet.ProjectModel.LockFile.GetTarget(string frameworkAlias, string runtimeIdentifier) -> NuGet.ProjectModel.LockFileTarget
 NuGet.ProjectModel.LockFile.IsValidForPackageSpec(NuGet.ProjectModel.PackageSpec spec) -> bool
 NuGet.ProjectModel.LockFile.IsValidForPackageSpec(NuGet.ProjectModel.PackageSpec spec, int requestLockFileVersion) -> bool
@@ -194,7 +195,7 @@ NuGet.ProjectModel.LockFileDependencyIdVersionComparer.Equals(NuGet.ProjectModel
 NuGet.ProjectModel.LockFileDependencyIdVersionComparer.GetHashCode(NuGet.ProjectModel.LockFileDependency obj) -> int
 NuGet.ProjectModel.LockFileDependencyIdVersionComparer.LockFileDependencyIdVersionComparer() -> void
 NuGet.ProjectModel.LockFileDependencyProvider
-NuGet.ProjectModel.LockFileDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
+NuGet.ProjectModel.LockFileDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, Chocolatey.NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
 NuGet.ProjectModel.LockFileDependencyProvider.LockFileDependencyProvider(NuGet.ProjectModel.LockFile lockFile) -> void
 NuGet.ProjectModel.LockFileDependencyProvider.SupportsType(NuGet.LibraryModel.LibraryDependencyTarget libraryType) -> bool
 NuGet.ProjectModel.LockFileExtensions
@@ -256,7 +257,7 @@ NuGet.ProjectModel.LockFileTarget.LockFileTarget() -> void
 NuGet.ProjectModel.LockFileTarget.Name.get -> string
 NuGet.ProjectModel.LockFileTarget.RuntimeIdentifier.get -> string
 NuGet.ProjectModel.LockFileTarget.RuntimeIdentifier.set -> void
-NuGet.ProjectModel.LockFileTarget.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.LockFileTarget.TargetFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
 NuGet.ProjectModel.LockFileTarget.TargetFramework.set -> void
 NuGet.ProjectModel.LockFileTargetLibrary
 NuGet.ProjectModel.LockFileTargetLibrary.Build.get -> System.Collections.Generic.IList<NuGet.ProjectModel.LockFileItem>
@@ -379,7 +380,7 @@ NuGet.ProjectModel.PackageSpec.Version.set -> void
 NuGet.ProjectModel.PackageSpecExtensions
 NuGet.ProjectModel.PackageSpecOperations
 NuGet.ProjectModel.PackageSpecReferenceDependencyProvider
-NuGet.ProjectModel.PackageSpecReferenceDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
+NuGet.ProjectModel.PackageSpecReferenceDependencyProvider.GetLibrary(NuGet.LibraryModel.LibraryRange libraryRange, Chocolatey.NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.LibraryModel.Library
 NuGet.ProjectModel.PackageSpecReferenceDependencyProvider.PackageSpecReferenceDependencyProvider(System.Collections.Generic.IEnumerable<NuGet.ProjectModel.ExternalProjectReference> externalProjects, NuGet.Common.ILogger logger) -> void
 NuGet.ProjectModel.PackageSpecReferenceDependencyProvider.SupportsType(NuGet.LibraryModel.LibraryDependencyTarget libraryType) -> bool
 NuGet.ProjectModel.PackageSpecUtility
@@ -411,7 +412,7 @@ NuGet.ProjectModel.PackagesLockFileTarget.Name.get -> string
 NuGet.ProjectModel.PackagesLockFileTarget.PackagesLockFileTarget() -> void
 NuGet.ProjectModel.PackagesLockFileTarget.RuntimeIdentifier.get -> string
 NuGet.ProjectModel.PackagesLockFileTarget.RuntimeIdentifier.set -> void
-NuGet.ProjectModel.PackagesLockFileTarget.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.PackagesLockFileTarget.TargetFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
 NuGet.ProjectModel.PackagesLockFileTarget.TargetFramework.set -> void
 NuGet.ProjectModel.PackagesLockFileUtilities
 NuGet.ProjectModel.PackagesLockFileUtilities.LockFileValidityWithMatchedResults
@@ -487,12 +488,12 @@ NuGet.ProjectModel.ProjectRestoreMetadataFile.ProjectRestoreMetadataFile(string 
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.Clone() -> NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.Equals(NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo other) -> bool
-NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.FrameworkName.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.FrameworkName.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.FrameworkName.set -> void
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectReferences.get -> System.Collections.Generic.IList<NuGet.ProjectModel.ProjectRestoreReference>
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectReferences.set -> void
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectRestoreMetadataFrameworkInfo() -> void
-NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectRestoreMetadataFrameworkInfo(NuGet.Frameworks.NuGetFramework frameworkName) -> void
+NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.ProjectRestoreMetadataFrameworkInfo(Chocolatey.NuGet.Frameworks.NuGetFramework frameworkName) -> void
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.TargetAlias.get -> string
 NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo.TargetAlias.set -> void
 NuGet.ProjectModel.ProjectRestoreReference
@@ -540,10 +541,10 @@ NuGet.ProjectModel.TargetFrameworkInformation.Dependencies.get -> System.Collect
 NuGet.ProjectModel.TargetFrameworkInformation.Dependencies.set -> void
 NuGet.ProjectModel.TargetFrameworkInformation.DownloadDependencies.get -> System.Collections.Generic.IList<NuGet.LibraryModel.DownloadDependency>
 NuGet.ProjectModel.TargetFrameworkInformation.Equals(NuGet.ProjectModel.TargetFrameworkInformation other) -> bool
-NuGet.ProjectModel.TargetFrameworkInformation.FrameworkName.get -> NuGet.Frameworks.NuGetFramework
+NuGet.ProjectModel.TargetFrameworkInformation.FrameworkName.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
 NuGet.ProjectModel.TargetFrameworkInformation.FrameworkName.set -> void
 NuGet.ProjectModel.TargetFrameworkInformation.FrameworkReferences.get -> System.Collections.Generic.ISet<NuGet.LibraryModel.FrameworkDependency>
-NuGet.ProjectModel.TargetFrameworkInformation.Imports.get -> System.Collections.Generic.IList<NuGet.Frameworks.NuGetFramework>
+NuGet.ProjectModel.TargetFrameworkInformation.Imports.get -> System.Collections.Generic.IList<Chocolatey.NuGet.Frameworks.NuGetFramework>
 NuGet.ProjectModel.TargetFrameworkInformation.Imports.set -> void
 NuGet.ProjectModel.TargetFrameworkInformation.RuntimeIdentifierGraphPath.get -> string
 NuGet.ProjectModel.TargetFrameworkInformation.RuntimeIdentifierGraphPath.set -> void
@@ -553,10 +554,10 @@ NuGet.ProjectModel.TargetFrameworkInformation.TargetFrameworkInformation() -> vo
 NuGet.ProjectModel.TargetFrameworkInformation.Warn.get -> bool
 NuGet.ProjectModel.TargetFrameworkInformation.Warn.set -> void
 NuGet.ProjectModel.ToolPathResolver
-NuGet.ProjectModel.ToolPathResolver.GetBestToolDirectoryPath(string packageId, NuGet.Versioning.VersionRange versionRange, NuGet.Frameworks.NuGetFramework framework) -> string
-NuGet.ProjectModel.ToolPathResolver.GetLockFilePath(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework framework) -> string
+NuGet.ProjectModel.ToolPathResolver.GetBestToolDirectoryPath(string packageId, NuGet.Versioning.VersionRange versionRange, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> string
+NuGet.ProjectModel.ToolPathResolver.GetLockFilePath(string packageId, NuGet.Versioning.NuGetVersion version, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> string
 NuGet.ProjectModel.ToolPathResolver.GetLockFilePath(string toolDirectory) -> string
-NuGet.ProjectModel.ToolPathResolver.GetToolDirectoryPath(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework framework) -> string
+NuGet.ProjectModel.ToolPathResolver.GetToolDirectoryPath(string packageId, NuGet.Versioning.NuGetVersion version, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> string
 NuGet.ProjectModel.ToolPathResolver.ToolPathResolver(string packagesDirectory) -> void
 NuGet.ProjectModel.ToolPathResolver.ToolPathResolver(string packagesDirectory, bool isLowercase) -> void
 NuGet.ProjectModel.WarningProperties
@@ -657,12 +658,12 @@ static NuGet.ProjectModel.LockFileExtensions.GetTargetLibraries(this NuGet.Proje
 static NuGet.ProjectModel.LockFileExtensions.GetTargetLibrary(this NuGet.ProjectModel.LockFileTarget target, string libraryId) -> NuGet.ProjectModel.LockFileTargetLibrary
 static NuGet.ProjectModel.LockFileItem.implicit operator NuGet.ProjectModel.LockFileItem(string path) -> NuGet.ProjectModel.LockFileItem
 static NuGet.ProjectModel.LockFileUtilities.GetLockFile(string lockFilePath, NuGet.Common.ILogger logger) -> NuGet.ProjectModel.LockFile
-static NuGet.ProjectModel.PackageSpecExtensions.GetRestoreMetadataFramework(this NuGet.ProjectModel.PackageSpec project, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo
-static NuGet.ProjectModel.PackageSpecExtensions.GetTargetFramework(this NuGet.ProjectModel.PackageSpec project, NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.TargetFrameworkInformation
+static NuGet.ProjectModel.PackageSpecExtensions.GetRestoreMetadataFramework(this NuGet.ProjectModel.PackageSpec project, Chocolatey.NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.ProjectRestoreMetadataFrameworkInfo
+static NuGet.ProjectModel.PackageSpecExtensions.GetTargetFramework(this NuGet.ProjectModel.PackageSpec project, Chocolatey.NuGet.Frameworks.NuGetFramework targetFramework) -> NuGet.ProjectModel.TargetFrameworkInformation
 static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageDependency dependency) -> void
-static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageDependency dependency, System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
+static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageDependency dependency, System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
 static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageIdentity identity) -> void
-static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageIdentity identity, System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
+static NuGet.ProjectModel.PackageSpecOperations.AddOrUpdateDependency(NuGet.ProjectModel.PackageSpec spec, NuGet.Packaging.Core.PackageIdentity identity, System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworksToAdd) -> void
 static NuGet.ProjectModel.PackageSpecOperations.HasPackage(NuGet.ProjectModel.PackageSpec spec, string packageId) -> bool
 static NuGet.ProjectModel.PackageSpecOperations.RemoveDependency(NuGet.ProjectModel.PackageSpec spec, string packageId) -> void
 static NuGet.ProjectModel.PackageSpecUtility.IsSnapshotVersion(string version) -> bool
@@ -709,7 +710,7 @@ static readonly NuGet.ProjectModel.JsonPackageSpecReader.PackageType -> string
 static readonly NuGet.ProjectModel.JsonPackageSpecReader.RestoreOptions -> string
 static readonly NuGet.ProjectModel.JsonPackageSpecReader.RestoreSettings -> string
 static readonly NuGet.ProjectModel.LockFile.DirectorySeparatorChar -> char
-static readonly NuGet.ProjectModel.LockFile.ToolFramework -> NuGet.Frameworks.NuGetFramework
+static readonly NuGet.ProjectModel.LockFile.ToolFramework -> Chocolatey.NuGet.Frameworks.NuGetFramework
 static readonly NuGet.ProjectModel.LockFileContentFile.BuildActionProperty -> string
 static readonly NuGet.ProjectModel.LockFileContentFile.CodeLanguageProperty -> string
 static readonly NuGet.ProjectModel.LockFileContentFile.CopyToOutputProperty -> string

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -13,7 +14,16 @@ using NuGet.Versioning;
 
 namespace NuGet.Test.Utility
 {
-    public class V3PackageSearchMetadataFixture : IDisposable
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
+    public partial class V3PackageSearchMetadataFixture : IDisposable
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private bool _disposedValue = false; // To detect redundant calls
         public IPackageSearchMetadata TestData { get; private set; }
@@ -54,7 +64,16 @@ namespace NuGet.Test.Utility
             Dispose(true);
         }
 
-        public class MockPackageSearchMetadata : IPackageSearchMetadata
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public partial class MockPackageSearchMetadata : IPackageSearchMetadata
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         {
             public MockPackageSearchMetadata()
             {

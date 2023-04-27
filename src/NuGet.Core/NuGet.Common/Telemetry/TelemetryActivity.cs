@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace NuGet.Common
 {
@@ -50,6 +51,13 @@ namespace NuGet.Common
         /// End with <see cref="EndIntervalMeasure(string)"/>
         /// The intervals cannot overlap. For non-overlapping intervals <see cref="StartIndependentInterval(string)"/>
         /// </summary>
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Conditional("TELEMETRYCONDITION")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void StartIntervalMeasure()
         {
             _intervalWatch.Restart();
@@ -57,6 +65,13 @@ namespace NuGet.Common
 
         /// <summary> End interval measure. </summary>
         /// <param name="propertyName"> Property name to represents the interval. </param>
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Conditional("TELEMETRYCONDITION")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void EndIntervalMeasure(string propertyName)
         {
             _intervalWatch.Stop();
@@ -109,8 +124,8 @@ namespace NuGet.Common
                 if (NuGetTelemetryService != null && TelemetryEvent != null)
                 {
                     var endTime = DateTime.UtcNow;
-                    TelemetryEvent["StartTime"] = _startTime.ToString("O");
-                    TelemetryEvent["EndTime"] = endTime.ToString("O");
+                    TelemetryEvent["StartTime"] = _startTime.ToString("O", CultureInfo.CurrentCulture);
+                    TelemetryEvent["EndTime"] = endTime.ToString("O", CultureInfo.CurrentCulture);
                     TelemetryEvent["Duration"] = _stopwatch.Elapsed.TotalSeconds;
 
                     if (ParentId != Guid.Empty)
@@ -128,7 +143,15 @@ namespace NuGet.Common
                         TelemetryEvent[interval.Item1] = interval.Item2.TotalSeconds;
                     }
 
-                    NuGetTelemetryService.EmitTelemetryEvent(TelemetryEvent);
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
+                    //NuGetTelemetryService.EmitTelemetryEvent(TelemetryEvent);
+
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
                 }
 
                 _telemetryActivity?.Dispose();
@@ -139,6 +162,13 @@ namespace NuGet.Common
 
         /// <summary> Emit a singular telemetry event. </summary>
         /// <param name="TelemetryEvent"> Telemetry event. </param>
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Conditional("TELEMETRYCONDITION")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public static void EmitTelemetryEvent(TelemetryEvent TelemetryEvent)
         {
             NuGetTelemetryService?.EmitTelemetryEvent(TelemetryEvent);

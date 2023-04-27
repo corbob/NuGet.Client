@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,7 +8,13 @@ using System.Globalization;
 using System.Linq;
 using NuGet.Common;
 using NuGet.DependencyResolver;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.ProjectModel;
@@ -231,7 +238,7 @@ namespace NuGet.Commands
                         var package = packageInfo.Package;
                         var libraryDependency = tfi.Dependencies.FirstOrDefault(e => e.Name.Equals(library.Name, StringComparison.OrdinalIgnoreCase));
 
-                        var targetLibrary = LockFileUtils.CreateLockFileTargetLibrary(
+                        (LockFileTargetLibrary targetLibrary, bool usedFallbackFramework) = LockFileUtils.CreateLockFileTargetLibrary(
                             libraryDependency?.Aliases,
                             libraries[Tuple.Create(library.Name, library.Version)],
                             package,
@@ -246,19 +253,24 @@ namespace NuGet.Commands
                         // Log warnings if the target library used the fallback framework
                         if (warnForImportsOnGraph && !librariesWithWarnings.Contains(library))
                         {
-                            var nonFallbackFramework = new NuGetFramework(target.TargetFramework);
+                            if (target.TargetFramework is FallbackFramework)
+                            {
+                                // PackageTargetFallback works different from AssetTargetFallback so the warning logic for PTF cannot be optimized.
+                                var nonFallbackFramework = new NuGetFramework(target.TargetFramework);
 
-                            var targetLibraryWithoutFallback = LockFileUtils.CreateLockFileTargetLibrary(
-                                libraryDependency?.Aliases,
-                                libraries[Tuple.Create(library.Name, library.Version)],
-                                package,
-                                targetGraph,
-                                targetFrameworkOverride: nonFallbackFramework,
-                                dependencyType: includeFlags,
-                                dependencies: graphItem.Data.Dependencies,
-                                cache: lockFileBuilderCache);
+                                var targetLibraryWithoutFallback = LockFileUtils.CreateLockFileTargetLibrary(
+                                    libraryDependency?.Aliases,
+                                    libraries[Tuple.Create(library.Name, library.Version)],
+                                    package,
+                                    targetGraph,
+                                    targetFrameworkOverride: nonFallbackFramework,
+                                    dependencyType: includeFlags,
+                                    dependencies: graphItem.Data.Dependencies,
+                                    cache: lockFileBuilderCache);
+                                usedFallbackFramework = !targetLibrary.Equals(targetLibraryWithoutFallback);
+                            }
 
-                            if (!targetLibrary.Equals(targetLibraryWithoutFallback))
+                            if (usedFallbackFramework)
                             {
                                 var libraryName = DiagnosticUtility.FormatIdentity(library);
 
@@ -266,7 +278,7 @@ namespace NuGet.Commands
                                     Strings.Log_ImportsFallbackWarning,
                                     libraryName,
                                     GetFallbackFrameworkString(target.TargetFramework),
-                                    nonFallbackFramework);
+                                    new NuGetFramework(target.TargetFramework));
 
                                 var logMessage = RestoreLogMessage.CreateWarning(
                                     NuGetLogCode.NU1701,

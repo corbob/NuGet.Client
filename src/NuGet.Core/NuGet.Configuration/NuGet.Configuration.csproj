@@ -3,6 +3,13 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <AssemblyName>Chocolatey.NuGet.Configuration</AssemblyName>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
     <Description>NuGet's configuration settings implementation.</Description>
     <NoWarn>$(NoWarn);CS1591</NoWarn>
     <TargetFrameworks>$(TargetFrameworksLibrary)</TargetFrameworks>
@@ -29,7 +36,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == '$(NetStandardVersion)' or '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(NetStandardVersion)' or '$(TargetFramework)' == 'net7.0' ">
     <PackageReference Include="System.Security.Cryptography.ProtectedData" />
   </ItemGroup>
 

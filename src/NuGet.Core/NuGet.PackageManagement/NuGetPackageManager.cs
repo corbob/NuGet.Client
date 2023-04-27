@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -13,7 +14,13 @@ using System.Threading.Tasks;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement.Utility;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -322,7 +329,7 @@ namespace NuGet.PackageManagement
 
             if (resolvedPackage == null || resolvedPackage.LatestVersion == null)
             {
-                throw new InvalidOperationException(string.Format(Strings.NoLatestVersionFound, packageId));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.NoLatestVersionFound, packageId));
             }
 
             // Step-2 : Call InstallPackageAsync(project, packageIdentity)
@@ -1481,7 +1488,7 @@ namespace NuGet.PackageManagement
                 if (sourceDepInfo == null)
                 {
                     // this really should never happen
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentUICulture, Strings.PackageNotFound, newPackageToInstall));
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.PackageNotFound, newPackageToInstall));
                 }
 
                 nuGetProjectActions.Add(NuGetProjectAction.CreateInstallProjectAction(newPackageToInstall, sourceDepInfo.Source, project));
@@ -1773,7 +1780,7 @@ namespace NuGet.PackageManagement
             var oldListOfInstalledPackages = projectInstalledPackageReferences.Select(p => p.PackageIdentity);
             if (oldListOfInstalledPackages.Any(p => p.Equals(packageIdentity)))
             {
-                var alreadyInstalledMessage = string.Format(Strings.PackageAlreadyExistsInProject, packageIdentity, projectName ?? string.Empty);
+                var alreadyInstalledMessage = string.Format(CultureInfo.CurrentCulture, Strings.PackageAlreadyExistsInProject, packageIdentity, projectName ?? string.Empty);
                 throw new InvalidOperationException(alreadyInstalledMessage, new PackageAlreadyInstalledException(alreadyInstalledMessage));
             }
 
@@ -1847,7 +1854,7 @@ namespace NuGet.PackageManagement
 
                     if (!availablePackageDependencyInfoWithSourceSet.Any())
                     {
-                        throw new InvalidOperationException(string.Format(Strings.UnableToGatherDependencyInfo, packageIdentity));
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.UnableToGatherDependencyInfo, packageIdentity));
                     }
 
                     // Prune the results down to only what we would allow to be installed
@@ -1916,7 +1923,7 @@ namespace NuGet.PackageManagement
 
                     if (newListOfInstalledPackages == null)
                     {
-                        throw new InvalidOperationException(string.Format(Strings.UnableToResolveDependencyInfo, packageIdentity, resolutionContext.DependencyBehavior));
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.UnableToResolveDependencyInfo, packageIdentity, resolutionContext.DependencyBehavior));
                     }
 
                     // Step-3 : Get the list of nuGetProjectActions to perform, install/uninstall on the nugetproject
@@ -1965,7 +1972,7 @@ namespace NuGet.PackageManagement
                             if (sourceDepInfo == null)
                             {
                                 // this really should never happen
-                                throw new InvalidOperationException(string.Format(Strings.PackageNotFound, packageIdentity));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.PackageNotFound, packageIdentity));
                             }
 
                             nuGetProjectActions.Add(NuGetProjectAction.CreateInstallProjectAction(sourceDepInfo, sourceDepInfo.Source, nuGetProject));
@@ -1984,7 +1991,7 @@ namespace NuGet.PackageManagement
                 {
                     if (string.IsNullOrEmpty(ex.Message))
                     {
-                        throw new InvalidOperationException(string.Format(Strings.PackageCouldNotBeInstalled, packageIdentity), ex);
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.PackageCouldNotBeInstalled, packageIdentity), ex);
                     }
                     throw new InvalidOperationException(ex.Message, ex);
                 }
@@ -2066,7 +2073,8 @@ namespace NuGet.PackageManagement
                 catch (Exception ex)
                 {
                     logger.LogWarning(
-                        string.Format(Strings.Warning_ErrorFindingRepository,
+                        string.Format(CultureInfo.CurrentCulture,
+                            Strings.Warning_ErrorFindingRepository,
                             pair.Key.PackageSource.Source,
                             ExceptionUtilities.DisplayMessage(ex)));
                 }
@@ -2172,7 +2180,7 @@ namespace NuGet.PackageManagement
                 var packageReference = installedPackages.FirstOrDefault(pr => pr.PackageIdentity.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase));
                 if (packageReference?.PackageIdentity == null)
                 {
-                    throw new ArgumentException(string.Format(Strings.PackageToBeUninstalledCouldNotBeFound,
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Strings.PackageToBeUninstalledCouldNotBeFound,
                         packageId, project.GetMetadata<string>(NuGetProjectMetadataKeys.Name)));
                 }
 
@@ -2204,7 +2212,7 @@ namespace NuGet.PackageManagement
                 var packageReference = installedPackages.FirstOrDefault(pr => pr.PackageIdentity.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase));
                 if (packageReference?.PackageIdentity == null)
                 {
-                    throw new ArgumentException(string.Format(Strings.PackageToBeUninstalledCouldNotBeFound,
+                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Strings.PackageToBeUninstalledCouldNotBeFound,
                         packageId, buildIntegratedProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name)));
                 }
 
@@ -2260,7 +2268,7 @@ namespace NuGet.PackageManagement
             var packageReference = installedPackages.FirstOrDefault(pr => pr.PackageIdentity.Id.Equals(packageId, StringComparison.OrdinalIgnoreCase));
             if (packageReference?.PackageIdentity == null)
             {
-                throw new ArgumentException(string.Format(Strings.PackageToBeUninstalledCouldNotBeFound,
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Strings.PackageToBeUninstalledCouldNotBeFound,
                     packageId, nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name)));
             }
 
@@ -2301,7 +2309,7 @@ namespace NuGet.PackageManagement
             var packageReference = installedPackages.FirstOrDefault(pr => pr.PackageIdentity.Equals(packageIdentity));
             if (packageReference?.PackageIdentity == null)
             {
-                throw new ArgumentException(string.Format(Strings.PackageToBeUninstalledCouldNotBeFound,
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Strings.PackageToBeUninstalledCouldNotBeFound,
                     packageIdentity.Id, nuGetProject.GetMetadata<string>(NuGetProjectMetadataKeys.Name)));
             }
 
@@ -3501,7 +3509,7 @@ namespace NuGet.PackageManagement
             }
 
             token.ThrowIfCancellationRequested();
-            nuGetProjectContext.Log(MessageLevel.Info, string.Format(Strings.RestoringPackage, packageIdentity));
+            nuGetProjectContext.Log(MessageLevel.Info, string.Format(CultureInfo.CurrentCulture, Strings.RestoringPackage, packageIdentity));
             var enabledSources = (sourceRepositories != null && sourceRepositories.Any()) ? sourceRepositories :
                 SourceRepositoryProvider.GetRepositories().Where(e => e.PackageSource.IsEnabled);
 

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -16,7 +17,13 @@ using NuGet.Protocol.Core.Types;
 
 namespace NuGet.Protocol
 {
-    public class HttpSource : IDisposable
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+    public class HttpSource : IHttpSource
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
     {
         private readonly Func<Task<HttpHandlerResource>> _messageHandlerFactory;
         private readonly Uri _sourceUri;
@@ -199,7 +206,13 @@ namespace NuGet.Protocol
             return ProcessStreamAsync<T>(request, processAsync, cacheContext: null, log: log, token: token);
         }
 
-        internal async Task<T> ProcessHttpStreamAsync<T>(
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        public virtual async Task<T> ProcessHttpStreamAsync<T>(
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             HttpSourceRequest request,
             Func<HttpResponseMessage, Task<T>> processAsync,
             ILogger log,
@@ -250,6 +263,43 @@ namespace NuGet.Protocol
                 log,
                 token);
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        public virtual async Task<T> ProcessStreamAsync<T>(
+            HttpSourceRequest request,
+            Func<Stream, ChocolateyProgressInfo, Task<T>> processAsync,
+            SourceCacheContext cacheContext,
+            ILogger log,
+            ChocolateyProgressInfo progressInfo,
+            CancellationToken token)
+        {
+            return await ProcessResponseAsync(
+                request,
+                async response =>
+                {
+                    if ((request.IgnoreNotFounds && response.StatusCode == HttpStatusCode.NotFound) ||
+                         response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        return await processAsync(null, null);
+                    }
+
+                    response.EnsureSuccessStatusCode();
+
+                    progressInfo.Length = response.Content.Headers.ContentLength;
+                    progressInfo.Operation = "Downloading";
+
+                    var networkStream = await response.Content.ReadAsStreamAsync();
+                    return await processAsync(networkStream, progressInfo);
+                },
+                cacheContext,
+                log,
+                token);
+        }
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         public Task<T> ProcessResponseAsync<T>(
             HttpSourceRequest request,

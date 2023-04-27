@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -16,7 +17,13 @@ using NuGet.Client;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.ContentModel;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Packaging.PackageCreation.Resources;
 using NuGet.RuntimeModel;
@@ -24,7 +31,16 @@ using NuGet.Versioning;
 
 namespace NuGet.Packaging
 {
-    public class PackageBuilder : IPackageMetadata
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
+    public partial class PackageBuilder : IPackageMetadata
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private static readonly Uri DefaultUri = new Uri("http://defaultcontainer/");
         private static readonly DateTime ZipFormatMinDate = new DateTime(1980, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -131,6 +147,16 @@ namespace NuGet.Packaging
             TargetFrameworks = new List<NuGetFramework>();
             // Just like parameter replacements, these are also case insensitive, for consistency.
             Properties = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            FinishContruction();
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         public string Id
@@ -462,7 +488,7 @@ namespace NuGet.Packaging
             }
             else
             {
-                return Guid.NewGuid().ToString("N");
+                return Guid.NewGuid().ToString("N", provider: null);
             }
         }
 
@@ -988,6 +1014,16 @@ namespace NuGet.Packaging
             {
                 PackageTypes = new Collection<PackageType>(metadata.PackageTypes.ToList());
             }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            FinishPopulate(metadata);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         public void PopulateFiles(string basePath, IEnumerable<ManifestFile> files)

@@ -201,18 +201,9 @@ Function Install-DotnetCLI {
             $arch = "x86";
         }
 
-        # The Quality option:
-        # Daily links are those from daily builds
-        # Signed have been post-build signed (in the case of 6.0+, pre-6.0 is signed even in daily builds)
-        # Validated have gone through CTI testing and other validation
-        # Preview are released bits that are preview versions
-        # GA are released servicing and GA builds
-        Trace-Log "$DotNetInstall -Channel $($cli.Channel) -Quality signed -InstallDir $($cli.Root) -Version $($cli.Version) -Architecture $arch -NoPath"
-
-        # dotnet-install might make http requests that fail, but it handles those errors internally
-        # However, Invoke-BuildStep checks if any error happened, ever. Hence we need to run dotnet-install
-        # in a different process, to avoid treating their handled errors as build errors.
-        & powershell $DotNetInstall -Channel $cli.Channel -Quality signed -InstallDir $cli.Root -Version $cli.Version -Architecture $arch -NoPath
+        Trace-Log "$DotNetInstall -Channel $($cli.Channel) -InstallDir $($cli.Root) -Version $($cli.Version) -Architecture $arch -NoPath"
+ 
+        & powershell $DotNetInstall -Channel $cli.Channel -InstallDir $cli.Root -Version $cli.Version -Architecture $arch -NoPath
         if ($LASTEXITCODE -ne 0)
         {
             throw "dotnet-install.ps1 exited with non-zero exit code"
@@ -230,12 +221,13 @@ Function Install-DotnetCLI {
         }
     }
 
-    # Install the 2.x runtime because our tests target netcoreapp2x
+    # Install the 3.x runtime because our tests target netcoreapp2x
     Trace-Log "$DotNetInstall -Runtime dotnet -Channel 3.1 -InstallDir $CLIRoot -NoPath"
     # dotnet-install might make http requests that fail, but it handles those errors internally
     # However, Invoke-BuildStep checks if any error happened, ever. Hence we need to run dotnet-install
     # in a different process, to avoid treating their handled errors as build errors.
     & powershell $DotNetInstall -Runtime dotnet -Channel 3.1 -InstallDir $CLIRoot -NoPath
+
     if ($LASTEXITCODE -ne 0)
     {
         throw "dotnet-install.ps1 exited with non-zero exit code"
@@ -293,7 +285,13 @@ Function Get-MSBuildExe {
     # Otherwise, use VSWhere.exe to find the latest MSBuild.exe.
     $MSBuildExe = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -requires Microsoft.Component.MSBuild -find MSBuild\**\bin\MSBuild.exe
 
-    if (Test-Path $MSBuildExe) {
+    # This is an additional fallback to cover the case that only the Visual Studio Build Tools are installed, and not full Visual Studio
+    # VSWhere does not include BuildTools by default, as per this issue: https://github.com/microsoft/vswhere/issues/22
+    if (-not $MSBuildExe) {
+        $MSBuildExe = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -prerelease -products 'Microsoft.VisualStudio.Product.BuildTools' -find MSBuild\**\bin\MSBuild.exe
+    }
+
+    if (Test-Path $MSBuildExe -ErrorAction SilentlyContinue) {
         Verbose-Log "Found MSBuild.exe at `"$MSBuildExe`""
         return $MSBuildExe
     }

@@ -15,5 +15,15 @@ namespace NuGet.Protocol.Core.Types
         public abstract Task<bool> SupportsSearchAsync(ILogger log, CancellationToken token);
 
         public abstract Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public abstract Task<bool> SupportsFindPackagesByIdAsync(ILogger log, CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

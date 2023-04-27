@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -65,7 +66,15 @@ namespace NuGet.CommandLine
                 // The PackageSaveMode flag only determines if nuspec and nupkg are saved at the target location.
                 // For install \ restore, we always extract files.
                 EffectivePackageSaveMode = Packaging.PackageSaveMode.Files;
-                foreach (var v in packageSaveModeValue.Split(';'))
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                foreach (var v in packageSaveModeValue.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
                 {
                     if (v.Equals(Packaging.PackageSaveMode.Nupkg.ToString(), StringComparison.OrdinalIgnoreCase))
                     {

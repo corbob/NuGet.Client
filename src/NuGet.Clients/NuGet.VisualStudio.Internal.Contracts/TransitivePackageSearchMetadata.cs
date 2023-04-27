@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,7 +12,16 @@ using NuGet.Protocol.Core.Types;
 
 namespace NuGet.VisualStudio.Internal.Contracts
 {
-    public class TransitivePackageSearchMetadata : IPackageSearchMetadata
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
+    public partial class TransitivePackageSearchMetadata : IPackageSearchMetadata
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         public IReadOnlyCollection<PackageIdentity> TransitiveOrigins { get; private set; }
 

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -152,7 +153,27 @@ namespace NuGet.Configuration.Test
             }
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         [Fact]
+        public void SettingsFile_Constructor_DoesNotCreateConfigFileIfNoConfig()
+        {
+            using (var mockBaseDirectory = TestDirectory.Create())
+            {
+                // Act
+                var settingsFile = new SettingsFile(mockBaseDirectory);
+
+                settingsFile.Should().NotBeNull();
+                File.Exists(Path.Combine(mockBaseDirectory, "NuGet.Config")).Should().BeFalse();
+            }
+        }
+
+        [Fact(Skip = "Chocolatey SKIP: Fails when NuGet.config is not created by default")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void SettingsFile_Constructor_CreateDefaultConfigFileIfNoConfig()
         {
             using (var mockBaseDirectory = TestDirectory.Create())

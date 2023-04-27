@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -9,7 +10,13 @@ using System.Linq;
 using System.Xml.Linq;
 using NuGet.Common;
 using NuGet.DependencyResolver;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -168,7 +175,7 @@ namespace NuGet.Commands
             doc.Root.AddFirst(
                 new XElement(Namespace + "PropertyGroup",
                             new XAttribute("Condition", $" {ExcludeAllCondition} "),
-                            GenerateProperty("RestoreSuccess", success.ToString()),
+                            GenerateProperty("RestoreSuccess", success.ToString(CultureInfo.CurrentCulture)),
                             GenerateProperty("RestoreTool", "NuGet"),
                             GenerateProperty("ProjectAssetsFile", assetsFilePath),
                             GenerateProperty("NuGetPackageRoot", ReplacePathsWithMacros(repositoryRoot)),
@@ -249,7 +256,7 @@ namespace NuGet.Commands
                 }
             }
 
-            entry.Add(new XElement(Namespace + "Private", privateFlag.ToString()));
+            entry.Add(new XElement(Namespace + "Private", privateFlag.ToString(CultureInfo.CurrentCulture)));
 
             // Remove contentFile/lang/tfm/ from start of the path
             var linkPath = string.Join(string.Empty + Path.DirectorySeparatorChar,

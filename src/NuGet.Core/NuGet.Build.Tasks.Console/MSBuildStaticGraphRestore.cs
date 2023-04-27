@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -15,6 +16,7 @@ using Microsoft.Build.Construction;
 using Microsoft.Build.Definition;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Evaluation.Context;
+using Microsoft.Build.Exceptions;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Graph;
@@ -22,7 +24,13 @@ using Microsoft.Build.Logging;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.ProjectModel;
@@ -130,7 +138,7 @@ namespace NuGet.Build.Tasks.Console
             }
             catch (Exception e)
             {
-                LoggingQueue.TaskLoggingHelper.LogErrorFromException(e, showStackTrace: true);
+                LogErrorFromException(e);
 
                 return false;
             }
@@ -167,7 +175,7 @@ namespace NuGet.Build.Tasks.Console
             }
             catch (Exception e)
             {
-                LoggingQueue.TaskLoggingHelper.LogErrorFromException(e, showStackTrace: true);
+                LogErrorFromException(e);
             }
             return false;
         }
@@ -690,13 +698,9 @@ namespace NuGet.Build.Tasks.Console
                         }
                     });
                 }
-                catch (AggregateException e)
+                catch (Exception e)
                 {
-                    // Log exceptions thrown while creating PackageSpec objects
-                    foreach (var exception in e.Flatten().InnerExceptions)
-                    {
-                        LoggingQueue.TaskLoggingHelper.LogErrorFromException(exception);
-                    }
+                    LogErrorFromException(e);
 
                     return null;
                 }
@@ -724,7 +728,7 @@ namespace NuGet.Build.Tasks.Console
             }
             catch (Exception e)
             {
-                LoggingQueue.TaskLoggingHelper.LogErrorFromException(e, showStackTrace: true);
+                LogErrorFromException(e);
             }
 
             return null;
@@ -997,7 +1001,7 @@ namespace NuGet.Build.Tasks.Console
             }
             catch (Exception e)
             {
-                LoggingQueue.TaskLoggingHelper.LogErrorFromException(e, showStackTrace: true);
+                LogErrorFromException(e);
 
                 return null;
             }
@@ -1036,6 +1040,43 @@ namespace NuGet.Build.Tasks.Console
         private static IEnumerable<IMSBuildItem> GetDistinctItemsOrEmpty(IMSBuildProject project, string itemName)
         {
             return project.GetItems(itemName)?.Distinct(ProjectItemInstanceEvaluatedIncludeComparer.Instance) ?? Enumerable.Empty<IMSBuildItem>();
+        }
+
+        /// <summary>
+        /// Logs an error from the specified exception.
+        /// </summary>
+        /// <param name="exception">The <see cref="Exception" /> with details to be logged.</param>
+        private void LogErrorFromException(Exception exception)
+        {
+            switch (exception)
+            {
+                case AggregateException aggregateException:
+                    foreach (Exception innerException in aggregateException.Flatten().InnerExceptions)
+                    {
+                        LogErrorFromException(innerException);
+                    }
+                    break;
+
+                case InvalidProjectFileException invalidProjectFileException:
+                    // Special case the InvalidProjectFileException since it has extra information about what project file couldn't be loaded
+                    LoggingQueue.TaskLoggingHelper.LogError(
+                        invalidProjectFileException.ErrorSubcategory,
+                        invalidProjectFileException.ErrorCode,
+                        invalidProjectFileException.HelpKeyword,
+                        invalidProjectFileException.ProjectFile,
+                        invalidProjectFileException.LineNumber,
+                        invalidProjectFileException.ColumnNumber,
+                        invalidProjectFileException.EndLineNumber,
+                        invalidProjectFileException.EndColumnNumber,
+                        invalidProjectFileException.Message);
+                    break;
+
+                default:
+                    LoggingQueue.TaskLoggingHelper.LogErrorFromException(
+                        exception,
+                        showStackTrace: true);
+                    break;
+            }
         }
     }
 }

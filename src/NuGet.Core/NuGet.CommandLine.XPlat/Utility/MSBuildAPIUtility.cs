@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -10,7 +11,13 @@ using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;
 using NuGet.ProjectModel;
@@ -393,7 +400,7 @@ namespace NuGet.CommandLine.XPlat
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine(string.Format(Strings.ListPkg_ErrorReadingAssetsFile, assetsFile.Path));
+                    Console.WriteLine(string.Format(CultureInfo.CurrentCulture, Strings.ListPkg_ErrorReadingAssetsFile, assetsFile.Path));
                     return null;
                 }
 
@@ -632,7 +639,7 @@ namespace NuGet.CommandLine.XPlat
 
         private static string GetTargetFrameworkCondition(string targetFramework)
         {
-            return string.Format("'$(TargetFramework)' == '{0}'", targetFramework);
+            return string.Format(CultureInfo.CurrentCulture, "'$(TargetFramework)' == '{0}'", targetFramework);
         }
     }
 }

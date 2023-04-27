@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -41,6 +42,7 @@ namespace NuGet.Protocol
                 if (!IsLocalOrUNC(_localResource.Root))
                 {
                     throw new InvalidOperationException(string.Format(
+                        CultureInfo.CurrentCulture,
                         Strings.Protocol_Search_LocalSourceNotFound,
                         _localResource.Root));
                 }
@@ -53,14 +55,37 @@ namespace NuGet.Protocol
                 // Filter on search terms
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
-                    var terms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    query = query.Where(package => ContainsAnyTerm(terms, package));
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
+                    if (filters.ExactPackageId)
+                    {
+                        query = query.Where(package => package.Identity.Id.ToUpperInvariant() == searchTerm.ToUpperInvariant());
+                    }
+                    else
+                    {
+                        var terms = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        query = query.Where(package => ContainsAnyTerm(terms, package));
+                    }
+
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
                 }
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 // Collapse to the highest version per id, if necessary
                 var collapsedQuery = filters?.Filter == SearchFilterType.IsLatestVersion ||
                                      filters?.Filter == SearchFilterType.IsAbsoluteLatestVersion
-                                     ? CollapseToHighestVersion(query) : query;
+                                     ? CollapseToHighestVersion(query.OrderBy(p => p.Identity.Id)) : query;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 // execute the query
                 var packages = collapsedQuery
@@ -207,5 +232,18 @@ namespace NuGet.Protocol
 
             yield break;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<int> SearchCountAsync(string searchTerm, SearchFilter filters, ILogger log, CancellationToken cancellationToken)
+        {
+            return (await SearchAsync(searchTerm, filters, 0, int.MaxValue, log, cancellationToken)).Count();
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

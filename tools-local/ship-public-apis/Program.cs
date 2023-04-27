@@ -79,10 +79,13 @@ namespace NuGet.Internal.Tools.ShipPublicApis
                 {
                     throw new FileNotFoundException($"Cannot migrate APIs from {unshippedTxtPath.FullName}. {shippedTxtPath} not found.");
                 }
+                var removedTxtPath = Path.Combine(unshippedTxtPath.DirectoryName, "PublicAPI.Removed.txt");
 
                 var shippedLines = new List<string>();
                 var unshippedLines = new List<string>();
+                var removedLines = new List<string>();
                 int unshippedApiCount = 0;
+                int removedApiCount = 0;
                 using (var stream = unshippedTxtPath.OpenText())
                 {
                     string line;
@@ -93,6 +96,11 @@ namespace NuGet.Internal.Tools.ShipPublicApis
                             if (line.StartsWith("#"))
                             {
                                 unshippedLines.Add(line);
+                            }
+                            else if (line.StartsWith("*REMOVED*", StringComparison.OrdinalIgnoreCase))
+                            {
+                                removedLines.Add(line[9..].TrimStart());
+                                removedApiCount++;
                             }
                             else
                             {
@@ -117,10 +125,33 @@ namespace NuGet.Internal.Tools.ShipPublicApis
 
                 shippedLines.Sort(StringComparer.Ordinal);
 
+                if (File.Exists(removedTxtPath))
+                {
+                    using (var stream = File.OpenText(removedTxtPath))
+                    {
+                        string line;
+                        while ((line = await stream.ReadLineAsync()) != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(line))
+                            {
+                                removedLines.Add(line);
+                            }
+                        }
+                    }
+                }
+
+                removedLines.Sort(StringComparer.Ordinal);
+
                 await File.WriteAllLinesAsync(shippedTxtPath, shippedLines);
                 await File.WriteAllLinesAsync(unshippedTxtPath.FullName, unshippedLines);
 
+                if (removedLines.Count > 0)
+                {
+                    await File.WriteAllLinesAsync(removedTxtPath, removedLines);
+                }
+
                 Console.WriteLine($"{unshippedTxtPath.FullName}: Shipped {unshippedApiCount} APIs.");
+                Console.WriteLine($"{unshippedTxtPath.FullName}: Removed {removedApiCount} APIs.");
             }
 
             if (!foundAtLeastOne)

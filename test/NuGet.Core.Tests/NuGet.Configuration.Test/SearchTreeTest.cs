@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Test.Utility;
@@ -10,8 +11,25 @@ using Xunit;
 
 namespace NuGet.Configuration.Test
 {
-    public class SearchTreeTest
+    public class SearchTreeTest : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+        private readonly CultureInfo _originalUiCulture;
+
+        public SearchTreeTest()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            _originalUiCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+            CultureInfo.CurrentUICulture = _originalUiCulture;
+        }
+
         [Theory]
         [InlineData("public,Nuget", "Nuget")]
         [InlineData("public,nuget", "Nuget")]

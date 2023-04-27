@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Sdk.TestFramework;
 using Microsoft.VisualStudio.Shell;
@@ -11,13 +12,27 @@ using Task = System.Threading.Tasks.Task;
 
 namespace NuGet.PackageManagement.VisualStudio.Test
 {
-    public abstract class MockedVSCollectionTests : IAsyncServiceProvider
+    public abstract class MockedVSCollectionTests : IAsyncServiceProvider, IDisposable
     {
         private readonly Dictionary<Type, Task<object>> _services = new Dictionary<Type, Task<object>>();
         protected readonly Dictionary<string, bool> _experimentationFlags;
 
+        private readonly CultureInfo _originalCulture;
+        private readonly CultureInfo _originalUiCulture;
+
+        public virtual void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+            CultureInfo.CurrentUICulture = _originalUiCulture;
+        }
+
         public MockedVSCollectionTests(GlobalServiceProvider globalServiceProvider)
         {
+            _originalCulture = CultureInfo.CurrentCulture;
+            _originalUiCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+
             globalServiceProvider.Reset();
             _experimentationFlags = new Dictionary<string, bool>();
 

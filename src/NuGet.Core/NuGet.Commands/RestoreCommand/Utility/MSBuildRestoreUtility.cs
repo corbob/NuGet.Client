@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -9,7 +10,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.ProjectModel;
@@ -1000,15 +1007,14 @@ namespace NuGet.Commands
         {
             foreach (var framework in frameworks)
             {
-                if (centralPackageVersions.ContainsKey(framework))
+                if (!centralPackageVersions.TryGetValue(framework, out Dictionary<string, CentralPackageVersion> versions))
                 {
-                    centralPackageVersions[framework].Add(centralPackageVersion.Name, centralPackageVersion);
+                    versions = new Dictionary<string, CentralPackageVersion>(StringComparer.OrdinalIgnoreCase);
+
+                    centralPackageVersions.Add(framework, versions);
                 }
-                else
-                {
-                    var deps = new Dictionary<string, CentralPackageVersion>() { [centralPackageVersion.Name] = centralPackageVersion };
-                    centralPackageVersions.Add(framework, deps);
-                }
+
+                versions[centralPackageVersion.Name] = centralPackageVersion;
             }
         }
 

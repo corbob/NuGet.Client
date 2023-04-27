@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,7 +8,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
@@ -19,16 +26,32 @@ namespace NuGet.Protocol
     /// </summary>
     public sealed class DependencyInfoResourceV3 : DependencyInfoResource
     {
-        private readonly HttpSource _client;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _client;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly RegistrationResourceV3 _regResource;
         private readonly SourceRepository _source;
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Dependency info resource
         /// </summary>
         /// <param name="client">Http client</param>
         /// <param name="regResource">Registration blob resource</param>
-        public DependencyInfoResourceV3(HttpSource client, RegistrationResourceV3 regResource, SourceRepository source)
+        public DependencyInfoResourceV3(IHttpSource client, RegistrationResourceV3 regResource, SourceRepository source)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             if (client == null)
             {
@@ -85,7 +108,7 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = String.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, package, _source);
+                var error = String.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, package, _source);
 
                 throw new FatalProtocolException(error, ex);
             }
@@ -126,11 +149,60 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = string.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
 
                 throw new FatalProtocolException(error, ex);
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="projectFramework">project target framework. This is used for finding the dependency group</param>
+        /// <param name="token">cancellation token</param>
+        /// <returns>available packages and their dependencies</returns>
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext cacheContext, Common.ILogger log, CancellationToken token)
+        {
+            try
+            {
+                var results = new List<SourcePackageDependencyInfo>();
+
+                // Construct the registration index url
+                var uri = _regResource.GetUri(packageId);
+
+                // Retrieve the registration blob
+                var regInfo = await ResolverMetadataClient.GetRegistrationInfo(_client, uri, packageId, includePrerelease ? VersionRange.All : VersionRange.AllStable, cacheContext, projectFramework, log, token);
+
+                // regInfo is null if the server returns a 404 for the package to indicate that it does not exist
+                if (regInfo != null)
+                {
+                    // Parse package and dependeny info from the blob
+                    var packages = GetPackagesFromRegistration(regInfo, token);
+
+                    // Filter on prerelease
+                    results.AddRange(packages);
+                }
+
+                return results;
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Retrieve the available packages and their dependencies.
@@ -152,7 +224,33 @@ namespace NuGet.Protocol
             catch (Exception ex)
             {
                 // Wrap exceptions coming from the server with a user friendly message
-                var error = string.Format(CultureInfo.CurrentUICulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
+
+                throw new FatalProtocolException(error, ex);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="token">cancellation token</param>
+        /// <returns>available packages and their dependencies</returns>
+        public override Task<IEnumerable<RemoteSourceDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, SourceCacheContext cacheContext, Common.ILogger log, CancellationToken token)
+        {
+            try
+            {
+                // Construct the registration index url
+                var uri = _regResource.GetUri(packageId);
+
+                // Retrieve the registration blob
+                return ResolverMetadataClient.GetDependencies(_client, uri, packageId, includePrerelease ? VersionRange.All : VersionRange.AllStable, cacheContext, log, token);
+            }
+            catch (Exception ex)
+            {
+                // Wrap exceptions coming from the server with a user friendly message
+                var error = string.Format(CultureInfo.CurrentCulture, Strings.Protocol_PackageMetadataError, packageId, _source);
 
                 throw new FatalProtocolException(error, ex);
             }

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -20,10 +21,19 @@ using NuGet.Versioning;
 
 namespace NuGet.Protocol
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// A light weight XML parser for NuGet V2 Feeds
     /// </summary>
-    public sealed class V2FeedParser : IV2FeedParser
+    public sealed partial class V2FeedParser : IV2FeedParser
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private const string W3Atom = "http://www.w3.org/2005/Atom";
         private const string MetadataNS = "http://schemas.microsoft.com/ado/2007/08/dataservices/metadata";
@@ -31,7 +41,18 @@ namespace NuGet.Protocol
 
         // XNames used in the feed
         private static readonly XName _xnameEntry = XName.Get("entry", W3Atom);
-        private static readonly XName _xnameTitle = XName.Get("title", W3Atom);
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private static readonly XName _xnameAtomTitle = XName.Get("title", W3Atom);
+        private static readonly XName _xnameTitle = XName.Get("Title", DataServicesNS);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private static readonly XName _xnameContent = XName.Get("content", W3Atom);
         private static readonly XName _xnameLink = XName.Get("link", W3Atom);
         private static readonly XName _xnameProperties = XName.Get("properties", MetadataNS);
@@ -57,16 +78,29 @@ namespace NuGet.Protocol
         private static readonly XName _xnamePackageHashAlgorithm = XName.Get("PackageHashAlgorithm", DataServicesNS);
         private static readonly XName _xnameMinClientVersion = XName.Get("MinClientVersion", DataServicesNS);
 
-        private readonly HttpSource _httpSource;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _httpSource;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly string _baseAddress;
         private readonly V2FeedQueryBuilder _queryBuilder;
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Creates a V2 parser
         /// </summary>
         /// <param name="httpSource">HttpSource and message handler containing auth/proxy support</param>
         /// <param name="baseAddress">base address for all services from this OData service</param>
-        public V2FeedParser(HttpSource httpSource, string baseAddress)
+        public V2FeedParser(IHttpSource httpSource, string baseAddress)
             : this(httpSource, baseAddress, baseAddress)
         {
         }
@@ -77,7 +111,10 @@ namespace NuGet.Protocol
         /// <param name="httpSource">HttpSource and message handler containing auth/proxy support</param>
         /// <param name="baseAddress">base address for all services from this OData service</param>
         /// <param name="source">PackageSource useful for reporting meaningful errors that relate back to the configuration</param>
-        public V2FeedParser(HttpSource httpSource, string baseAddress, string source)
+        public V2FeedParser(IHttpSource httpSource, string baseAddress, string source)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             if (httpSource == null)
             {
@@ -264,6 +301,71 @@ namespace NuGet.Protocol
             return page.Items;
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public async Task<int> SearchCountAsync(
+            string searchTerm,
+            SearchFilter filters,
+            ILogger log,
+            CancellationToken token)
+        {
+            var skip = 0;
+            var take = 1;
+            var relativeUri = _queryBuilder.BuildSearchUri(searchTerm, filters, skip, take, isCount: true);
+
+            var uri = string.Format(CultureInfo.InvariantCulture, "{0}{1}", _baseAddress, relativeUri);
+
+            int count = await _httpSource.ProcessResponseAsync(
+                new HttpSourceRequest(
+                    () =>
+                    {
+                        var request = HttpRequestMessageFactory.Create(HttpMethod.Get, uri, log);
+                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("text/plain"));
+                        return request;
+                    })
+                {
+                    IsRetry = false
+                },
+                async response =>
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var networkStream = await response.Content.ReadAsStringAsync();
+                        return Convert.ToInt32(networkStream);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        // Treat "404 Not Found" as an empty response.
+                        return 0;
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NoContent)
+                    {
+                        // Always treat "204 No Content" as exactly that.
+                        return 0;
+                    }
+                    else
+                    {
+                        throw new FatalProtocolException(string.Format(
+                            CultureInfo.CurrentCulture,
+                            Strings.Log_FailedToFetchV2Feed,
+                            uri,
+                            (int)response.StatusCode,
+                            response.ReasonPhrase));
+                    }
+                },
+                null,
+                log,
+                token);
+
+            return count;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public async Task<DownloadResourceResult> DownloadFromUrl(
             PackageIdentity package,
             Uri downloadUri,
@@ -330,7 +432,16 @@ namespace NuGet.Protocol
         {
             var properties = element.Element(_xnameProperties);
             var idElement = properties.Element(_xnameId);
-            var titleElement = element.Element(_xnameTitle);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var titleElement = element.Element(_xnameAtomTitle);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // If 'Id' element exist, use its value as accurate package Id
             // Otherwise, use the value of 'title' if it exist
@@ -340,7 +451,16 @@ namespace NuGet.Protocol
             var version = metadataCache.GetVersion(metadataCache.GetString(versionString));
             var downloadUrl = metadataCache.GetString(element.Element(_xnameContent).Attribute("src").Value);
 
-            var title = metadataCache.GetString(titleElement?.Value);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var title = metadataCache.GetString(GetString(properties, _xnameTitle));
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             var summary = metadataCache.GetString(GetString(element, _xnameSummary));
             var description = metadataCache.GetString(GetString(properties, _xnameDescription));
             var iconUrl = metadataCache.GetString(GetString(properties, _xnameIconUrl));
@@ -381,10 +501,53 @@ namespace NuGet.Protocol
                 authors = authorNode.Elements(_xnameName).Select(e => metadataCache.GetString(e.Value));
             }
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var packageSize = GetLong(properties, _xnamePackageSize);
+            var versionDownloadCount = GetInt(properties, _xnameVersionDownloadCount);
+            var isApproved = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsApproved));
+            var packageStatus = metadataCache.GetString(GetString(properties, _xnamePackageStatus));
+            var packageSubmittedStatus = metadataCache.GetString(GetString(properties, _xnamePackageSubmittedStatus));
+            var packageTestResultStatus = metadataCache.GetString(GetString(properties, _xnamePackageTestResultStatus));
+            var packageTestResultStatusDate = GetNoOffsetDate(properties, _xnamePackageTestResultStatusDate);
+            var packageValidationResultStatus = metadataCache.GetString(GetString(properties, _xnamePackageValidationResultStatus));
+            var packageValidationResultDate = GetNoOffsetDate(properties, _xnamePackageValidationResultDate);
+            var packageCleanupResultDate = GetNoOffsetDate(properties, _xnamePackageCleanupResultDate);
+            var packageReviewedDate = GetNoOffsetDate(properties, _xnamePackageReviewedDate);
+            var packageApprovedDate = GetNoOffsetDate(properties, _xnamePackageApprovedDate);
+            var packageReviewer = metadataCache.GetString(GetString(properties, _xnamePackageReviewer));
+            var isDownloadCacheAvailable = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsDownloadCacheAvailable));
+            var downloadCacheDate = GetNoOffsetDate(properties, _xnameDownloadCacheDate);
+            var downloadCacheString = metadataCache.GetString(GetString(properties, _xnameDownloadCache));
+            var isLatestVersion = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsLatestVersion));
+            var isAbsoluteLatestVersion = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsAbsoluteLatestVersion));
+            var isPrerelease = StringComparer.OrdinalIgnoreCase.Equals(bool.TrueString, GetString(properties, _xnameIsPrerelease));
+            var releaseNotes = metadataCache.GetString(GetString(properties, _xnameReleaseNotes));
+            var projectSourceUrl = metadataCache.GetString(GetString(properties, _xnameProjectSourceUrl));
+            var packageSourceUrl = metadataCache.GetString(GetString(properties, _xnamePackageSourceUrl));
+            var docsUrl = metadataCache.GetString(GetString(properties, _xnameDocsUrl));
+            var mailingListUrl = metadataCache.GetString(GetString(properties, _xnameMailingListUrl));
+            var bugTrackerUrl = metadataCache.GetString(GetString(properties, _xnameBugTrackerUrl));
+            var downloadCacheStatus = metadataCache.GetString(GetString(properties, _xnameDownloadCacheStatus));
+            var packageScanStatus = metadataCache.GetString(GetString(properties, _xnamePackageScanStatus));
+            var packageScanResultDate = GetNoOffsetDate(properties, _xnamePackageScanResultDate);
+            var packageScanFlagResult = metadataCache.GetString(GetString(properties, _xnamePackageScanFlagResult));
+
             return new V2FeedPackageInfo(new PackageIdentity(identityId, version), title, summary, description, authors,
                 owners, iconUrl, licenseUrl, projectUrl, reportAbuseUrl, galleryDetailsUrl, tags, created, lastEdited,
                 published, dependencies, requireLicenseAcceptance, downloadUrl, downloadCount, packageHash,
-                packageHashAlgorithm, minClientVersion);
+                packageHashAlgorithm, minClientVersion, packageSize, versionDownloadCount, isApproved, packageStatus,
+                packageSubmittedStatus, packageTestResultStatus, packageTestResultStatusDate, packageValidationResultStatus,
+                packageValidationResultDate, packageCleanupResultDate, packageReviewedDate, packageApprovedDate,
+                packageReviewer, isDownloadCacheAvailable, downloadCacheDate, downloadCacheString, isLatestVersion,
+                isAbsoluteLatestVersion, isPrerelease, releaseNotes, projectSourceUrl, packageSourceUrl, docsUrl, mailingListUrl,
+                bugTrackerUrl, downloadCacheStatus, packageScanStatus, packageScanResultDate, packageScanFlagResult);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         /// <summary>
@@ -436,7 +599,7 @@ namespace NuGet.Protocol
             var results = new List<V2FeedPackageInfo>();
             var uris = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-            var uri = string.Format("{0}{1}", _baseAddress, relativeUri);
+            var uri = string.Format(CultureInfo.InvariantCulture, "{0}{1}", _baseAddress, relativeUri);
             uris.Add(uri);
 
             // page

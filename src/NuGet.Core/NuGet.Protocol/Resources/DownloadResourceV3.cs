@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -19,14 +20,28 @@ namespace NuGet.Protocol
     {
         private readonly string _source;
         private readonly RegistrationResourceV3 _regResource;
-        private readonly HttpSource _client;
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _client;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly string _packageBaseAddressUrl;
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Download packages using the download url found in the registration resource.
         /// </summary>
         [Obsolete("Use constructor with source parameter")]
-        public DownloadResourceV3(HttpSource client, RegistrationResourceV3 regResource)
+        public DownloadResourceV3(IHttpSource client, RegistrationResourceV3 regResource)
             : this(source: null, client, regResource)
         {
         }
@@ -34,7 +49,7 @@ namespace NuGet.Protocol
         /// <summary>
         /// Download packages using the download url found in the registration resource.
         /// </summary>
-        public DownloadResourceV3(string source, HttpSource client, RegistrationResourceV3 regResource)
+        public DownloadResourceV3(string source, IHttpSource client, RegistrationResourceV3 regResource)
             : this(client)
         {
             if (regResource == null)
@@ -50,7 +65,7 @@ namespace NuGet.Protocol
         /// Download packages using the package base address container resource.
         /// </summary>
         [Obsolete("Use constructor with source parameter")]
-        public DownloadResourceV3(HttpSource client, string packageBaseAddress)
+        public DownloadResourceV3(IHttpSource client, string packageBaseAddress)
             : this(source: null, client, packageBaseAddress)
         {
         }
@@ -58,7 +73,7 @@ namespace NuGet.Protocol
         /// <summary>
         /// Download packages using the package base address container resource.
         /// </summary>
-        public DownloadResourceV3(string source, HttpSource client, string packageBaseAddress)
+        public DownloadResourceV3(string source, IHttpSource client, string packageBaseAddress)
             : this(client)
         {
             if (packageBaseAddress == null)
@@ -70,7 +85,7 @@ namespace NuGet.Protocol
             _packageBaseAddressUrl = packageBaseAddress.TrimEnd('/');
         }
 
-        private DownloadResourceV3(HttpSource client)
+        private DownloadResourceV3(IHttpSource client)
         {
             if (client == null)
             {
@@ -79,6 +94,10 @@ namespace NuGet.Protocol
 
             _client = client;
         }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         /// <summary>
         /// Get the download url of the package.

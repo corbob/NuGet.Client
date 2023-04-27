@@ -1,3 +1,7 @@
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +15,13 @@ using System.Threading.Tasks;
 using NuGet.Client;
 using NuGet.Common;
 using NuGet.ContentModel;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.RuntimeModel;
 
@@ -68,7 +78,7 @@ namespace NuGet.Packaging.Rules
                         (var tfmNames, var suggestedDirectories) = GenerateWarningString(possibleFrameworks);
 
                         var issue = new List<PackagingLogMessage>();
-                        issue.Add(PackagingLogMessage.CreateWarning(string.Format(MessageFormat, tfmNames, suggestedDirectories),
+                        issue.Add(PackagingLogMessage.CreateWarning(string.Format(CultureInfo.CurrentCulture, MessageFormat, tfmNames, suggestedDirectories),
                             NuGetLogCode.NU5127));
                         return issue;
                     }
@@ -86,7 +96,7 @@ namespace NuGet.Packaging.Rules
 
             string suggestedDirectories = possibleFrameworks.Length > 1
                 ? CreateDirectoriesMessage(possibleFrameworks)
-                : string.Format("-lib/{0}/_._", possibleFrameworks[0]);
+                : string.Format(CultureInfo.CurrentCulture, "-lib/{0}/_._", possibleFrameworks[0]);
 
             return (tfmNames, suggestedDirectories);
         }
@@ -96,7 +106,7 @@ namespace NuGet.Packaging.Rules
             var suggestedDirectories = new StringBuilder();
             foreach (var framework in possibleFrameworks)
             {
-                suggestedDirectories.AppendFormat("-lib/{0}/_._", framework).AppendLine();
+                suggestedDirectories.AppendFormat(CultureInfo.CurrentCulture, "-lib/{0}/_._", framework).AppendLine();
             }
             return suggestedDirectories.ToString();
         }

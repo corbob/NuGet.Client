@@ -8,6 +8,29 @@ namespace NuGet.Protocol.Core.Types
         /// <summary>
         /// Order the resulting packages by package ID.
         /// </summary>
-        Id
+        Id,
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Order the resulting packages by number of downloads.
+        /// </summary>
+        DownloadCount,
+
+        /// <summary>
+        /// Order the resulting packages grouped by the version number
+        /// </summary>
+        Version,
+
+        /// <summary>
+        /// Order the resulting packages by number of downloads, and also group by the version number
+        /// </summary>
+        DownloadCountAndVersion
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

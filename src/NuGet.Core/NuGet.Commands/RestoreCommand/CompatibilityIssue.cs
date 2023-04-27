@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -6,7 +7,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 
 namespace NuGet.Commands
@@ -280,7 +287,7 @@ namespace NuGet.Commands
 
             if (AvailableFrameworks.Any())
             {
-                sb.AppendFormat(supports);
+                sb.AppendFormat(CultureInfo.CurrentCulture, supports);
 
                 if (AvailableFrameworks.Count > 1)
                 {
@@ -299,7 +306,7 @@ namespace NuGet.Commands
             }
             else if (AvailableFrameworkRuntimePairs.Any())
             {
-                sb.AppendFormat(supports);
+                sb.AppendFormat(CultureInfo.CurrentCulture, supports);
 
                 if (AvailableFrameworkRuntimePairs.Count > 1)
                 {

@@ -1,8 +1,10 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,7 +12,13 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;
 using NuGet.RuntimeModel;
@@ -19,8 +27,25 @@ using Xunit;
 
 namespace NuGet.ProjectModel.Test
 {
-    public class JsonPackageSpecReaderTests
+    public class JsonPackageSpecReaderTests : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+        private readonly CultureInfo _originalUiCulture;
+
+        public JsonPackageSpecReaderTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            _originalUiCulture = CultureInfo.CurrentUICulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture;
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+            CultureInfo.CurrentUICulture = _originalUiCulture;
+        }
+
         [Fact]
         public void PackageSpecReader_PackageMissingVersion()
         {
@@ -3515,7 +3540,7 @@ namespace NuGet.ProjectModel.Test
                     {
                         var dependencies = new List<LibraryDependency>();
                         NuGetFramework framework = NuGetFramework.Parse(frameworkPropertyName);
-                        JsonPackageSpecReader.ReadCentralTransitveDependencyGroup(
+                        JsonPackageSpecReader.ReadCentralTransitiveDependencyGroup(
                             jsonReader: jsonReader,
                             results: dependencies,
                             packageSpecPath: "SomePath");

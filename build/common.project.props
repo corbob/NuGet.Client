@@ -14,18 +14,18 @@
     <NETFXTargetFrameworkVersion>v4.7.2</NETFXTargetFrameworkVersion>
     <NETFXTargetFramework>net472</NETFXTargetFramework>
     <NETCoreTargetFramework>netcoreapp3.1</NETCoreTargetFramework>
-    <NETCoreTargetFramework Condition="'$(DotNetBuildFromSource)' == 'true'">net6.0</NETCoreTargetFramework>
+    <NETCoreTargetFramework Condition="'$(DotNetBuildFromSource)' == 'true'">net7.0</NETCoreTargetFramework>
     <NETCoreTestTargetFramework>net6.0</NETCoreTestTargetFramework>
     <NetStandardVersion>netstandard2.0</NetStandardVersion>
     <TargetFrameworksExe>$(NETFXTargetFramework);$(NETCoreTargetFramework)</TargetFrameworksExe>
     <TargetFrameworksExe Condition="'$(IsXPlat)' == 'true'">$(NETCoreTargetFramework)</TargetFrameworksExe>
     <TargetFrameworksExeForSigning>$(TargetFrameworksExe);netcoreapp5.0</TargetFrameworksExeForSigning>
     <TargetFrameworksExeForSigning Condition=" '$(IsXPlat)' == 'true' ">$(NETCoreTargetFramework);netcoreapp5.0</TargetFrameworksExeForSigning>
-    <TargetFrameworksExeForSigning Condition="'$(DotNetBuildFromSource)' == 'true'">$(TargetFrameworksExe);net6.0</TargetFrameworksExeForSigning>
+    <TargetFrameworksExeForSigning Condition="'$(DotNetBuildFromSource)' == 'true'">$(TargetFrameworksExe);net7.0</TargetFrameworksExeForSigning>
     <TargetFrameworksLibrary>$(NETFXTargetFramework);$(NetStandardVersion)</TargetFrameworksLibrary>
     <TargetFrameworksLibrary Condition="'$(DotNetBuildFromSource)' == 'true'">$(NETCoreTargetFramework);$(NETFXTargetFramework);$(NetStandardVersion)</TargetFrameworksLibrary>
     <TargetFrameworksLibraryForSigning>$(TargetFrameworksLibrary);netcoreapp5.0</TargetFrameworksLibraryForSigning>
-    <TargetFrameworksLibraryForSigning Condition="'$(DotNetBuildFromSource)' == 'true'">$(TargetFrameworksLibrary);net6.0</TargetFrameworksLibraryForSigning>
+    <TargetFrameworksLibraryForSigning Condition="'$(DotNetBuildFromSource)' == 'true'">$(TargetFrameworksLibrary);net7.0</TargetFrameworksLibraryForSigning>
     <TargetFrameworksLibraryForCrossVerificationTests>$(NETFXTargetFramework);net6.0</TargetFrameworksLibraryForCrossVerificationTests>
     <RepositoryRootDirectory>$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory), 'README.md'))\</RepositoryRootDirectory>
     <BuildCommonDirectory>$(RepositoryRootDirectory)build\</BuildCommonDirectory>
@@ -126,10 +126,15 @@
 
   <!--Setting the product information for Beta builds-->
   <Choose>
+    <When Condition="'$(BuildRTM)' != 'true' AND '$(PreReleaseVersion)' != '' AND '$(PreReleaseVersion)' != '0' AND '$(BuildDate)' != '' AND '$(BuildDate)' != '0' ">
+      <PropertyGroup>
+        <PreReleaseInformationVersion>-$(ReleaseLabel)-$(BuildDate)-$(PreReleaseVersion)</PreReleaseInformationVersion>
+      </PropertyGroup>
+    </When>
     <!-- If we aren't excluding the build number, use the release label and the build number. -->
     <When Condition="'$(BuildRTM)' != 'true' AND '$(PreReleaseVersion)' != '' AND '$(PreReleaseVersion)' != '0' ">
       <PropertyGroup>
-        <PreReleaseInformationVersion>-$(ReleaseLabel).$(PreReleaseVersion)</PreReleaseInformationVersion>
+        <PreReleaseInformationVersion>-$(ReleaseLabel)-$(PreReleaseVersion)</PreReleaseInformationVersion>
       </PropertyGroup>
     </When>
     <!-- If we are excluding the build number, show the release label unless we are RTM. -->
@@ -246,7 +251,17 @@
   </ItemGroup>
 
   <!-- All projects in the repository -->
-  <ItemGroup Condition=" '$(IsXPlat)' != 'true' ">
+  <!--
+    ============================================================
+    Start Chocolatey Specific Modification
+    ============================================================
+  -->
+  <ItemGroup Condition=" '$(IsXPlat)' != 'true'  AND '$(ChocolateyBuild)' != 'true' ">
+  <!--
+    ============================================================
+    End Chocolatey Specific Modification
+    ============================================================
+  -->
     <SolutionProjects Include="$(RepositoryRootDirectory)test\*\*\*.csproj"
                       Exclude="$(RepositoryRootDirectory)test\EndToEnd\*\*.csproj;
                                $(RepositoryRootDirectory)test\NuGet.Tests.Apex\*\*.csproj"
@@ -259,8 +274,66 @@
                                 Exclude="$(VSIXProject)" />
   </ItemGroup>
 
+  <!--
+    ============================================================
+    Start Chocolatey Specific Modification
+    ============================================================
+  -->
+
+  <!-- Include only project for Chocolatey -->
+  <ItemGroup Condition=" '$(ChocolateyBuild)' == 'true' ">
+    <SolutionProjects Include="$(RepositoryRootDirectory)src\NuGet.Core\NuGet.Frameworks\NuGet.Frameworks.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Commands\NuGet.Commands.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Protocol\NuGet.Protocol.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Packaging\NuGet.Packaging.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Common\NuGet.Common.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Configuration\NuGet.Configuration.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.PackageManagement\NuGet.PackageManagement.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.DependencyResolver.Core\NuGet.DependencyResolver.Core.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.ProjectModel\NuGet.ProjectModel.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Resolver\NuGet.Resolver.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Versioning\NuGet.Versioning.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.Credentials\NuGet.Credentials.csproj;
+                               $(RepositoryRootDirectory)src\NuGet.Core\NuGet.LibraryModel\\NuGet.LibraryModel.csproj;"/>
+    
+    <CoreUnitTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Commands.Test\NuGet.Commands.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Common.Test\NuGet.Common.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Configuration.Test\NuGet.Configuration.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Credentials.Test\NuGet.Credentials.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.DependencyResolver.Core.Tests\NuGet.DependencyResolver.Core.Tests.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Frameworks.Test\NuGet.Frameworks.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.LibraryModel.Tests\NuGet.LibraryModel.Tests.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.PackageManagement.Test\NuGet.PackageManagement.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Packaging.Test\NuGet.Packaging.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.ProjectModel.Test\NuGet.ProjectModel.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Protocol.Tests\NuGet.Protocol.Tests.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Resolver.Test\NuGet.Resolver.Test.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Shared.Tests\NuGet.Shared.Tests.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.Tests\NuGet.Versioning.Test\NuGet.Versioning.Test.csproj" />
+
+    <CoreFuncTestProjects Include="$(RepositoryRootDirectory)test\NuGet.Core.FuncTests\NuGet.Commands.FuncTest\NuGet.Commands.FuncTest.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.FuncTests\NuGet.Packaging.FuncTest\NuGet.Packaging.FuncTest.csproj;
+                                   $(RepositoryRootDirectory)test\NuGet.Core.FuncTests\NuGet.Protocol.FuncTest\NuGet.Protocol.FuncTest.csproj" />
+  </ItemGroup>
+
+  <!--
+    ============================================================
+    End Chocolatey Specific Modification
+    ============================================================
+  -->
+
   <!-- All projects in the repository that support cross platform builds -->
-  <ItemGroup Condition=" '$(IsXPlat)' == 'true' ">
+  <!--
+    ============================================================
+    Start Chocolatey Specific Modification
+    ============================================================
+  -->
+  <ItemGroup Condition=" '$(IsXPlat)' == 'true' AND '$(ChocolateyBuild)' != 'true' ">
+  <!--
+    ============================================================
+    End Chocolatey Specific Modification
+    ============================================================
+  -->
     <SolutionProjects Include="@(CoreUnitTestProjects)" />
     <SolutionProjects Include="@(CoreFuncTestProjects)" />
   </ItemGroup>

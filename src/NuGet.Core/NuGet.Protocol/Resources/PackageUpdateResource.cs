@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -35,13 +36,29 @@ namespace NuGet.Protocol.Core.Types
         /// </summary>
         private const string TempApiKeyServiceEndpoint = "create-verification-key/{0}/{1}";
 
-        private HttpSource _httpSource;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private IHttpSource _httpSource;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private string _source;
         private bool _disableBuffering;
         public ISettings Settings { get; set; }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public PackageUpdateResource(string source,
-            HttpSource httpSource)
+            IHttpSource httpSource)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             _source = source;
             _httpSource = httpSource;
@@ -157,6 +174,7 @@ namespace NuGet.Protocol.Core.Types
             if (confirm(string.Format(CultureInfo.CurrentCulture, Strings.DeleteCommandConfirm, packageId, packageVersion, sourceDisplayName)))
             {
                 log.LogWarning(string.Format(
+                    CultureInfo.CurrentCulture,
                     Strings.DeleteCommandDeletingPackage,
                     packageId,
                     packageVersion,
@@ -856,7 +874,7 @@ namespace NuGet.Protocol.Core.Types
                 return apiKey;
             }
             var serviceEndpointUrl = GetServiceEndpointUrl(NuGetConstants.DefaultGalleryServerUrl,
-                string.Format(TempApiKeyServiceEndpoint, packageIdentity.Id, packageIdentity.Version), noServiceEndpoint);
+                string.Format(CultureInfo.InvariantCulture, TempApiKeyServiceEndpoint, packageIdentity.Id, packageIdentity.Version), noServiceEndpoint);
 
             try
             {

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -12,10 +13,19 @@ using NuGet.Versioning;
 
 namespace NuGet.Packaging
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// Manifest (user created .nuspec) file metadata model
     /// </summary>
-    public class ManifestMetadata : IPackageMetadata
+    public partial class ManifestMetadata : IPackageMetadata
+
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private string _minClientVersionString;
 
@@ -64,6 +74,16 @@ namespace NuGet.Packaging
             LicenseMetadata = copy.LicenseMetadata;
             Icon = copy.Icon;
             Readme = copy.Readme;
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            FinishContruction(copy);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         [ManifestVersion(5)]

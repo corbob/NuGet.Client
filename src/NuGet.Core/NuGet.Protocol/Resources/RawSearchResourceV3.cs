@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -17,10 +18,26 @@ namespace NuGet.Protocol
     [Obsolete("Use PackageSearchResource instead (via SourceRepository.GetResourceAsync<PackageSearchResource>")]
     public class RawSearchResourceV3 : INuGetResource
     {
-        private readonly HttpSource _client;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _client;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly Uri[] _searchEndpoints;
 
-        public RawSearchResourceV3(HttpSource client, IEnumerable<Uri> searchEndpoints)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public RawSearchResourceV3(IHttpSource client, IEnumerable<Uri> searchEndpoints)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             : base()
         {
             if (client == null)
@@ -48,9 +65,9 @@ namespace NuGet.Protocol
                 var queryUrl = new UriBuilder(endpoint.AbsoluteUri);
                 var queryString =
                     "q=" + searchTerm +
-                    "&skip=" + skip.ToString() +
-                    "&take=" + take.ToString() +
-                    "&prerelease=" + filters.IncludePrerelease.ToString().ToLowerInvariant();
+                    "&skip=" + skip.ToString(CultureInfo.CurrentCulture) +
+                    "&take=" + take.ToString(CultureInfo.CurrentCulture) +
+                    "&prerelease=" + filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant();
 
                 if (filters.IncludeDelisted)
                 {
@@ -63,7 +80,7 @@ namespace NuGet.Protocol
                     var frameworks =
                         string.Join("&",
                             filters.SupportedFrameworks.Select(
-                                fx => "supportedFramework=" + fx.ToString()));
+                                fx => "supportedFramework=" + fx.ToString(CultureInfo.InvariantCulture)));
                     queryString += "&" + frameworks;
                 }
 

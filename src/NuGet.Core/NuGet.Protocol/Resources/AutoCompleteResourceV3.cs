@@ -1,8 +1,10 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -17,10 +19,18 @@ namespace NuGet.Protocol
     {
         private readonly RegistrationResourceV3 _regResource;
         private readonly ServiceIndexResourceV3 _serviceIndex;
-        private readonly HttpSource _client;
 
-        public AutoCompleteResourceV3(HttpSource client, ServiceIndexResourceV3 serviceIndex, RegistrationResourceV3 regResource)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _client;
+
+        public AutoCompleteResourceV3(IHttpSource client, ServiceIndexResourceV3 serviceIndex, RegistrationResourceV3 regResource)
             : base()
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             _regResource = regResource;
             _serviceIndex = serviceIndex;
@@ -44,7 +54,7 @@ namespace NuGet.Protocol
             var queryUrl = new UriBuilder(searchUrl.AbsoluteUri);
             var queryString =
                 "q=" + WebUtility.UrlEncode(packageIdPrefix) +
-                "&prerelease=" + includePrerelease.ToString().ToLowerInvariant() +
+                "&prerelease=" + includePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant() +
                 "&semVerLevel=2.0.0";
 
             queryUrl.Query = queryString;

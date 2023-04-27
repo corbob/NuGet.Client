@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -12,7 +13,13 @@ using Newtonsoft.Json.Linq;
 using NuGet.Commands.Test;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -28,7 +35,13 @@ using Xunit;
 
 namespace NuGet.Commands.FuncTest
 {
-    using static NuGet.Frameworks.FrameworkConstants;
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+    using static Chocolatey.NuGet.Frameworks.FrameworkConstants;
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
 
     using LocalPackageArchiveDownloader = Protocol.LocalPackageArchiveDownloader;
 
@@ -3190,6 +3203,7 @@ namespace NuGet.Commands.FuncTest
             result.LockFile.Libraries.Should().HaveCount(2);
             result.LockFile.Libraries.Should().Contain(e => e.Name.Equals("native"));
             result.LockFile.Libraries.Should().Contain(e => e.Name.Equals("native.child"));
+            result.LockFile.LogMessages.Should().HaveCount(0);
         }
 
         [Fact]
@@ -3254,6 +3268,7 @@ namespace NuGet.Commands.FuncTest
             result.LockFile.Libraries.Should().HaveCount(2);
             result.LockFile.Libraries.Should().Contain(e => e.Name.Equals("native"));
             result.LockFile.Libraries.Should().Contain(e => e.Name.Equals("native.child"));
+            result.LockFile.LogMessages.Should().HaveCount(0);
         }
 
         [Fact]
@@ -3859,6 +3874,39 @@ namespace NuGet.Commands.FuncTest
             IAssetsLogMessage logMessage = result.LockFile.LogMessages[0];
             logMessage.Code.Should().Be(NuGetLogCode.NU1803);
             logMessage.Message.Should().Be("You are running the 'restore' operation with an 'HTTP' source, 'http://api.source/index.json'. Non-HTTPS access will be removed in a future version. Consider migrating to an 'HTTPS' source.");
+        }
+
+        [Fact]
+        public async Task Restore_WithPackageWithoutAsset_Succeeds()
+        {
+            // Arrange
+            using var pathContext = new SimpleTestPathContext();
+
+            var packageA = new SimpleTestPackageContext("a", "1.0.0");
+            packageA.Files.Clear();
+            packageA.AddFile("_._");
+            await SimpleTestPackageUtility.CreateFolderFeedV3Async(pathContext.PackageSource, packageA);
+
+            var logger = new TestLogger();
+            ISettings settings = Settings.LoadDefaultSettings(pathContext.SolutionRoot);
+            var projectSpec = ProjectTestHelpers.GetPackageSpec("Project1",
+                pathContext.SolutionRoot,
+                framework: "net5.0",
+                dependencyName: "a",
+                useAssetTargetFallback: true,
+                assetTargetFallbackFrameworks: "net472",
+                asAssetTargetFallback: true);
+
+            var request = ProjectTestHelpers.CreateRestoreRequest(projectSpec, pathContext, logger);
+            var command = new RestoreCommand(request);
+
+            // Act
+            var result = await command.ExecuteAsync();
+
+            // Assert
+            result.Success.Should().BeTrue(because: logger.ShowMessages());
+            result.LockFile.Libraries.Should().HaveCount(1);
+            result.LockFile.LogMessages.Should().HaveCount(0);
         }
 
         static TestRestoreRequest CreateRestoreRequest(PackageSpec spec, string userPackagesFolder, List<PackageSource> sources, ILogger logger)

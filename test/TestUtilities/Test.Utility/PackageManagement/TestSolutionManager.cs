@@ -1,13 +1,21 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement;
 using NuGet.ProjectManagement;
 using NuGet.ProjectManagement.Projects;
@@ -52,7 +60,7 @@ namespace Test.Utility
             GlobalPackagesFolder = Path.Combine(SolutionDirectory, "globalpackages");
 
             // create nuget config in solution root
-            File.WriteAllText(NuGetConfigPath, string.Format(_configContent, GlobalPackagesFolder));
+            File.WriteAllText(NuGetConfigPath, string.Format(CultureInfo.CurrentCulture, _configContent, GlobalPackagesFolder));
         }
 
         public TestSolutionManager(string solutionDirectory)

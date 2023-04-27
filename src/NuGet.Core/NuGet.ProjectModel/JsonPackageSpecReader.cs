@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,7 +12,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;
 using NuGet.RuntimeModel;
@@ -519,7 +526,7 @@ namespace NuGet.ProjectModel
             });
         }
 
-        internal static void ReadCentralTransitveDependencyGroup(
+        internal static void ReadCentralTransitiveDependencyGroup(
             JsonTextReader jsonReader,
             IList<LibraryDependency> results,
             string packageSpecPath)
@@ -808,6 +815,7 @@ namespace NuGet.ProjectModel
                     {
                         throw FileFormatException.Create(
                             string.Format(
+                                CultureInfo.CurrentCulture,
                                 Strings.Log_InvalidImportFramework,
                                 import,
                                 PackageSpec.PackageSpecFileName),
@@ -1502,7 +1510,7 @@ namespace NuGet.ProjectModel
                     else
                     {
                         throw FileFormatException.Create(
-                            string.Format("The value of a script in '{0}' can only be a string or an array of strings", PackageSpec.PackageSpecFileName),
+                            string.Format(CultureInfo.CurrentCulture, "The value of a script in '{0}' can only be a string or an array of strings", PackageSpec.PackageSpecFileName),
                             jsonReader.LineNumber,
                             jsonReader.LinePosition,
                             packageSpec.FilePath);

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -14,7 +15,13 @@ using Newtonsoft.Json.Linq;
 using NuGet.Commands;
 using NuGet.Common;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -177,7 +184,7 @@ namespace NuGet.ProjectManagement.Projects
                 if (packageSpec == null)
                 {
                     throw new InvalidOperationException(
-                        string.Format(Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
+                        string.Format(CultureInfo.CurrentCulture, Strings.ProjectNotLoaded_RestoreFailed, ProjectName));
                 }
                 var metadata = new ProjectRestoreMetadata();
                 packageSpec.RestoreMetadata = metadata;
@@ -320,7 +327,7 @@ namespace NuGet.ProjectManagement.Projects
             catch (Exception ex)
             {
                 throw new InvalidOperationException(
-                    string.Format(Strings.ErrorLoadingPackagesConfig, _jsonConfig.FullName, ex.Message), ex);
+                    string.Format(CultureInfo.CurrentCulture, Strings.ErrorLoadingPackagesConfig, _jsonConfig.FullName, ex.Message), ex);
             }
         }
 
@@ -339,7 +346,7 @@ namespace NuGet.ProjectManagement.Projects
             catch (Exception ex)
             {
                 throw new InvalidOperationException(
-                    string.Format(Strings.ErrorLoadingPackagesConfig, _jsonConfig.FullName, ex.Message), ex);
+                    string.Format(CultureInfo.CurrentCulture, Strings.ErrorLoadingPackagesConfig, _jsonConfig.FullName, ex.Message), ex);
             }
         }
 

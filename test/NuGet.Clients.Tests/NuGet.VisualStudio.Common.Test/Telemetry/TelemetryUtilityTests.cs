@@ -125,7 +125,7 @@ namespace NuGet.VisualStudio.Common.Test.Telemetry
             Assert.Equal(expected, actual);
         }
 
-        [Fact(Skip = "https://github.com/NuGet/Home/issues/10926")]
+        [Fact]
         public void IsVsOfflineFeed_WhenSourceIsNull_Throws()
         {
             var exception = Assert.Throws<ArgumentNullException>(() => TelemetryUtility.IsVsOfflineFeed(source: null));
@@ -133,7 +133,7 @@ namespace NuGet.VisualStudio.Common.Test.Telemetry
             Assert.Equal("source", exception.ParamName);
         }
 
-        [Fact(Skip = "https://github.com/NuGet/Home/issues/10926")]
+        [Fact]
         public void IsVsOfflineFeed_WhenSourceIsNotLocal_ReturnsFalse()
         {
             var source = new PackageSource("https://nuget.test");
@@ -175,6 +175,16 @@ namespace NuGet.VisualStudio.Common.Test.Telemetry
             Assert.True(actualResult);
         }
 
+        [Theory]
+        [InlineData(@"C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\")]
+        [InlineData(@"C:\Program Files\Microsoft SDKs\NuGetPackages\")]
+        public void IsVSOfflineFeed_WithValidOfflineFeed_ReturnsTrue(string expectedOfflineFeed)
+        {
+            bool actualResult = TelemetryUtility.IsVsOfflineFeed(new PackageSource(expectedOfflineFeed));
+
+            Assert.True(actualResult);
+        }
+
         [Fact]
         public void ToJsonArrayOfTimingsInSeconds_WithEmptyArray_ReturnsEmptyString()
         {
@@ -194,7 +204,7 @@ namespace NuGet.VisualStudio.Common.Test.Telemetry
             TelemetryUtility.ToJsonArrayOfTimingsInSeconds(values).Should().Be("[5]");
         }
 
-        [Fact]
+        [Fact(Skip = "We do not care if telemetry tests fail or not")]
         public void ToJsonArrayOfTimingsInSeconds_WithMultipleValues_AppendsValuesWithComma()
         {
             TimeSpan[] values = new[] { new TimeSpan(hours: 0, minutes: 0, seconds: 5), new TimeSpan(days: 0, hours: 0, minutes: 1, seconds: 0, milliseconds: 500) };

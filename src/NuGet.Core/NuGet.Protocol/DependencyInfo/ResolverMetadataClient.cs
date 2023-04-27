@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -12,7 +13,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
@@ -27,7 +34,13 @@ namespace NuGet.Protocol
         /// </summary>
         /// <returns>Returns an empty sequence if the package does not exist.</returns>
         public static async Task<IEnumerable<RemoteSourceDependencyInfo>> GetDependencies(
-            HttpSource httpClient,
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            IHttpSource httpClient,
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             Uri registrationUri,
             string packageId,
             VersionRange range,
@@ -115,7 +128,13 @@ namespace NuGet.Protocol
         /// </summary>
         /// <returns>Returns Null if the package does not exist</returns>
         public static async Task<RegistrationInfo> GetRegistrationInfo(
-            HttpSource httpClient,
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            IHttpSource httpClient,
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             Uri registrationUri,
             string packageId,
             VersionRange range,

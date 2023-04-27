@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,9 +9,16 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using NuGet.Common;
-using NuGet.Frameworks;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
+
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 
 namespace NuGet.Protocol
 {
@@ -25,11 +33,37 @@ namespace NuGet.Protocol
         private const string IdProperty = "Id";
         private const string SemVerLevel = "semVerLevel=2.0.0";
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private const string DownloadCountProperty = "DownloadCount";
+        private const string VersionProperty = "Version";
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         // constants for /Packages(ID,VERSION) endpoint
         private const string GetSpecificPackageFormat = "/Packages(Id='{0}',Version='{1}')";
 
         // constants for /Search() endpoint
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private const string SearchEndpointFormat = "/Search()?{0}{1}searchTerm='{2}'&targetFramework='{3}'&includePrerelease={4}&$skip={5}&$top={6}&" + SemVerLevel;
+        private const string CountEndpointFormat = "/Search()/$count?{0}{1}searchTerm='{2}'&targetFramework='{3}'&includePrerelease={4}&" + SemVerLevel;
+        private const string ExactFilterFormat = "tolower(Id)%20eq%20'{0}'";
+        private const string ByIdOnlyFormat = "substringof('{0}',tolower(Id))";
+        private const string ByTagOnlyFormat = "substringof('{0}',Tags)";
+        private const string IdStartsWithFormat = "startswith(tolower(Id),'chocolatey')";
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private const string QueryDelimiter = "&";
 
         // constants for /FindPackagesById() endpoint
@@ -56,12 +90,30 @@ namespace NuGet.Protocol
             TagsProperty
         };
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public string BuildSearchUri(
             string searchTerm,
             SearchFilter filters,
             int skip,
             int take)
         {
+            return BuildSearchUri(searchTerm, filters, skip, take, false);
+        }
+
+        public string BuildSearchUri(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            bool isCount)
+        {
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             var shortFormTargetFramework = string.Join(
                 "|",
                 filters
@@ -70,27 +122,40 @@ namespace NuGet.Protocol
 
             var orderBy = BuildOrderBy(filters.OrderBy);
 
-            var filter = BuildPropertyFilter(filters.Filter);
-            if (filter != null)
+            var filter = BuildFilter(searchTerm, filters, includePropertyClauses: false);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            if (isCount)
             {
-                filter = string.Format(
+                return string.Format(
                     CultureInfo.InvariantCulture,
-                    FilterFormat,
-                    filter);
+                    CountEndpointFormat,
+                    filter != null ? filter + QueryDelimiter : string.Empty,
+                    orderBy != null ? orderBy + QueryDelimiter : string.Empty,
+                    UriUtility.UrlEncodeOdataParameter(searchTerm),
+                    UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
+                    filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant());
+            }
+            else
+            {
+                return string.Format(
+                    CultureInfo.InvariantCulture,
+                    SearchEndpointFormat,
+                    filter != null ? filter + QueryDelimiter : string.Empty,
+                    orderBy != null ? orderBy + QueryDelimiter : string.Empty,
+                    UriUtility.UrlEncodeOdataParameter(searchTerm),
+                    UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
+                    filters.IncludePrerelease.ToString(CultureInfo.CurrentCulture).ToLowerInvariant(),
+                    skip,
+                    take);
             }
 
-            var uri = string.Format(
-                CultureInfo.InvariantCulture,
-                SearchEndpointFormat,
-                filter != null ? filter + QueryDelimiter : string.Empty,
-                orderBy != null ? orderBy + QueryDelimiter : string.Empty,
-                UriUtility.UrlEncodeOdataParameter(searchTerm),
-                UriUtility.UrlEncodeOdataParameter(shortFormTargetFramework),
-                filters.IncludePrerelease.ToString().ToLowerInvariant(),
-                skip,
-                take);
-
-            return uri;
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         public string BuildFindPackagesByIdUri(string id)
@@ -130,10 +195,26 @@ namespace NuGet.Protocol
             int? skip,
             int? take)
         {
-            var filterParameter = BuildFilter(searchTerm, filters.Filter);
-            var orderByParameter = BuildOrderBy(filters.OrderBy);
-            var skipParameter = BuildSkip(skip);
-            var topParameter = BuildTop(take);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var filterParameter = BuildFilter(searchTerm, filters, includePropertyClauses: true);
+
+            string orderByParameter = null;
+            string skipParameter = null;
+            string topParameter = null;
+
+            if (!filters.ExactPackageId)
+            {
+                orderByParameter = BuildOrderBy(filters.OrderBy);
+                skipParameter = BuildSkip(skip);
+                topParameter = BuildTop(take);
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // The parenthesis right after the "/Packages" path in the URL are excluded if the filter, orderby, and
             // top parameters are not used. This is a quirk of the NuGet 2.x implementation.
@@ -142,7 +223,7 @@ namespace NuGet.Protocol
             // Start building the URI.
             var builder = new StringBuilder();
 
-            builder.AppendFormat(GetPackagesFormat, useParenthesis ? EndpointParenthesis : string.Empty);
+            builder.AppendFormat(CultureInfo.InvariantCulture, GetPackagesFormat, useParenthesis ? EndpointParenthesis : string.Empty);
 
             var hasParameters = false;
 
@@ -150,6 +231,7 @@ namespace NuGet.Protocol
             if (filterParameter != null)
             {
                 builder.AppendFormat(
+                    CultureInfo.CurrentCulture,
                     hasParameters ? ParameterFormat : FirstParameterFormat,
                     filterParameter);
                 hasParameters = true;
@@ -158,6 +240,7 @@ namespace NuGet.Protocol
             if (orderByParameter != null)
             {
                 builder.AppendFormat(
+                    CultureInfo.CurrentCulture,
                     hasParameters ? ParameterFormat : FirstParameterFormat,
                     orderByParameter);
                 hasParameters = true;
@@ -166,6 +249,7 @@ namespace NuGet.Protocol
             if (skipParameter != null)
             {
                 builder.AppendFormat(
+                    CultureInfo.CurrentCulture,
                     hasParameters ? ParameterFormat : FirstParameterFormat,
                     skipParameter);
                 hasParameters = true;
@@ -174,12 +258,14 @@ namespace NuGet.Protocol
             if (topParameter != null)
             {
                 builder.AppendFormat(
+                    CultureInfo.CurrentCulture,
                     hasParameters ? ParameterFormat : FirstParameterFormat,
                     topParameter);
                 hasParameters = true;
             }
 
             builder.AppendFormat(
+                CultureInfo.CurrentCulture,
                 hasParameters ? ParameterFormat : FirstParameterFormat,
                 SemVerLevel);
             hasParameters = true;
@@ -207,12 +293,24 @@ namespace NuGet.Protocol
             return string.Format(CultureInfo.InvariantCulture, SkipFormat, skip);
         }
 
-        private string BuildFilter(string searchTerm, SearchFilterType? searchFilterType)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        private string BuildFilter(string searchTerm, SearchFilter searchFilter, bool includePropertyClauses)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             var pieces = new List<string>
             {
-                BuildFieldSearchFilter(searchTerm),
-                BuildPropertyFilter(searchFilterType)
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                BuildFieldSearchFilter(searchTerm, searchFilter, includePropertyClauses),
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                BuildPropertyFilter(searchFilter.Filter)
             }.AsEnumerable();
 
             pieces = pieces.Where(p => p != null);
@@ -236,6 +334,27 @@ namespace NuGet.Protocol
                 case SearchOrderBy.Id:
                     orderBy = IdProperty;
                     break;
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                case SearchOrderBy.DownloadCount:
+                    orderBy = string.Format("{0}%20desc,{1}", DownloadCountProperty, IdProperty);
+                    break;
+
+                case SearchOrderBy.Version:
+                    orderBy = string.Format("{0},{1}%20desc", IdProperty, VersionProperty);
+                    break;
+
+                case SearchOrderBy.DownloadCountAndVersion:
+                    orderBy = string.Format("{0}%20desc,{1},{2}%20desc", DownloadCountProperty, IdProperty, VersionProperty);
+                    break;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 case null:
                     orderBy = null;
                     break;
@@ -276,12 +395,62 @@ namespace NuGet.Protocol
             return filter;
         }
 
-        private string BuildFieldSearchFilter(string searchTerm)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        private string BuildFieldSearchFilter(string searchTerm, SearchFilter searchFilter, bool includePropertyClauses)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             if (searchTerm == null)
             {
                 return null;
             }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            if (searchFilter.ExactPackageId)
+            {
+                return string.Format(CultureInfo.InvariantCulture, ExactFilterFormat, searchTerm);
+            }
+
+            var idSearchFilters = new List<string>();
+
+            if (searchFilter.IdStartsWith)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, IdStartsWithFormat, searchTerm));
+            }
+            else if (searchFilter.ByIdOnly)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, ByIdOnlyFormat, searchTerm));
+            }
+
+            if (searchFilter.ByTagOnly)
+            {
+                idSearchFilters.Add(string.Format(CultureInfo.InvariantCulture, ByTagOnlyFormat, searchTerm));
+            }
+
+            if (idSearchFilters.Count == 1)
+            {
+                return idSearchFilters[0];
+            }
+            else if (idSearchFilters.Count > 1)
+            {
+                var idFilter = idSearchFilters.Aggregate((a, b) => string.Format(CultureInfo.InvariantCulture, AndFormat, a, b));
+                return idFilter;
+            }
+
+            if (!includePropertyClauses)
+            {
+                return null;
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             var searchTerms = searchTerm.Split();
 

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -13,12 +14,27 @@ namespace NuGet.Protocol
 {
     public class PackageMetadataResourceV2Feed : PackageMetadataResource
     {
-        private readonly HttpSource _httpSource;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _httpSource;
+        private readonly ILegacyFeedCapabilityResource _feedCapabilities;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly Configuration.PackageSource _packageSource;
         private readonly V2FeedParser _feedParser;
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public PackageMetadataResourceV2Feed(
             HttpSourceResource httpSourceResource,
+            ILegacyFeedCapabilityResource feedCapabilities,
             string baseAddress,
             Configuration.PackageSource packageSource)
         {
@@ -35,7 +51,12 @@ namespace NuGet.Protocol
             _httpSource = httpSourceResource.HttpSource;
             _packageSource = packageSource;
             _feedParser = new V2FeedParser(_httpSource, baseAddress, packageSource.Source);
+            _feedCapabilities = feedCapabilities;
         }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         public override async Task<IEnumerable<IPackageSearchMetadata>> GetMetadataAsync(
             string packageId,
@@ -45,7 +66,13 @@ namespace NuGet.Protocol
             Common.ILogger log,
             CancellationToken token)
         {
-            var packages = await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            var packages = await FindPackageByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             var metadataCache = new MetadataReferenceCache();
             var filter = new SearchFilter(includePrerelease);
@@ -71,5 +98,25 @@ namespace NuGet.Protocol
             }
             return null;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageByIdAsync(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            {
+                return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+            else
+            {
+                return await _feedParser.GetPackageVersionsAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -8,11 +9,28 @@ using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Protocol.Core.Types;
 
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using NuGet.Common;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+
 namespace NuGet.Protocol
 {
     public class PackageSearchResourceV2Feed : PackageSearchResource
     {
-        private readonly HttpSource _httpSource;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private readonly IHttpSource _httpSource;
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private readonly Configuration.PackageSource _packageSource;
         private readonly V2FeedParser _feedParser;
 
@@ -57,5 +75,22 @@ namespace NuGet.Protocol
 
             return results.ToList();
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<int> SearchCountAsync(string searchTerm, SearchFilter filters, ILogger log, CancellationToken cancellationToken)
+        {
+            return await _feedParser.SearchCountAsync(
+                searchTerm,
+                filters,
+                log,
+                cancellationToken);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

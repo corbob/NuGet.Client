@@ -1,22 +1,38 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
 
 namespace NuGet.Protocol
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
-    /// Represents a V2 package entry from the OData feed. This object primarily just holds the strings parsed from XML, all parsing 
+    /// Represents a V2 package entry from the OData feed. This object primarily just holds the strings parsed from XML, all parsing
     /// and converting should be done after based on the scenario.
     /// </summary>
-    public class V2FeedPackageInfo : PackageIdentity
+    public partial class V2FeedPackageInfo : PackageIdentity
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         private readonly string _title;
         private readonly string _summary;

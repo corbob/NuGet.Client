@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,17 +8,32 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 using NuGet.Packaging.Licenses;
 using NuGet.Versioning;
 
 namespace NuGet.Packaging
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// Reads .nuspec files
     /// </summary>
-    public class NuspecReader : NuspecCoreReaderBase
+    public partial class NuspecReader : NuspecCoreReaderBase
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         // node names
         private const string Dependencies = "dependencies";
@@ -427,7 +443,7 @@ namespace NuGet.Packaging
         /// <summary>
         /// Parses the license object if specified.
         /// The metadata can be of 2 types, Expression and File.
-        /// The method will not fail if it sees values that invalid (empty/unparseable license etc), but it will rather add validation errors/warnings. 
+        /// The method will not fail if it sees values that invalid (empty/unparseable license etc), but it will rather add validation errors/warnings.
         /// </summary>
         /// <remarks>This method never throws. Bad data is still parsed. </remarks>
         /// <returns>The licensemetadata if specified</returns>

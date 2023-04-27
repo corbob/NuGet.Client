@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -6,7 +7,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.Packaging.Core;
 
 namespace NuGet.Protocol.Core.Types
@@ -47,6 +54,28 @@ namespace NuGet.Protocol.Core.Types
             ILogger log,
             CancellationToken token);
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="projectFramework">project target framework. This is used for finding the dependency group</param>
+        /// <param name="token">cancellation token</param>
+        public abstract Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId,
+            bool includePrerelease,
+            NuGetFramework projectFramework,
+            SourceCacheContext cacheContext,
+            ILogger log,
+            CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Retrieve the available packages and their dependencies.
         /// </summary>
@@ -61,5 +90,28 @@ namespace NuGet.Protocol.Core.Types
         {
             throw new NotSupportedException();
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Retrieve the available packages and their dependencies.
+        /// </summary>
+        /// <param name="packageId">package Id to search</param>
+        /// <param name="includePrerelease">Should prerelease packages be resolved?</param>
+        /// <param name="token">cancellation token</param>
+        public virtual Task<IEnumerable<RemoteSourceDependencyInfo>> ResolvePackages(string packageId,
+            bool includePrerelease,
+            SourceCacheContext cacheContext,
+            Common.ILogger log,
+            CancellationToken token)
+        {
+            throw new NotSupportedException();
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }

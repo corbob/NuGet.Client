@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -22,7 +23,13 @@ namespace NuGet.Protocol
             SourceRepository source,
             CancellationToken token)
         {
-            HttpSource httpSource = null;
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            IHttpSource httpSource = null;
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             PackageUpdateResource packageUpdateResource = null;
             var sourceUri = source.PackageSource?.Source;
             if (!string.IsNullOrEmpty(sourceUri))

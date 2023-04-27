@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -9,7 +10,13 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;
 using NuGet.RuntimeModel;
@@ -828,7 +835,7 @@ namespace NuGet.ProjectModel
             var valueToken = json[property];
             if (valueToken == null)
             {
-                throw new Exception(string.Format("TODO: lock file missing required property {0}", property));
+                throw new Exception(string.Format(CultureInfo.CurrentCulture, "TODO: lock file missing required property {0}", property));
             }
             return SemanticVersion.Parse(valueToken.Value<string>());
         }
@@ -872,7 +879,7 @@ namespace NuGet.ProjectModel
                     NuGetFramework framework = NuGetFramework.Parse(frameworkPropertyName);
                     var dependencies = new List<LibraryDependency>();
 
-                    JsonPackageSpecReader.ReadCentralTransitveDependencyGroup(
+                    JsonPackageSpecReader.ReadCentralTransitiveDependencyGroup(
                         jsonReader: jsonReader,
                         results: dependencies,
                         packageSpecPath: path);

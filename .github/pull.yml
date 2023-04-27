@@ -1,0 +1,8 @@
+version: "1"
+rules:
+  - base: dev
+    upstream: NuGet:dev
+    mergeMethod: none
+    reviewers:
+      - AdmiringWorm
+      - gep13

@@ -3,6 +3,13 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <AssemblyName>Chocolatey.NuGet.Build.Tasks.Console</AssemblyName>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
     <TargetFrameworks>$(TargetFrameworksExeForSigning)</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <Shipping>true</Shipping>
@@ -17,6 +24,7 @@
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <UsePublicApiAnalyzer>false</UsePublicApiAnalyzer>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(IsVsixBuild)' == 'true' ">
@@ -41,6 +49,7 @@
 
   <ItemGroup>
     <None Include="App.config" Condition=" '$(TargetFramework)' == '$(NETFXTargetFramework)' " />
+    <None Include="app.manifest" />
   </ItemGroup>
 
   <ItemGroup>

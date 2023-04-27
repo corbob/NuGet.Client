@@ -8,8 +8,20 @@ using Xunit;
 
 namespace NuGet.Common.Test
 {
-    public class DateTimeUtilityTests
+    public class DateTimeUtilityTests : IDisposable
     {
+        private readonly CultureInfo _originalCulture;
+
+        public DateTimeUtilityTests()
+        {
+            _originalCulture = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en");
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentCulture = _originalCulture;
+        }
         public static IEnumerable<object[]> GetData()
         {
             return new[]

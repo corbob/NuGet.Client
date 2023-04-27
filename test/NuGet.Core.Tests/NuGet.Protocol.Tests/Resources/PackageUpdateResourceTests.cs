@@ -379,7 +379,7 @@ namespace NuGet.Protocol.Tests
             }
         }
 
-        [Fact]
+        [Fact(Skip = "No access to myget and nuget symbol server.")]
         public async Task PackageUpdateResource_SymbolSourceOnlyPushingAsync()
         {
             // Arrange
@@ -692,7 +692,7 @@ namespace NuGet.Protocol.Tests
             }
         }
 
-        [Fact]
+        [Fact(Skip = "No access to myget and nuget symbol server.")]
         public async Task PackageUpdateResource_GetErrorFromCreateKeyPushingAsync()
         {
             // Arrange

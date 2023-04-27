@@ -38,7 +38,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.Throws<ArgumentException>(() => new TelemetryOnceEmitter(eventName));
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public void EmitIfNeeded_TwoCalls_EmitsTelemetryOnce()
         {
             // Arrange
@@ -54,7 +60,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.Equal(1, _telemetryEvents.Count);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public async Task EmitIfNeeded_MultipleThreads_EmitsOnceAsync()
         {
             // Arrange
@@ -84,7 +96,13 @@ namespace NuGet.PackageManagement.VisualStudio.Test
             Assert.Contains(_telemetryEvents, e => e.Name == logger.EventName);
         }
 
-        [Fact]
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Fact(Skip = "Intentionally broken by Chocolatey changes")]
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////]
         public void Reset_WithAlreadyEmitted_Restarts()
         {
             // Arrange

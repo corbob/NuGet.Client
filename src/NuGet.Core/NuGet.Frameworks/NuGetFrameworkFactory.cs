@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,7 +8,13 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
-namespace NuGet.Frameworks
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+namespace Chocolatey.NuGet.Frameworks
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 {
     public partial class NuGetFramework
     {
@@ -685,6 +692,12 @@ namespace NuGet.Frameworks
                 case "net6.0":
                 case "net60":
                     framework = FrameworkConstants.CommonFrameworks.Net60;
+                    break;
+                case "netcoreapp7.0":
+                case "netcoreapp70":
+                case "net7.0":
+                case "net70":
+                    framework = FrameworkConstants.CommonFrameworks.Net70;
                     break;
             }
 

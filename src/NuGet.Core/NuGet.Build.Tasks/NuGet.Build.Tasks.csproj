@@ -3,6 +3,13 @@
   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
 
   <PropertyGroup>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <AssemblyName>Chocolatey.NuGet.Build.Tasks</AssemblyName>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
     <TargetFrameworks>$(TargetFrameworksLibraryForSigning)</TargetFrameworks>
     <TargetFramework />
     <Shipping>true</Shipping>
@@ -48,9 +55,9 @@
   </ItemGroup>
 
   <ItemGroup Condition=" '$(IsCore)' == 'true' ">
-    <PackageReference Include="Microsoft.Build.Framework" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" />
+    <PackageReference Include="Microsoft.Build.Framework" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <ItemGroup>

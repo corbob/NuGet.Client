@@ -6,7 +6,7 @@
     <IsDesktop>true</IsDesktop>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netcoreapp')) OR $(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6')) ">
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('netcoreapp')) OR $(TargetFramework.StartsWith('netstandard')) OR $(TargetFramework.StartsWith('net6')) OR $(TargetFramework.StartsWith('net7')) ">
     <DefineConstants>$(DefineConstants);IS_CORECLR</DefineConstants>
     <IsCore>true</IsCore>
   </PropertyGroup>
@@ -67,7 +67,13 @@
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(PackProject)' == 'true' ">
-    <None Include="$(MSBuildThisFileDirectory)..\icon.png" Pack="true" PackagePath="\" Visible="false" />
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->  
+    <None Include="$(MSBuildThisFileDirectory)..\chocolateyicon.png" Pack="true" PackagePath="\" Visible="false" />
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->    
     <None Include="$(MSBuildProjectDirectory)\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 

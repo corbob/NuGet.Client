@@ -1,11 +1,18 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement;
 using NuGet.Packaging.Core;
 using NuGet.Resolver;
@@ -20,6 +27,17 @@ namespace NuGet.VisualStudio.Internal.Contracts
             CancellationToken cancellationToken);
         ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
             IReadOnlyCollection<string> projectIds,
+            CancellationToken cancellationToken);
+        /// <summary>
+        /// Obtains the installed and transitive packages from all given projects, optionally including transitive origins for transitive packages.
+        /// </summary>
+        /// <param name="projectIds">Projects to retrieve installed and transitive packages</param>
+        /// <param name="includeTransitiveOrigins">Set it to <c>true</c> to get transitive origins of each transitive package</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>An object with two lists: installed and transitive packages from all projects</returns>
+        ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
+            IReadOnlyCollection<string> projectIds,
+            bool includeTransitiveOrigins,
             CancellationToken cancellationToken);
         ValueTask<IReadOnlyCollection<NuGetFramework>> GetTargetFrameworksAsync(
             IReadOnlyCollection<string> projectIds,

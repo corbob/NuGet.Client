@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -9,11 +10,20 @@ using NuGet.Packaging.Core;
 
 namespace NuGet.Protocol.Core.Types
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// Package metadata only containing select fields relevant to search results processing and presenting.
     /// Immutable.
     /// </summary>
-    public interface IPackageSearchMetadata
+    public partial interface IPackageSearchMetadata
+
+    //////////////////////////////////////////////////////////
+    // End Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         string Authors { get; }
         IEnumerable<PackageDependencyGroup> DependencySets { get; }

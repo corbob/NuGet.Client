@@ -4,6 +4,13 @@
 
 
   <PropertyGroup>
+    <!-- //////////////////////////////////////////////////////////
+         // Start - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
+    <AssemblyName>Chocolatey.Microsoft.Build.NuGetSdkResolver</AssemblyName>
+    <!-- //////////////////////////////////////////////////////////
+         // End - Chocolatey Specific Modification
+         ////////////////////////////////////////////////////////// -->
     <TargetFrameworks>$(TargetFrameworksLibraryForSigning)</TargetFrameworks>
     <TargetFramework />
     <Shipping>true</Shipping>

@@ -27,7 +27,16 @@ namespace NuGet.Protocol
                 var httpSource = await source.GetResourceAsync<HttpSourceResource>(token);
                 var parser = new V2FeedParser(httpSource.HttpSource, serviceDocument.BaseAddress, source.PackageSource.Source);
 
-                resource = new MetadataResourceV2Feed(parser, source);
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                var feedCapabilityResource = new LegacyFeedCapabilityResourceV2Feed(parser, serviceDocument.BaseAddress);
+                resource = new MetadataResourceV2Feed(parser, feedCapabilityResource, source);
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             }
 
             return new Tuple<bool, INuGetResource>(resource != null, resource);

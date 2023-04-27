@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 #nullable enable
@@ -15,7 +16,13 @@ using Microsoft.ServiceHub.Framework.Services;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Threading;
 using NuGet.Common;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement.Telemetry;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -164,6 +171,7 @@ namespace NuGet.PackageManagement.VisualStudio
 
         public async ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
             IReadOnlyCollection<string> projectIds,
+            bool includeTransitiveOrigins,
             CancellationToken cancellationToken)
         {
             Assumes.NotNullOrEmpty(projectIds);
@@ -179,7 +187,7 @@ namespace NuGet.PackageManagement.VisualStudio
             {
                 if (project is IPackageReferenceProject packageReferenceProject)
                 {
-                    prStyleTasks.Add(packageReferenceProject.GetInstalledAndTransitivePackagesAsync(cancellationToken));
+                    prStyleTasks.Add(packageReferenceProject.GetInstalledAndTransitivePackagesAsync(includeTransitiveOrigins, cancellationToken));
                 }
                 else
                 {
@@ -198,6 +206,10 @@ namespace NuGet.PackageManagement.VisualStudio
             TransitivePackageReferenceContextInfo[] transitivePackageContextInfos = prStyleReferences.SelectMany(e => e.TransitivePackages).Select(pr => TransitivePackageReferenceContextInfo.Create(pr)).ToArray();
             return new InstalledAndTransitivePackages(installedPackagesContextInfos, transitivePackageContextInfos);
         }
+
+        public async ValueTask<IInstalledAndTransitivePackages> GetInstalledAndTransitivePackagesAsync(
+            IReadOnlyCollection<string> projectIds,
+            CancellationToken cancellationToken) => await GetInstalledAndTransitivePackagesAsync(projectIds, includeTransitiveOrigins: false, cancellationToken);
 
         public async ValueTask<IReadOnlyCollection<PackageDependencyInfo>> GetInstalledPackagesDependencyInfoAsync(
             string projectId,
@@ -670,7 +682,7 @@ namespace NuGet.PackageManagement.VisualStudio
 
         private static string CreateProjectActionId()
         {
-            return Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
+            return Guid.NewGuid().ToString("N", provider: null);
         }
 
         private async Task<IReadOnlyList<NuGetProject>> GetProjectsAsync(

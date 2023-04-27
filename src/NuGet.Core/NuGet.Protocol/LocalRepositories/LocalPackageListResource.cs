@@ -31,7 +31,7 @@ namespace NuGet.Protocol
             {
                 filter = new SearchFilter(includePrerelease: prerelease, filter: null)
                 {
-                    OrderBy = SearchOrderBy.Id,
+                    OrderBy = SearchOrderBy.Version,
                     IncludeDelisted = includeDelisted
                 };
             }
@@ -56,6 +56,28 @@ namespace NuGet.Protocol
             return Task.FromResult(enumerable);
 
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public async override Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger logger,
+            CancellationToken token)
+        {
+            var searchFilter = new SearchFilter(prerelease);
+            searchFilter.ExactPackageId = true;
+
+            var result = await _localPackageSearchResource.SearchAsync(searchTerm, searchFilter, 0, int.MaxValue, logger, token);
+
+            return result.FirstOrDefault();
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
         internal class EnumerableAsync<T> : IEnumerableAsync<T>
         {
@@ -121,6 +143,24 @@ namespace NuGet.Protocol
                         case SearchOrderBy.Id:
                             _currentEnumerator = results.OrderBy(p => p.Identity).GetEnumerator();
                             break;
+
+                        //////////////////////////////////////////////////////////
+                        // Start - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
+
+                        case SearchOrderBy.DownloadCount:
+                            // Local packages do not have downloads available
+                            goto default;
+
+                        case SearchOrderBy.Version:
+                        case SearchOrderBy.DownloadCountAndVersion:
+                            _currentEnumerator = results.OrderBy(p => p.Identity.Id).ThenByDescending(p => p.Identity.Version).GetEnumerator();
+                            break;
+
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
+
                         default:
                             _currentEnumerator = results.GetEnumerator();
                             break;

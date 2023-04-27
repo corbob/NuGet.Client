@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -12,7 +13,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.DependencyResolver;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.LibraryModel;
 using NuGet.Packaging.Core;
 using NuGet.ProjectModel;
@@ -126,7 +133,7 @@ namespace NuGet.Commands
                 bool isPackageSourceMappingEnabled = _request?.PackageSourceMapping.IsEnabled ?? false;
                 telemetry.TelemetryEvent[PackageSourceMappingIsMappingEnabled] = isPackageSourceMappingEnabled;
                 telemetry.TelemetryEvent[SourcesCount] = _request.DependencyProviders.RemoteProviders.Count;
-                var httpSourcesCount = _request.DependencyProviders.RemoteProviders.Where(e => e.IsHttp).Count();
+                int httpSourcesCount = _request.DependencyProviders.RemoteProviders.Where(e => e.IsHttp).Count();
                 telemetry.TelemetryEvent[HttpSourcesCount] = httpSourcesCount;
                 telemetry.TelemetryEvent[LocalSourcesCount] = _request.DependencyProviders.RemoteProviders.Count - httpSourcesCount;
                 telemetry.TelemetryEvent[FallbackFoldersCount] = _request.DependencyProviders.FallbackPackageFolders.Count;
@@ -138,11 +145,6 @@ namespace NuGet.Commands
 
                 if (isCpvmEnabled)
                 {
-                    _logger.LogMinimal(string.Format(
-                          CultureInfo.CurrentCulture,
-                          Strings.CentralPackageVersionManagementInPreview,
-                          _request.Project.FilePath));
-
                     var isCentralPackageTransitivePinningEnabled = _request.Project.RestoreMetadata?.CentralPackageTransitivePinningEnabled ?? false;
                     telemetry.TelemetryEvent[IsCentralPackageTransitivePinningEnabled] = isCentralPackageTransitivePinningEnabled;
                 }
@@ -208,7 +210,7 @@ namespace NuGet.Commands
                 }
                 telemetry.TelemetryEvent[NoOpResult] = false; // Getting here means we did not no-op.
 
-                if (!await AreCentralVersionRequirementsSatisfiedAsync(_request))
+                if (!await AreCentralVersionRequirementsSatisfiedAsync(_request, httpSourcesCount))
                 {
                     // the errors will be added to the assets file
                     _success = false;
@@ -463,7 +465,7 @@ namespace NuGet.Commands
             }
         }
 
-        private async Task<bool> AreCentralVersionRequirementsSatisfiedAsync(RestoreRequest restoreRequest)
+        private async Task<bool> AreCentralVersionRequirementsSatisfiedAsync(RestoreRequest restoreRequest, int httpSourcesCount)
         {
             if (restoreRequest?.Project?.RestoreMetadata == null || !restoreRequest.Project.RestoreMetadata.CentralPackageVersionsEnabled)
             {
@@ -483,10 +485,10 @@ namespace NuGet.Commands
                 return false;
             }
 
-            // Log a warning if there are more than one configured source and package source mapping is not enabled
-            if (restoreRequest.Project.RestoreMetadata.Sources.Count > 1 && !restoreRequest.PackageSourceMapping.IsEnabled)
+            if (!restoreRequest.PackageSourceMapping.IsEnabled && httpSourcesCount > 1)
             {
-                await _logger.LogAsync(RestoreLogMessage.CreateWarning(NuGetLogCode.NU1507, string.Format(CultureInfo.CurrentCulture, Strings.Warning_CentralPackageVersions_MultipleSourcesWithoutPackageSourceMapping, restoreRequest.Project.RestoreMetadata.Sources.Count, string.Join(", ", restoreRequest.Project.RestoreMetadata.Sources.Select(i => i.Name)))));
+                // Log a warning if there are more than one configured source and package source mapping is not enabled
+                await _logger.LogAsync(RestoreLogMessage.CreateWarning(NuGetLogCode.NU1507, string.Format(CultureInfo.CurrentCulture, Strings.Warning_CentralPackageVersions_MultipleSourcesWithoutPackageSourceMapping, httpSourcesCount, string.Join(", ", restoreRequest.DependencyProviders.RemoteProviders.Where(i => i.IsHttp).Select(i => i.Source.Name)))));
             }
 
             // The dependencies should not have versions explicitly defined if cpvm is enabled.

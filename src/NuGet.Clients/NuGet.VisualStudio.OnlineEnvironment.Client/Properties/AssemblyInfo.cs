@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System.Reflection;
@@ -19,23 +20,35 @@ using Microsoft.VisualStudio.Shell;
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Lucene.Net.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Microsoft.Web.XmlTransform.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Newtonsoft.Json.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Commands.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Common.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Configuration.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Credentials.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.DependencyResolver.Core.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Frameworks.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Indexing.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.LibraryModel.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.PackageManagement.dll")]
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Commands.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Common.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Configuration.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Credentials.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.DependencyResolver.Core.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Frameworks.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Indexing.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.LibraryModel.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.PackageManagement.dll")]
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.PackageManagement.UI.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.PackageManagement.VisualStudio.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Packaging.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.ProjectModel.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Protocol.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Resolver.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.Versioning.dll")]
-[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.VisualStudio.dll")]
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Packaging.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.ProjectModel.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Protocol.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Resolver.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.Versioning.dll")]
+[assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\Chocolatey.NuGet.VisualStudio.dll")]
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.VisualStudio.Common.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.VisualStudio.Internal.Contracts.dll")]
 [assembly: ProvideCodeBase(CodeBase = @"$PackageFolder$\NuGet.VisualStudio.OnlineEnvironment.Client.dll")]

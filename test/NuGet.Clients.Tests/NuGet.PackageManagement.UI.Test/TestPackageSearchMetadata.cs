@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -11,10 +12,19 @@ using NuGet.Protocol.Core.Types;
 
 namespace NuGet.PackageManagement.UI.Test
 {
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     /// <summary>
     /// Test implementation of <see cref="IPackageSearchMetadata"/>. Not for production use
     /// </summary>
-    class TestPackageSearchMetadata : IPackageSearchMetadata
+    partial class TestPackageSearchMetadata : IPackageSearchMetadata
+
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     {
         public string Authors { get; set; }
 

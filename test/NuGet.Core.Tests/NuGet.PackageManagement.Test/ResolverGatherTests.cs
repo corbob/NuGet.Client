@@ -1,4 +1,5 @@
-// Copyright (c) .NET Foundation. All rights reserved.
+// Copyright (c) 2022-Present Chocolatey Software, Inc.
+// Copyright (c) 2015-2022 .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
@@ -7,7 +8,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Configuration;
-using NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// Start - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
+using Chocolatey.NuGet.Frameworks;
+//////////////////////////////////////////////////////////
+// End - Chocolatey Specific Modification
+//////////////////////////////////////////////////////////
 using NuGet.PackageManagement;
 using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
@@ -1675,6 +1682,19 @@ namespace NuGet.Test
         {
             throw Exception;
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            throw Exception;
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 
     /// <summary>
@@ -1706,5 +1726,23 @@ namespace NuGet.Test
                 await Task.Delay(20);
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public override async Task<IEnumerable<SourcePackageDependencyInfo>> ResolvePackages(string packageId, bool includePrerelease, NuGetFramework projectFramework, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
+        {
+            while (true)
+            {
+                token.ThrowIfCancellationRequested();
+
+                await Task.Delay(20);
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
     }
 }
