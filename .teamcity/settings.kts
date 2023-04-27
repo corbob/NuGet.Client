@@ -55,11 +55,11 @@ object ChocolateyNugetClient : BuildType({
                 content = """
                     ${'$'}branchName = %teamcity.build.branch%
             
-                    if ( ${'$'}branchName -eq 'develop' ) { ${'$'}releaseLabel = 'alpha' }
-                    elseif ( ${'$'}branchName -eq 'master' ) { ${'$'}releaseLabel = 'rc' }
-                    elseif ( ${'$'}branchName.StartsWith('release') ) { ${'$'}releaseLabel = 'beta' }
-                    elseif ( ${'$'}branchName.StartsWith('hotfix') ) { ${'$'}releaseLabel = 'beta' }
-                    elseif ( ${'$'}branchName.StartsWith('tags') ) { ${'$'}releaseLabel = 'rtm' }                
+                    if ( ${'$'}branchName -eq "develop" ) { ${'$'}releaseLabel = "alpha" }
+                    elseif ( ${'$'}branchName -eq "master" ) { ${'$'}releaseLabel = "rc" }
+                    elseif ( ${'$'}branchName.StartsWith("release") ) { ${'$'}releaseLabel = "beta" }
+                    elseif ( ${'$'}branchName.StartsWith("hotfix") ) { ${'$'}releaseLabel = "beta" }
+                    elseif ( ${'$'}branchName.StartsWith("tags") ) { ${'$'}releaseLabel = "rtm" }                
         
                     .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild -BuildNumber %build.counter% -ReleaseLabel ${'$'}releaseLabel -BuildDate (Get-Date -Format "yyyyMMdd")
                 """.trimIndent()
