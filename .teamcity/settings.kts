@@ -14,7 +14,9 @@ object ChocolateyNugetClient : BuildType({
     artifactRules = """
         +:artifacts/nupkgs/*.nupkg
         -:artifacts/nupkgs/*.symbols.nupkg
-        -:artifacts/nupkgs/*.beta.nupkg
+        -:artifacts/nupkgs/*-beta.nupkg
+        -:artifacts/nupkgs/*-alpha.nupkg
+        -:artifacts/nupkgs/*-rc.nupkg
     """.trimIndent()
 
     vcs {
@@ -51,18 +53,30 @@ object ChocolateyNugetClient : BuildType({
             name = "Build"
             scriptMode = script {
                 content = """
-                    .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild -BuildNumber %build.counter% -ReleaseLabel beta -BuildDate (Get-Date -Format "yyyyMMdd")
+                    ${'$'}branchName = %teamcity.build.branch%
+            
+                    if ( ${'$'}branchName -eq 'develop' ) { ${'$'}releaseLabel = 'alpha' }
+                    elseif ( ${'$'}branchName -eq 'master' ) { ${'$'}releaseLabel = 'rc' }
+                    elseif ( ${'$'}branchName.StartsWith('release') ) { ${'$'}releaseLabel = 'beta' }
+                    elseif ( ${'$'}branchName.StartsWith('hotfix') ) { ${'$'}releaseLabel = 'beta' }
+                    elseif ( ${'$'}branchName.StartsWith('tags') ) { ${'$'}releaseLabel = 'rtm' }                
+        
+                    .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild -BuildNumber %build.counter% -ReleaseLabel ${'$'}releaseLabel -BuildDate (Get-Date -Format "yyyyMMdd")
                 """.trimIndent()
             }
         }
         powerShell {
             conditions {
-                equals("teamcity.build.branch.is_default", "true")
+                equals("teamcity.build.branch", "develop")
+                contains("teamcity.build.branch", "release")
+                contains("teamcity.build.branch", "hotfix")
+                equals("teamcity.build.branch", "master")
+                contains("teamcity.build.branch", "tags")
             }
             name = "Publish NuGet Packages"
             scriptMode = script {
                 content = """
-                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*" -and ${'$'}_.Name -notlike "*beta.nupkg"}
+                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*" -and ${'$'}_.Name -notlike "*-beta.nupkg" -and ${'$'}_.Name -notlike "*-alpha.nupkg" -and ${'$'}_.Name -notlike "*-rc.nupkg" -and ${'$'}_.Name -notlike "*-rtm-*" -and ${'$'}_.Name -notlike "*-rc-*"}
 
                     foreach (${'$'}file in ${'$'}files) {
                       NuGet push -Source '%env.NUGETDEVPUSH_SOURCE%' -ApiKey '%env.NUGETDEVPUSH_API_KEY%' "${'$'}(${'$'}file.FullName)"
