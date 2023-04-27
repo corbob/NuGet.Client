@@ -1,6 +1,0 @@
-NuGet.Common.IPackLogMessage.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
-NuGet.Common.PackagingLogMessage.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
-static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage
-*REMOVED* NuGet.Common.IPackLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
-*REMOVED* NuGet.Common.PackagingLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
-*REMOVED* static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage

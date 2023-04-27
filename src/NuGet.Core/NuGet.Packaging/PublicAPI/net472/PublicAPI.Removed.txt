@@ -1,0 +1,49 @@
+NuGet.Client.ManagedCodeConventions.ManagedCodeCriteria.ForFramework(NuGet.Frameworks.NuGetFramework framework) -> NuGet.ContentModel.SelectionCriteria
+NuGet.Client.ManagedCodeConventions.ManagedCodeCriteria.ForFrameworkAndRuntime(NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> NuGet.ContentModel.SelectionCriteria
+NuGet.Packaging.FrameworkAssemblyReference.FrameworkAssemblyReference(string assemblyName, System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework> supportedFrameworks) -> void
+NuGet.Packaging.FrameworkAssemblyReference.SupportedFrameworks.get -> System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>
+NuGet.Packaging.FrameworkReferenceGroup.FrameworkReferenceGroup(NuGet.Frameworks.NuGetFramework targetFramework, System.Collections.Generic.IEnumerable<NuGet.Packaging.FrameworkReference> frameworkReferences) -> void
+NuGet.Packaging.FrameworkReferenceGroup.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.FrameworkSpecificGroup.FrameworkSpecificGroup(NuGet.Frameworks.NuGetFramework targetFramework, System.Collections.Generic.IEnumerable<string> items) -> void
+NuGet.Packaging.FrameworkSpecificGroup.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.IPackageFile.NuGetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.NuspecReader.NuspecReader(System.IO.Stream stream, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, bool leaveStreamOpen) -> void
+NuGet.Packaging.NuspecReader.NuspecReader(System.Xml.Linq.XDocument xml, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider) -> void
+NuGet.Packaging.NuspecReader.NuspecReader(string path, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider) -> void
+NuGet.Packaging.PackageArchiveReader.PackageArchiveReader(System.IO.Compression.ZipArchive zipArchive, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageArchiveReader.PackageArchiveReader(System.IO.Stream stream, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageArchiveReader.PackageArchiveReader(System.IO.Stream stream, bool leaveStreamOpen, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageArchiveReader.PackageArchiveReader(string filePath, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider = null, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider = null) -> void
+NuGet.Packaging.PackageBuilder.TargetFrameworks.get -> System.Collections.Generic.IList<NuGet.Frameworks.NuGetFramework>
+NuGet.Packaging.PackageDependencyGroup.PackageDependencyGroup(NuGet.Frameworks.NuGetFramework targetFramework, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageDependency> packages) -> void
+NuGet.Packaging.PackageDependencyGroup.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.PackageFolderReader.PackageFolderReader(System.IO.DirectoryInfo folder, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageFolderReader.PackageFolderReader(string folderPath, NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, ChocolateyNuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageReaderBase.CompatibilityProvider.get -> NuGet.Frameworks.IFrameworkCompatibilityProvider
+NuGet.Packaging.PackageReaderBase.FrameworkProvider.get -> NuGet.Frameworks.IFrameworkNameProvider
+NuGet.Packaging.PackageReaderBase.GetFrameworkFromPath(string path, bool allowSubFolders = false) -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.PackageReaderBase.PackageReaderBase(NuGet.Frameworks.IFrameworkNameProvider frameworkProvider) -> void
+NuGet.Packaging.PackageReaderBase.PackageReaderBase(NuGet.Frameworks.IFrameworkNameProvider frameworkProvider, NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+NuGet.Packaging.PackageReference.PackageReference(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework) -> void
+NuGet.Packaging.PackageReference.PackageReference(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework, bool userInstalled) -> void
+NuGet.Packaging.PackageReference.PackageReference(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework, bool userInstalled, bool developmentDependency, bool requireReinstallation) -> void
+NuGet.Packaging.PackageReference.PackageReference(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework, bool userInstalled, bool developmentDependency, bool requireReinstallation, NuGet.Versioning.VersionRange allowedVersions) -> void
+NuGet.Packaging.PackageReference.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.PackageReferenceSet.PackageReferenceSet(NuGet.Frameworks.NuGetFramework targetFramework, System.Collections.Generic.IEnumerable<string> references) -> void
+NuGet.Packaging.PackageReferenceSet.TargetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Packaging.PackagesConfigReader.PackagesConfigReader(NuGet.Frameworks.IFrameworkNameProvider frameworkMappings, System.IO.Stream stream, bool leaveStreamOpen) -> void
+NuGet.Packaging.PackagesConfigReader.PackagesConfigReader(NuGet.Frameworks.IFrameworkNameProvider frameworkMappings, System.Xml.Linq.XDocument xml) -> void
+NuGet.Packaging.PackagesConfigWriter.AddPackageEntry(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework) -> void
+NuGet.Packaging.PackagesConfigWriter.AddPackageEntry(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework targetFramework) -> void
+NuGet.Packaging.PackagesConfigWriter.PackagesConfigWriter(System.IO.Stream stream, bool createNew, NuGet.Frameworks.IFrameworkNameProvider frameworkMappings) -> void
+NuGet.Packaging.PackagesConfigWriter.PackagesConfigWriter(string fullPath, bool createNew, NuGet.Frameworks.IFrameworkNameProvider frameworkMappings) -> void
+NuGet.Packaging.PackagesConfigWriter.RemovePackageEntry(NuGet.Packaging.Core.PackageIdentity identity, NuGet.Frameworks.NuGetFramework targetFramework) -> void
+NuGet.Packaging.PackagesConfigWriter.RemovePackageEntry(string packageId, NuGet.Versioning.NuGetVersion version, NuGet.Frameworks.NuGetFramework targetFramework) -> void
+NuGet.Packaging.PhysicalPackageFile.NuGetFramework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.RuntimeModel.CompatibilityProfile.CompatibilityProfile(string name, System.Collections.Generic.IEnumerable<NuGet.Frameworks.FrameworkRuntimePair> restoreContexts) -> void
+NuGet.RuntimeModel.CompatibilityProfile.RestoreContexts.get -> System.Collections.Generic.IList<NuGet.Frameworks.FrameworkRuntimePair>
+static NuGet.Packaging.FrameworkNameUtility.ParseNuGetFrameworkFolderName(string path, bool strictParsing, out string effectivePath) -> NuGet.Frameworks.NuGetFramework
+static NuGet.Packaging.FrameworkNameUtility.ParseNuGetFrameworkFromFilePath(string filePath, out string effectivePath) -> NuGet.Frameworks.NuGetFramework
+static NuGet.Packaging.FrameworksExtensions.GetFrameworkString(this NuGet.Frameworks.NuGetFramework self) -> string
+virtual NuGet.Packaging.PackageReaderBase.GetSupportedFrameworks() -> System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>
+virtual NuGet.Packaging.PackageReaderBase.GetSupportedFrameworksAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<NuGet.Frameworks.NuGetFramework>>

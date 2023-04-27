@@ -173,6 +173,9 @@ NuGet.Configuration.PackageSourceMapping
 NuGet.Configuration.PackageSourceMapping.GetConfiguredPackageSources(string packageId) -> System.Collections.Generic.IReadOnlyList<string>
 NuGet.Configuration.PackageSourceMapping.IsEnabled.get -> bool
 NuGet.Configuration.PackageSourceMapping.PackageSourceMapping(System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IReadOnlyList<string>> patterns) -> void
+NuGet.Configuration.PackageSourceMappingProvider
+NuGet.Configuration.PackageSourceMappingProvider.PackageSourceMappingProvider(NuGet.Configuration.ISettings settings) -> void
+NuGet.Configuration.PackageSourceMappingProvider.SavePackageSourceMappings(System.Collections.Generic.IReadOnlyList<NuGet.Configuration.PackageSourceMappingSourceItem> packageSourceMappingsSourceItems) -> void
 NuGet.Configuration.PackageSourceMappingSourceItem
 NuGet.Configuration.PackageSourceMappingSourceItem.PackageSourceMappingSourceItem(string name, System.Collections.Generic.IEnumerable<NuGet.Configuration.PackagePatternItem> packagePatternItems) -> void
 NuGet.Configuration.PackageSourceMappingSourceItem.Patterns.get -> System.Collections.Generic.IList<NuGet.Configuration.PackagePatternItem>
@@ -207,9 +210,11 @@ NuGet.Configuration.PackageSourceUpdateOptions.UpdateCredentials.get -> bool
 NuGet.Configuration.PackageSourceUpdateOptions.UpdateEnabled.get -> bool
 NuGet.Configuration.ProxyCache
 NuGet.Configuration.ProxyCache.Add(System.Net.IWebProxy proxy) -> void
+NuGet.Configuration.ProxyCache.ClearOverriding() -> void
 NuGet.Configuration.ProxyCache.GetCredential(System.Uri proxyAddress, string authType) -> System.Net.NetworkCredential
 NuGet.Configuration.ProxyCache.GetProxy(System.Uri sourceUri) -> System.Net.IWebProxy
 NuGet.Configuration.ProxyCache.GetUserConfiguredProxy() -> NuGet.Configuration.WebProxy
+NuGet.Configuration.ProxyCache.Override(System.Net.IWebProxy proxy) -> void
 NuGet.Configuration.ProxyCache.ProxyCache(NuGet.Configuration.ISettings settings, NuGet.Common.IEnvironmentVariableReader environment) -> void
 NuGet.Configuration.ProxyCache.UpdateCredential(System.Uri proxyAddress, System.Net.NetworkCredential credentials) -> void
 NuGet.Configuration.ProxyCache.Version.get -> System.Guid

@@ -28,6 +28,8 @@ NuGet.Versioning.NuGetVersion.NuGetVersion(string version) -> void
 NuGet.Versioning.NuGetVersion.OriginalVersion.get -> string
 NuGet.Versioning.NuGetVersion.Revision.get -> int
 NuGet.Versioning.NuGetVersion.Version.get -> System.Version
+NuGet.Versioning.NuGetVersionConverter
+NuGet.Versioning.NuGetVersionConverter.NuGetVersionConverter() -> void
 NuGet.Versioning.NuGetVersionFloatBehavior
 NuGet.Versioning.NuGetVersionFloatBehavior.AbsoluteLatest = 6 -> NuGet.Versioning.NuGetVersionFloatBehavior
 NuGet.Versioning.NuGetVersionFloatBehavior.Major = 5 -> NuGet.Versioning.NuGetVersionFloatBehavior
@@ -122,6 +124,10 @@ override NuGet.Versioning.FloatRange.Equals(object obj) -> bool
 override NuGet.Versioning.FloatRange.GetHashCode() -> int
 override NuGet.Versioning.FloatRange.ToString() -> string
 override NuGet.Versioning.NuGetVersion.ToString() -> string
+override NuGet.Versioning.NuGetVersionConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
+override NuGet.Versioning.NuGetVersionConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
+override NuGet.Versioning.NuGetVersionConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
+override NuGet.Versioning.NuGetVersionConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
 override NuGet.Versioning.SemanticVersion.Equals(object obj) -> bool
 override NuGet.Versioning.SemanticVersion.GetHashCode() -> int
 override NuGet.Versioning.SemanticVersion.ToString() -> string

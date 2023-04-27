@@ -1,0 +1,394 @@
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.AsFallbackFramework() -> Chocolatey.NuGet.Frameworks.FallbackFramework
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.AssetTargetFallbackFramework(Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IReadOnlyList<Chocolatey.NuGet.Frameworks.NuGetFramework> fallbackFrameworks) -> void
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.Equals(Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework other) -> bool
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.Fallback.get -> System.Collections.Generic.IReadOnlyList<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.RootFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.CompatibilityListProvider
+Chocolatey.NuGet.Frameworks.CompatibilityListProvider.CompatibilityListProvider(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider nameProvider, Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> void
+Chocolatey.NuGet.Frameworks.CompatibilityListProvider.GetFrameworksSupporting(Chocolatey.NuGet.Frameworks.NuGetFramework target) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.CompatibilityMappingComparer
+Chocolatey.NuGet.Frameworks.CompatibilityMappingComparer.CompatibilityMappingComparer() -> void
+Chocolatey.NuGet.Frameworks.CompatibilityMappingComparer.Equals(Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry x, Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry y) -> bool
+Chocolatey.NuGet.Frameworks.CompatibilityMappingComparer.GetHashCode(Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry obj) -> int
+Chocolatey.NuGet.Frameworks.CompatibilityProvider
+Chocolatey.NuGet.Frameworks.CompatibilityProvider.CompatibilityProvider(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> void
+Chocolatey.NuGet.Frameworks.CompatibilityProvider.IsCompatible(Chocolatey.NuGet.Frameworks.NuGetFramework target, Chocolatey.NuGet.Frameworks.NuGetFramework candidate) -> bool
+Chocolatey.NuGet.Frameworks.CompatibilityTable
+Chocolatey.NuGet.Frameworks.CompatibilityTable.CompatibilityTable(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> void
+Chocolatey.NuGet.Frameworks.CompatibilityTable.CompatibilityTable(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings, Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider compat) -> void
+Chocolatey.NuGet.Frameworks.CompatibilityTable.GetNearest(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.CompatibilityTable.HasFramework(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> bool
+Chocolatey.NuGet.Frameworks.CompatibilityTable.TryGetCompatible(Chocolatey.NuGet.Frameworks.NuGetFramework framework, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> compatible) -> bool
+Chocolatey.NuGet.Frameworks.DefaultCompatibilityProvider
+Chocolatey.NuGet.Frameworks.DefaultCompatibilityProvider.DefaultCompatibilityProvider() -> void
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.CompatibilityMappings.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.DefaultFrameworkMappings() -> void
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.EquivalentFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.EquivalentFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.EquivalentProfiles.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.FullNameReplacements.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.IdentifierShortNames.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.IdentifierSynonyms.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.NonPackageBasedFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.PackageBasedFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.ProfileShortNames.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.ShortNameReplacements.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.SubSetFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.DefaultFrameworkNameProvider
+Chocolatey.NuGet.Frameworks.DefaultFrameworkNameProvider.DefaultFrameworkNameProvider() -> void
+Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings
+Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings.CompatibilityMappings.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.FrameworkRange>>
+Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings.DefaultPortableFrameworkMappings() -> void
+Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings.ProfileFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.NuGetFramework[]>>
+Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings.ProfileOptionalFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.NuGetFramework[]>>
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.AsFallbackFramework() -> Chocolatey.NuGet.Frameworks.FallbackFramework
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.DualCompatibilityFramework(Chocolatey.NuGet.Frameworks.NuGetFramework framework, Chocolatey.NuGet.Frameworks.NuGetFramework secondaryFramework) -> void
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.Equals(Chocolatey.NuGet.Frameworks.DualCompatibilityFramework other) -> bool
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.RootFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.SecondaryFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FallbackFramework
+Chocolatey.NuGet.Frameworks.FallbackFramework.Equals(Chocolatey.NuGet.Frameworks.FallbackFramework other) -> bool
+Chocolatey.NuGet.Frameworks.FallbackFramework.Fallback.get -> System.Collections.Generic.IReadOnlyList<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FallbackFramework.FallbackFramework(Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IReadOnlyList<Chocolatey.NuGet.Frameworks.NuGetFramework> fallbackFrameworks) -> void
+Chocolatey.NuGet.Frameworks.FrameworkConstants
+Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks
+Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers
+Chocolatey.NuGet.Frameworks.FrameworkConstants.PlatformIdentifiers
+Chocolatey.NuGet.Frameworks.FrameworkConstants.SpecialIdentifiers
+Chocolatey.NuGet.Frameworks.FrameworkException
+Chocolatey.NuGet.Frameworks.FrameworkException.FrameworkException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+Chocolatey.NuGet.Frameworks.FrameworkException.FrameworkException(string message) -> void
+Chocolatey.NuGet.Frameworks.FrameworkExpander
+Chocolatey.NuGet.Frameworks.FrameworkExpander.Expand(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkExpander.FrameworkExpander() -> void
+Chocolatey.NuGet.Frameworks.FrameworkExpander.FrameworkExpander(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> void
+Chocolatey.NuGet.Frameworks.FrameworkNameHelpers
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.AddFrameworkPrecedenceMappings(System.Collections.Generic.IDictionary<string, int> destination, System.Collections.Generic.IEnumerable<string> mappings) -> void
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.CompareEquivalentFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.CompareFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.FrameworkNameProvider(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.IFrameworkMappings> mappings, System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings> portableMappings) -> void
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.GetCompatibleCandidates() -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.GetFullNameReplacement(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.GetNetStandardVersions() -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.GetShortNameReplacement(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.GetVersionString(string framework, System.Version version) -> string
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetCompatibilityMappings(Chocolatey.NuGet.Frameworks.NuGetFramework framework, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkRange> supportedFrameworkRanges) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetEquivalentFrameworks(Chocolatey.NuGet.Frameworks.FrameworkRange range, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetEquivalentFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework framework, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetIdentifier(string framework, out string identifier) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPlatformVersion(string versionString, out System.Version version) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableCompatibilityMappings(int profile, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkRange> supportedFrameworkRanges) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableFrameworks(int profile, bool includeOptional, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableFrameworks(int profile, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableFrameworks(string profile, bool includeOptional, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableFrameworks(string shortPortableProfiles, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableProfile(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> supportedFrameworks, out int profileNumber) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetPortableProfileNumber(string profile, out int profileNumber) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetProfile(string frameworkIdentifier, string profileShortName, out string profile) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetShortIdentifier(string identifier, out string identifierShortName) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetShortProfile(string frameworkIdentifier, string profile, out string profileShortName) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetSubSetFrameworks(string frameworkIdentifier, out System.Collections.Generic.IEnumerable<string> subSetFrameworks) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkNameProvider.TryGetVersion(string versionString, out System.Version version) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkPrecedenceSorter
+Chocolatey.NuGet.Frameworks.FrameworkPrecedenceSorter.Compare(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.FrameworkPrecedenceSorter.FrameworkPrecedenceSorter(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings, bool allEquivalent) -> void
+Chocolatey.NuGet.Frameworks.FrameworkRange
+Chocolatey.NuGet.Frameworks.FrameworkRange.Equals(Chocolatey.NuGet.Frameworks.FrameworkRange other) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRange.FrameworkIdentifier.get -> string
+Chocolatey.NuGet.Frameworks.FrameworkRange.FrameworkRange(Chocolatey.NuGet.Frameworks.NuGetFramework min, Chocolatey.NuGet.Frameworks.NuGetFramework max) -> void
+Chocolatey.NuGet.Frameworks.FrameworkRange.FrameworkRange(Chocolatey.NuGet.Frameworks.NuGetFramework min, Chocolatey.NuGet.Frameworks.NuGetFramework max, bool includeMin, bool includeMax) -> void
+Chocolatey.NuGet.Frameworks.FrameworkRange.IncludeMax.get -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRange.IncludeMin.get -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRange.Max.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkRange.Min.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkRange.Satisfies(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRangeComparer
+Chocolatey.NuGet.Frameworks.FrameworkRangeComparer.Equals(Chocolatey.NuGet.Frameworks.FrameworkRange x, Chocolatey.NuGet.Frameworks.FrameworkRange y) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRangeComparer.FrameworkRangeComparer() -> void
+Chocolatey.NuGet.Frameworks.FrameworkRangeComparer.GetHashCode(Chocolatey.NuGet.Frameworks.FrameworkRange obj) -> int
+Chocolatey.NuGet.Frameworks.FrameworkReducer
+Chocolatey.NuGet.Frameworks.FrameworkReducer.FrameworkReducer() -> void
+Chocolatey.NuGet.Frameworks.FrameworkReducer.FrameworkReducer(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings, Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider compat) -> void
+Chocolatey.NuGet.Frameworks.FrameworkReducer.GetNearest(Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> possibleFrameworks) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkReducer.ReduceDownwards(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkReducer.ReduceEquivalent(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkReducer.ReduceUpwards(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.Clone() -> Chocolatey.NuGet.Frameworks.FrameworkRuntimePair
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.CompareTo(Chocolatey.NuGet.Frameworks.FrameworkRuntimePair other) -> int
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.Equals(Chocolatey.NuGet.Frameworks.FrameworkRuntimePair other) -> bool
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.Framework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.FrameworkRuntimePair(Chocolatey.NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> void
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.Name.get -> string
+Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.RuntimeIdentifier.get -> string
+Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping
+Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping.FrameworkIdentifier.get -> string
+Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping.FrameworkSpecificMapping(string frameworkIdentifier, System.Collections.Generic.KeyValuePair<string, string> mapping) -> void
+Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping.FrameworkSpecificMapping(string frameworkIdentifier, string key, string value) -> void
+Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping.Mapping.get -> System.Collections.Generic.KeyValuePair<string, string>
+Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityListProvider
+Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityListProvider.GetFrameworksSupporting(Chocolatey.NuGet.Frameworks.NuGetFramework target) -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider
+Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider.IsCompatible(Chocolatey.NuGet.Frameworks.NuGetFramework framework, Chocolatey.NuGet.Frameworks.NuGetFramework other) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkMappings
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.CompatibilityMappings.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.EquivalentFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.EquivalentFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.EquivalentProfiles.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.FullNameReplacements.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.IdentifierShortNames.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.IdentifierSynonyms.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.NonPackageBasedFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.PackageBasedFrameworkPrecedence.get -> System.Collections.Generic.IEnumerable<string>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.ProfileShortNames.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkSpecificMapping>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.ShortNameReplacements.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<Chocolatey.NuGet.Frameworks.NuGetFramework, Chocolatey.NuGet.Frameworks.NuGetFramework>>
+Chocolatey.NuGet.Frameworks.IFrameworkMappings.SubSetFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, string>>
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.CompareEquivalentFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.CompareFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.GetCompatibleCandidates() -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.GetFullNameReplacement(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.GetNetStandardVersions() -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.GetShortNameReplacement(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.GetVersionString(string framework, System.Version version) -> string
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetCompatibilityMappings(Chocolatey.NuGet.Frameworks.NuGetFramework framework, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkRange> supportedFrameworkRanges) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetEquivalentFrameworks(Chocolatey.NuGet.Frameworks.FrameworkRange range, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetEquivalentFrameworks(Chocolatey.NuGet.Frameworks.NuGetFramework framework, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetIdentifier(string identifierShortName, out string identifier) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPlatformVersion(string versionString, out System.Version version) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableCompatibilityMappings(int profile, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.FrameworkRange> supportedFrameworkRanges) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableFrameworks(int profile, bool includeOptional, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableFrameworks(int profile, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableFrameworks(string profile, bool includeOptional, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableFrameworks(string shortPortableProfiles, out System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> frameworks) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableProfile(System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework> supportedFrameworks, out int profileNumber) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetPortableProfileNumber(string profile, out int profileNumber) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetProfile(string frameworkIdentifier, string profileShortName, out string profile) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetShortIdentifier(string identifier, out string identifierShortName) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetShortProfile(string frameworkIdentifier, string profile, out string profileShortName) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetSubSetFrameworks(string frameworkIdentifier, out System.Collections.Generic.IEnumerable<string> subSetFrameworkIdentifiers) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkNameProvider.TryGetVersion(string versionString, out System.Version version) -> bool
+Chocolatey.NuGet.Frameworks.IFrameworkSpecific
+Chocolatey.NuGet.Frameworks.IFrameworkSpecific.TargetFramework.get -> Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.IFrameworkTargetable
+Chocolatey.NuGet.Frameworks.IFrameworkTargetable.SupportedFrameworks.get -> System.Collections.Generic.IEnumerable<Chocolatey.NuGet.Frameworks.NuGetFramework>
+Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings
+Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings.CompatibilityMappings.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.FrameworkRange>>
+Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings.ProfileFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.NuGetFramework[]>>
+Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings.ProfileOptionalFrameworks.get -> System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int, Chocolatey.NuGet.Frameworks.NuGetFramework[]>>
+Chocolatey.NuGet.Frameworks.NuGetFramework
+Chocolatey.NuGet.Frameworks.NuGetFramework.AllFrameworkVersions.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.DotNetFrameworkName.get -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.DotNetPlatformName.get -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.Equals(Chocolatey.NuGet.Frameworks.NuGetFramework other) -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.Framework.get -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.GetDotNetFrameworkName(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.GetShortFolderName() -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.HasPlatform.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.HasProfile.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsAgnostic.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsAny.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsPCL.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsPackageBased.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsSpecificFramework.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.IsUnsupported.get -> bool
+Chocolatey.NuGet.Frameworks.NuGetFramework.NuGetFramework(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> void
+Chocolatey.NuGet.Frameworks.NuGetFramework.NuGetFramework(string framework) -> void
+Chocolatey.NuGet.Frameworks.NuGetFramework.NuGetFramework(string framework, System.Version version) -> void
+Chocolatey.NuGet.Frameworks.NuGetFramework.NuGetFramework(string frameworkIdentifier, System.Version frameworkVersion, string frameworkProfile) -> void
+Chocolatey.NuGet.Frameworks.NuGetFramework.NuGetFramework(string frameworkIdentifier, System.Version frameworkVersion, string platform, System.Version platformVersion) -> void
+Chocolatey.NuGet.Frameworks.NuGetFramework.Platform.get -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.PlatformVersion.get -> System.Version
+Chocolatey.NuGet.Frameworks.NuGetFramework.Profile.get -> string
+Chocolatey.NuGet.Frameworks.NuGetFramework.Version.get -> System.Version
+Chocolatey.NuGet.Frameworks.NuGetFrameworkExtensions
+Chocolatey.NuGet.Frameworks.NuGetFrameworkFullComparer
+Chocolatey.NuGet.Frameworks.NuGetFrameworkFullComparer.Equals(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> bool
+Chocolatey.NuGet.Frameworks.NuGetFrameworkFullComparer.GetHashCode(Chocolatey.NuGet.Frameworks.NuGetFramework obj) -> int
+Chocolatey.NuGet.Frameworks.NuGetFrameworkFullComparer.NuGetFrameworkFullComparer() -> void
+Chocolatey.NuGet.Frameworks.NuGetFrameworkNameComparer
+Chocolatey.NuGet.Frameworks.NuGetFrameworkNameComparer.Equals(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> bool
+Chocolatey.NuGet.Frameworks.NuGetFrameworkNameComparer.GetHashCode(Chocolatey.NuGet.Frameworks.NuGetFramework obj) -> int
+Chocolatey.NuGet.Frameworks.NuGetFrameworkNameComparer.NuGetFrameworkNameComparer() -> void
+Chocolatey.NuGet.Frameworks.NuGetFrameworkSorter
+Chocolatey.NuGet.Frameworks.NuGetFrameworkSorter.Compare(Chocolatey.NuGet.Frameworks.NuGetFramework x, Chocolatey.NuGet.Frameworks.NuGetFramework y) -> int
+Chocolatey.NuGet.Frameworks.NuGetFrameworkSorter.NuGetFrameworkSorter() -> void
+Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility
+Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry
+Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.Equals(Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry other) -> bool
+Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.OneWayCompatibilityMappingEntry(Chocolatey.NuGet.Frameworks.FrameworkRange targetFramework, Chocolatey.NuGet.Frameworks.FrameworkRange supportedFramework) -> void
+Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.SupportedFrameworkRange.get -> Chocolatey.NuGet.Frameworks.FrameworkRange
+Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.TargetFrameworkRange.get -> Chocolatey.NuGet.Frameworks.FrameworkRange
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.AspNet = "ASP.NET" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.AspNetCore = "ASP.NETCore" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Dnx = "DNX" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.DnxCore = "DNXCore" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.DotNet = "dotnet" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.MonoAndroid = "MonoAndroid" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.MonoMac = "MonoMac" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.MonoTouch = "MonoTouch" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NanoFramework = ".NETnanoFramework" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Native = "native" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Net = ".NETFramework" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetCore = ".NETCore" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetCoreApp = ".NETCoreApp" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetMicro = ".NETMicroFramework" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetPlatform = ".NETPlatform" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetStandard = ".NETStandard" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.NetStandardApp = ".NETStandardApp" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Portable = ".NETPortable" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Silverlight = "Silverlight" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Tizen = "Tizen" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.UAP = "UAP" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.WinRT = "WinRT" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.Windows = "Windows" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.WindowsPhone = "WindowsPhone" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.WindowsPhoneApp = "WindowsPhoneApp" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinIOs = "Xamarin.iOS" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinMac = "Xamarin.Mac" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinPlayStation3 = "Xamarin.PlayStation3" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinPlayStation4 = "Xamarin.PlayStation4" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinPlayStationVita = "Xamarin.PlayStationVita" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinTVOS = "Xamarin.TVOS" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinWatchOS = "Xamarin.WatchOS" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinXbox360 = "Xamarin.Xbox360" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.FrameworkIdentifiers.XamarinXboxOne = "Xamarin.XboxOne" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.PlatformIdentifiers.Windows = "Windows" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.PlatformIdentifiers.WindowsPhone = "WindowsPhone" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.SpecialIdentifiers.Agnostic = "Agnostic" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.SpecialIdentifiers.Any = "Any" -> string
+const Chocolatey.NuGet.Frameworks.FrameworkConstants.SpecialIdentifiers.Unsupported = "Unsupported" -> string
+override Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.AssetTargetFallbackFramework.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.DualCompatibilityFramework.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.FallbackFramework.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.FallbackFramework.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.FrameworkRange.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.FrameworkRange.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.FrameworkRange.ToString() -> string
+override Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.ToString() -> string
+override Chocolatey.NuGet.Frameworks.NuGetFramework.Equals(object obj) -> bool
+override Chocolatey.NuGet.Frameworks.NuGetFramework.GetHashCode() -> int
+override Chocolatey.NuGet.Frameworks.NuGetFramework.ToString() -> string
+override Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.ToString() -> string
+static Chocolatey.NuGet.Frameworks.CompatibilityListProvider.Default.get -> Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityListProvider
+static Chocolatey.NuGet.Frameworks.DefaultCompatibilityProvider.Instance.get -> Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider
+static Chocolatey.NuGet.Frameworks.DefaultFrameworkMappings.Instance.get -> Chocolatey.NuGet.Frameworks.IFrameworkMappings
+static Chocolatey.NuGet.Frameworks.DefaultFrameworkNameProvider.Instance.get -> Chocolatey.NuGet.Frameworks.IFrameworkNameProvider
+static Chocolatey.NuGet.Frameworks.DefaultPortableFrameworkMappings.Instance.get -> Chocolatey.NuGet.Frameworks.IPortableFrameworkMappings
+static Chocolatey.NuGet.Frameworks.FrameworkNameHelpers.GetFolderName(string identifierShortName, string versionString, string profileShortName) -> string
+static Chocolatey.NuGet.Frameworks.FrameworkNameHelpers.GetPortableProfileNumberString(int profileNumber) -> string
+static Chocolatey.NuGet.Frameworks.FrameworkNameHelpers.GetVersion(string versionString) -> System.Version
+static Chocolatey.NuGet.Frameworks.FrameworkNameHelpers.GetVersionString(System.Version version) -> string
+static Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.GetName(Chocolatey.NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> string
+static Chocolatey.NuGet.Frameworks.FrameworkRuntimePair.GetTargetGraphName(Chocolatey.NuGet.Frameworks.NuGetFramework framework, string runtimeIdentifier) -> string
+static Chocolatey.NuGet.Frameworks.NuGetFramework.Parse(string folderName) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.Parse(string folderName, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.ParseComponents(string targetFrameworkMoniker, string targetPlatformMoniker) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.ParseFolder(string folderName) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.ParseFolder(string folderName, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.ParseFrameworkName(string frameworkName, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static Chocolatey.NuGet.Frameworks.NuGetFramework.operator !=(Chocolatey.NuGet.Frameworks.NuGetFramework left, Chocolatey.NuGet.Frameworks.NuGetFramework right) -> bool
+static Chocolatey.NuGet.Frameworks.NuGetFramework.operator ==(Chocolatey.NuGet.Frameworks.NuGetFramework left, Chocolatey.NuGet.Frameworks.NuGetFramework right) -> bool
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkExtensions.GetNearest<T>(this System.Collections.Generic.IEnumerable<T> items, Chocolatey.NuGet.Frameworks.NuGetFramework projectFramework) -> T
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkExtensions.IsDesktop(this Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> bool
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.GetNearest<T>(System.Collections.Generic.IEnumerable<T> items, Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> T
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.GetNearest<T>(System.Collections.Generic.IEnumerable<T> items, Chocolatey.NuGet.Frameworks.NuGetFramework framework, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider frameworkMappings, Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider) -> T
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.GetNearest<T>(System.Collections.Generic.IEnumerable<T> items, Chocolatey.NuGet.Frameworks.NuGetFramework framework, Chocolatey.NuGet.Frameworks.IFrameworkNameProvider frameworkMappings, Chocolatey.NuGet.Frameworks.IFrameworkCompatibilityProvider compatibilityProvider, System.Func<T, Chocolatey.NuGet.Frameworks.NuGetFramework> selector) -> T
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.GetNearest<T>(System.Collections.Generic.IEnumerable<T> items, Chocolatey.NuGet.Frameworks.NuGetFramework framework, System.Func<T, Chocolatey.NuGet.Frameworks.NuGetFramework> selector) -> T
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.IsCompatibleWithFallbackCheck(Chocolatey.NuGet.Frameworks.NuGetFramework projectFramework, Chocolatey.NuGet.Frameworks.NuGetFramework candidate) -> bool
+static Chocolatey.NuGet.Frameworks.NuGetFrameworkUtility.IsNetCore50AndUp(Chocolatey.NuGet.Frameworks.NuGetFramework framework) -> bool
+static Chocolatey.NuGet.Frameworks.OneWayCompatibilityMappingEntry.Comparer.get -> Chocolatey.NuGet.Frameworks.CompatibilityMappingComparer
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.AspNet -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.AspNet50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.AspNetCore -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.AspNetCore50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Dnx -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Dnx45 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Dnx451 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Dnx452 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DnxCore -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DnxCore50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet51 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet52 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet53 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet54 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet55 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.DotNet56 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Native -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net11 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net2 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net35 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net4 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net403 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net45 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net451 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net452 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net46 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net461 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net462 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net463 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net47 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net471 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net472 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net60 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Net70 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCore45 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCore451 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCore50 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp10 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp11 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp20 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp21 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp22 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp30 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetCoreApp31 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard10 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard11 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard12 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard13 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard14 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard15 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard16 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard17 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard20 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandard21 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.NetStandardApp15 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.SL4 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.SL5 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Tizen3 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Tizen4 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Tizen6 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.UAP10 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.WP7 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.WP75 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.WP8 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.WP81 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.WPA81 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Win10 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Win8 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.CommonFrameworks.Win81 -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.DotNetAll -> Chocolatey.NuGet.Frameworks.FrameworkRange
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.EmptyVersion -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.MaxVersion -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.Version10 -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.Version5 -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.Version6 -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.FrameworkConstants.Version7 -> System.Version
+static readonly Chocolatey.NuGet.Frameworks.NuGetFramework.AgnosticFramework -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.NuGetFramework.AnyFramework -> Chocolatey.NuGet.Frameworks.NuGetFramework
+static readonly Chocolatey.NuGet.Frameworks.NuGetFramework.Comparer -> System.Collections.Generic.IEqualityComparer<Chocolatey.NuGet.Frameworks.NuGetFramework>
+static readonly Chocolatey.NuGet.Frameworks.NuGetFramework.FrameworkNameComparer -> System.Collections.Generic.IEqualityComparer<Chocolatey.NuGet.Frameworks.NuGetFramework>
+static readonly Chocolatey.NuGet.Frameworks.NuGetFramework.UnsupportedFramework -> Chocolatey.NuGet.Frameworks.NuGetFramework
+virtual Chocolatey.NuGet.Frameworks.NuGetFramework.GetShortFolderName(Chocolatey.NuGet.Frameworks.IFrameworkNameProvider mappings) -> string

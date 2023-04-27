@@ -1,0 +1,3 @@
+NuGet.Common.IPackLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
+NuGet.Common.PackagingLogMessage.Framework.get -> NuGet.Frameworks.NuGetFramework
+static NuGet.Common.PackagingLogMessage.CreateWarning(string message, NuGet.Common.NuGetLogCode code, string libraryId, NuGet.Frameworks.NuGetFramework framework) -> NuGet.Common.PackagingLogMessage
