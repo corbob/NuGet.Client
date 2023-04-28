@@ -17,6 +17,7 @@ object ChocolateyNugetClient : BuildType({
         -:artifacts/nupkgs/*-beta.nupkg
         -:artifacts/nupkgs/*-alpha.nupkg
         -:artifacts/nupkgs/*-rc.nupkg
+        -:artifacts/nugkgs/*-rtm*.nupkg
     """.trimIndent()
 
     vcs {
@@ -60,6 +61,9 @@ object ChocolateyNugetClient : BuildType({
                     elseif ( ${'$'}branchName.StartsWith('release') ) { ${'$'}releaseLabel = 'beta' }
                     elseif ( ${'$'}branchName.StartsWith('hotfix') ) { ${'$'}releaseLabel = 'beta' }
                     elseif ( ${'$'}branchName.StartsWith('tags') ) { ${'$'}releaseLabel = 'rtm' }
+                    elseif ( ${'$'}branchName.StartsWith('proj') ) { ${'$'}releaseLabel = 'alpha' }
+                    elseif ( ${'$'}branchName.StartsWith('bugfix') ) { ${'$'}releaseLabel = 'beta' }
+                    elseif ( ${'$'}branchName.StartsWith('pull') ) { ${'$'}releaseLabel = 'pr' }
         
                     .\build.ps1 -CI -SkipUnitTest -ChocolateyBuild -BuildNumber %build.counter% -ReleaseLabel ${'$'}releaseLabel -BuildDate (Get-Date -Format "yyyyMMdd")
                 """.trimIndent()
@@ -73,7 +77,7 @@ object ChocolateyNugetClient : BuildType({
             name = "Publish NuGet Packages"
             scriptMode = script {
                 content = """
-                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*" -and ${'$'}_.Name -notlike "*-beta.nupkg" -and ${'$'}_.Name -notlike "*-alpha.nupkg" -and ${'$'}_.Name -notlike "*-rc.nupkg" -and ${'$'}_.Name -notlike "*-rtm-*" -and ${'$'}_.Name -notlike "*-rc-*"}
+                    ${'$'}files=Get-ChildItem "artifacts/nupkgs" | Where-Object {${'$'}_.Name -like "*.nupkg" -and ${'$'}_.Name -notlike "*symbols*" -and ${'$'}_.Name -notlike "*-beta.nupkg" -and ${'$'}_.Name -notlike "*-alpha.nupkg" -and ${'$'}_.Name -notlike "*-rc.nupkg" -and ${'$'}_.Name -notlike "*-rtm-*" -and ${'$'}_.Name -notlike "*-rc-*" -and ${'$'}_.Name -notlike "*-pr.nupkg" -and ${'$'}_.Name -notlike "*-pr-*"}
 
                     foreach (${'$'}file in ${'$'}files) {
                       NuGet push -Source '%env.NUGETDEVPUSH_SOURCE%' -ApiKey '%env.NUGETDEVPUSH_API_KEY%' "${'$'}(${'$'}file.FullName)"

@@ -40,7 +40,7 @@ param (
     [ValidateSet('debug', 'release')]
     [Alias('c')]
     [string]$Configuration,
-    [ValidatePattern('^(alpha|beta|final|preview|rc|release|rtm|xprivate|zlocal)([0-9]*)$')]
+    [ValidatePattern('^(alpha|beta|final|preview|pr|rc|release|rtm|xprivate|zlocal)([0-9]*)$')]
     [Alias('l')]
     [string]$ReleaseLabel = 'zlocal',
     [Alias('n')]
