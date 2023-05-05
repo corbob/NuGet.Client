@@ -48,15 +48,25 @@ namespace NuGet.PackageManagement
             return dependentsDict;
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        [Obsolete("This method will be removed in version v4.0.0.  Use overload that accepts an ILogger as a final parameter.")]
         public static ICollection<PackageIdentity> GetPackagesToBeUninstalled(PackageIdentity packageIdentity, IEnumerable<PackageDependencyInfo> dependencyInfoEnumerable,
             IEnumerable<PackageIdentity> installedPackages, UninstallationContext uninstallationContext)
+        {
+            return GetPackagesToBeUninstalled(packageIdentity, dependencyInfoEnumerable, installedPackages, uninstallationContext, null);
+        }
+
+        public static ICollection<PackageIdentity> GetPackagesToBeUninstalled(PackageIdentity packageIdentity, IEnumerable<PackageDependencyInfo> dependencyInfoEnumerable,
+            IEnumerable<PackageIdentity> installedPackages, UninstallationContext uninstallationContext, Common.ILogger log)
         {
             IDictionary<PackageIdentity, HashSet<PackageIdentity>> dependenciesDictionary;
             var dependentsDictionary = GetPackageDependents(dependencyInfoEnumerable, installedPackages, out dependenciesDictionary);
             var packagesMarkedForUninstall =
                 MarkPackagesToBeUninstalled(packageIdentity, dependenciesDictionary, uninstallationContext);
 
-            CheckIfPackageCanBeUninstalled(packageIdentity, dependenciesDictionary, dependentsDictionary, uninstallationContext, packagesMarkedForUninstall);
+            CheckIfPackageCanBeUninstalled(packageIdentity, dependenciesDictionary, dependentsDictionary, uninstallationContext, packagesMarkedForUninstall, log);
             return packagesMarkedForUninstall;
         }
 
@@ -64,7 +74,12 @@ namespace NuGet.PackageManagement
             IDictionary<PackageIdentity, HashSet<PackageIdentity>> dependenciesDict,
             IDictionary<PackageIdentity, HashSet<PackageIdentity>> dependentsDict,
             UninstallationContext uninstallationContext,
-            HashSet<PackageIdentity> packagesMarkedForUninstall)
+            HashSet<PackageIdentity> packagesMarkedForUninstall,
+            Common.ILogger log,
+            bool isInitialPackage = true)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             HashSet<PackageIdentity> dependents;
             if (dependentsDict.TryGetValue(packageIdentity, out dependents)
@@ -75,7 +90,25 @@ namespace NuGet.PackageManagement
                     var unMarkedDependents = dependents.Where(d => !packagesMarkedForUninstall.Contains(d)).ToList();
                     if (unMarkedDependents.Count > 0)
                     {
-                        throw CreatePackageHasDependentsException(packageIdentity, unMarkedDependents);
+                        //////////////////////////////////////////////////////////
+                        // Start - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
+                        if (log is null || isInitialPackage || !uninstallationContext.WarnDependencyResolvingFailure)
+                        {
+                            throw CreatePackageHasDependentsException(packageIdentity, unMarkedDependents);
+                        }
+                        else
+                        {
+                            log.LogWarning(string.Format(CultureInfo.CurrentCulture, "'{0} {1}' skipped, because it is in use by '{2}'.",
+                                packageIdentity.Id,
+                                packageIdentity.Version,
+                                string.Join(",", unMarkedDependents.Select(u => string.Format(CultureInfo.CurrentCulture, "{0} {1}", u.Id, u.Version)))));
+
+                            packagesMarkedForUninstall.Remove(packageIdentity);
+                        }
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
                     }
                 }
             }
@@ -87,11 +120,19 @@ namespace NuGet.PackageManagement
             {
                 foreach (var dependency in dependencies)
                 {
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
                     CheckIfPackageCanBeUninstalled(dependency,
                         dependenciesDict,
                         dependentsDict,
                         uninstallationContext,
-                        packagesMarkedForUninstall);
+                        packagesMarkedForUninstall,
+                        log,
+                        isInitialPackage: false);
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
                 }
             }
         }

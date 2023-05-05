@@ -353,6 +353,8 @@ NuGet.PackageManagement.UninstallationContext
 NuGet.PackageManagement.UninstallationContext.ForceRemove.get -> bool
 NuGet.PackageManagement.UninstallationContext.RemoveDependencies.get -> bool
 NuGet.PackageManagement.UninstallationContext.UninstallationContext(bool removeDependencies = false, bool forceRemove = false) -> void
+NuGet.PackageManagement.UninstallationContext.UninstallationContext(bool removeDependencies, bool forceRemove, bool warnDependencyResolvingFailure) -> void
+NuGet.PackageManagement.UninstallationContext.WarnDependencyResolvingFailure.get -> bool
 NuGet.PackageManagement.UriHelper
 NuGet.PackageManagement.Utility.PackagesConfigLockFileUtility
 NuGet.PackageManagement.VersionConstraints
@@ -818,6 +820,7 @@ static NuGet.PackageManagement.PrunePackageTree.RemoveDisallowedVersions(System.
 static NuGet.PackageManagement.ResolverGather.GatherAsync(NuGet.PackageManagement.GatherContext context, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<System.Collections.Generic.HashSet<NuGet.Protocol.Core.Types.SourcePackageDependencyInfo>>
 static NuGet.PackageManagement.UninstallResolver.GetPackageDependents(System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageDependencyInfo> dependencyInfoEnumerable, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageIdentity> installedPackages, out System.Collections.Generic.IDictionary<NuGet.Packaging.Core.PackageIdentity, System.Collections.Generic.HashSet<NuGet.Packaging.Core.PackageIdentity>> dependenciesDict) -> System.Collections.Generic.IDictionary<NuGet.Packaging.Core.PackageIdentity, System.Collections.Generic.HashSet<NuGet.Packaging.Core.PackageIdentity>>
 static NuGet.PackageManagement.UninstallResolver.GetPackagesToBeUninstalled(NuGet.Packaging.Core.PackageIdentity packageIdentity, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageDependencyInfo> dependencyInfoEnumerable, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageIdentity> installedPackages, NuGet.PackageManagement.UninstallationContext uninstallationContext) -> System.Collections.Generic.ICollection<NuGet.Packaging.Core.PackageIdentity>
+static NuGet.PackageManagement.UninstallResolver.GetPackagesToBeUninstalled(NuGet.Packaging.Core.PackageIdentity packageIdentity, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageDependencyInfo> dependencyInfoEnumerable, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageIdentity> installedPackages, NuGet.PackageManagement.UninstallationContext uninstallationContext, NuGet.Common.ILogger log) -> System.Collections.Generic.ICollection<NuGet.Packaging.Core.PackageIdentity>
 static NuGet.PackageManagement.UriHelper.IsAnySourceAvailable(NuGet.Configuration.PackageSourceProvider packageSourceProvider, bool checkHttp) -> bool
 static NuGet.PackageManagement.UriHelper.IsAnySourceLocal(NuGet.Configuration.PackageSourceProvider packageSourceProvider, out string localSource) -> bool
 static NuGet.PackageManagement.UriHelper.IsHttpSource(NuGet.Configuration.PackageSourceProvider packageSourceProvider) -> bool
