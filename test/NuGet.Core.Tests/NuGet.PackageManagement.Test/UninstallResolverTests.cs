@@ -136,10 +136,17 @@ namespace NuGet.Test
         public void TestUninstallResolverSimplePass()
         {
             // Act
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             var result = UninstallResolver.GetPackagesToBeUninstalled(A1,
                 PackageDependencyInfo1,
                 InstalledPackages1,
-                new UninstallationContext(removeDependencies: true)).ToList();
+                new UninstallationContext(removeDependencies: true),
+                log: null).ToList();
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // Assert
             Assert.Equal(5, result.Count);
@@ -157,10 +164,17 @@ namespace NuGet.Test
             Exception exception = null;
             try
             {
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
                 var result = UninstallResolver.GetPackagesToBeUninstalled(E1,
                     PackageDependencyInfo1,
                     InstalledPackages1,
-                    new UninstallationContext(removeDependencies: true)).ToList();
+                    new UninstallationContext(removeDependencies: true),
+                    log: null).ToList();
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             }
             catch (InvalidOperationException ex)
             {
@@ -182,10 +196,17 @@ namespace NuGet.Test
         public void DiamondDependencyUninstall()
         {
             // Act
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             var result = UninstallResolver.GetPackagesToBeUninstalled(A1,
                 DiamondDependencyInfo,
                 DiamondDependencyInstalledPackages,
-                new UninstallationContext(removeDependencies: true)).ToList();
+                new UninstallationContext(removeDependencies: true),
+                log: null).ToList();
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // Assert
             Assert.Equal(4, result.Count);
@@ -199,10 +220,17 @@ namespace NuGet.Test
         public void DeepDiamondDependencyUninstall()
         {
             // Act
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
             var result = UninstallResolver.GetPackagesToBeUninstalled(A1,
                 DeepDiamondDependencyInfo,
                 DeepDiamondDependencyInstalledPackages,
-                new UninstallationContext(removeDependencies: true)).ToList();
+                new UninstallationContext(removeDependencies: true),
+                log: null).ToList();
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             // Assert
             Assert.Equal(5, result.Count);

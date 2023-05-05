@@ -1,0 +1,3 @@
+NuGet.PackageManagement.UninstallationContext.UninstallationContext(bool removeDependencies, bool forceRemove, bool warnDependencyResolvingFailure) -> void
+NuGet.PackageManagement.UninstallationContext.WarnDependencyResolvingFailure.get -> bool
+static NuGet.PackageManagement.UninstallResolver.GetPackagesToBeUninstalled(NuGet.Packaging.Core.PackageIdentity packageIdentity, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageDependencyInfo> dependencyInfoEnumerable, System.Collections.Generic.IEnumerable<NuGet.Packaging.Core.PackageIdentity> installedPackages, NuGet.PackageManagement.UninstallationContext uninstallationContext, NuGet.Common.ILogger log) -> System.Collections.Generic.ICollection<NuGet.Packaging.Core.PackageIdentity>
