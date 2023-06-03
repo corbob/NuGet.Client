@@ -19,17 +19,21 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
             PackageMetadataResourceV2Feed resource = null;
 
-            if (await source.GetFeedType(token) == FeedType.HttpV2)
+            if (await source.GetFeedType(cacheContext, token) == FeedType.HttpV2)
             {
-                var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(token);
+                var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
 
-                var serviceDocument = await source.GetResourceAsync<ODataServiceDocumentResourceV2>(token);
-
-                //////////////////////////////////////////////////////////
-                // Start - Chocolatey Specific Modification
-                //////////////////////////////////////////////////////////
+                var serviceDocument = await source.GetResourceAsync<ODataServiceDocumentResourceV2>(cacheContext, token);
 
                 var parser = new V2FeedParser(httpSourceResource.HttpSource, serviceDocument.BaseAddress, source.PackageSource.Source);
                 var feedCapabilityResource = new LegacyFeedCapabilityResourceV2Feed(parser, serviceDocument.BaseAddress);

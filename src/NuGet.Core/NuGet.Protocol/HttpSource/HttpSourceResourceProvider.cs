@@ -35,6 +35,17 @@ namespace NuGet.Protocol
 
         public override Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return TryCreate(source, cacheContext: null, token);
+        }
+
+        public override Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             Debug.Assert(source.PackageSource.IsHttp, "HTTP source requested for a non-http source.");
 
             HttpSourceResource curResource = null;

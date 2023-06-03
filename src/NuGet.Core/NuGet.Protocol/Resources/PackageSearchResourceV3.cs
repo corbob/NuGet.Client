@@ -68,6 +68,29 @@ namespace NuGet.Protocol
         /// <returns>List of package meta data.</returns>
         public override async Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(string searchTerm, SearchFilter filter, int skip, int take, Common.ILogger log, CancellationToken cancellationToken)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await SearchAsync(searchTerm, filter, skip, take, log, cacheContext: null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Query nuget package list from nuget server. This implementation optimized for performance so doesn't iterate whole result
+        /// returned nuget server, so as soon as find "take" number of result packages then stop processing and return the result.
+        /// </summary>
+        /// <param name="searchTerm">The term we're searching for.</param>
+        /// <param name="filter">Filter for whether to include prerelease, delisted, supportedframework flags in query.</param>
+        /// <param name="skip">Skip how many items from beginning of list.</param>
+        /// <param name="take">Return how many items.</param>
+        /// <param name="log">Logger instance.</param>
+        /// <param name="cacheContext">The source cache context.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of package meta data.</returns>
+        public override async Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(string searchTerm, SearchFilter filter, int skip, int take, Common.ILogger log, SourceCacheContext cacheContext, CancellationToken cancellationToken)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             IEnumerable<PackageSearchMetadata> searchResultMetadata;
             var metadataCache = new MetadataReferenceCache();
 

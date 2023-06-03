@@ -21,10 +21,26 @@ namespace NuGet.Protocol.Core.Types
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
+        public abstract Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token);
+
         public abstract Task<IPackageSearchMetadata> PackageAsync(
             string searchTerm,
             bool prerelease,
             ILogger log,
+            CancellationToken token);
+
+        public abstract Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger log,
+            SourceCacheContext cacheContext,
             CancellationToken token);
 
         //////////////////////////////////////////////////////////

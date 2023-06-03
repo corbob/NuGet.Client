@@ -20,9 +20,20 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
             INuGetResource resource = null;
 
-            var feedType = await source.GetFeedType(token);
+            var feedType = await source.GetFeedType(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             // Default to v3 if the type is unknown
             if (feedType == FeedType.FileSystemV3

@@ -19,16 +19,33 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository sourceRepository, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(sourceRepository, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository sourceRepository, SourceCacheContext cacheContext, CancellationToken token)
+        {
             INuGetResource resource = null;
 
-            var serviceIndexResource = await sourceRepository.GetResourceAsync<ServiceIndexResourceV3>();
+            var serviceIndexResource = await sourceRepository.GetResourceAsync<ServiceIndexResourceV3>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             if (serviceIndexResource != null)
             {
                 //Repository signature information init
-                var repositorySignatureResource = await sourceRepository.GetResourceAsync<RepositorySignatureResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                var repositorySignatureResource = await sourceRepository.GetResourceAsync<RepositorySignatureResource>(cacheContext, token);
                 repositorySignatureResource?.UpdateRepositorySignatureInfo();
-                var httpSourceResource = await sourceRepository.GetResourceAsync<HttpSourceResource>(token);
+                var httpSourceResource = await sourceRepository.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
                 resource = new RemoteV3FindPackageByIdResource(
                     sourceRepository,

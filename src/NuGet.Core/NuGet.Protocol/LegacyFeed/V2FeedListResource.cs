@@ -37,7 +37,27 @@ namespace NuGet.Protocol
             ILogger logger,
             CancellationToken token)
         {
-            var isSearchSupported = await _feedCapabilities.SupportsSearchAsync(logger, token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+            return await ListAsync(searchTerm, prerelease, allVersions, includeDelisted, logger, cacheContext: null, token);
+        }
+
+        public async override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            ILogger logger,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
+            var isSearchSupported = await _feedCapabilities.SupportsSearchAsync(logger, cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
             SearchFilter filter = null;
             if (isSearchSupported)
             {
@@ -51,12 +71,12 @@ namespace NuGet.Protocol
                 }
                 else
                 {
-                    var supportsIsAbsoluteLatestVersion =
-                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
-
                     //////////////////////////////////////////////////////////
                     // Start - Chocolatey Specific Modification
                     //////////////////////////////////////////////////////////
+
+                    var supportsIsAbsoluteLatestVersion =
+                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, cacheContext, token);
 
                     if (prerelease)
                     {
@@ -104,12 +124,12 @@ namespace NuGet.Protocol
                 }
                 else
                 {
-                    var supportsIsAbsoluteLatestVersion =
-                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
-
                     //////////////////////////////////////////////////////////
                     // Start - Chocolatey Specific Modification
                     //////////////////////////////////////////////////////////
+
+                    var supportsIsAbsoluteLatestVersion =
+                        await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, cacheContext, token);
 
                     if (prerelease)
                     {
@@ -146,8 +166,24 @@ namespace NuGet.Protocol
                 }
 
             }
-            return new EnumerableAsync<IPackageSearchMetadata>(_feedParser, searchTerm, filter, 0, Take, isSearchSupported, allVersions,
-                        logger, token);
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            return new EnumerableAsync<IPackageSearchMetadata>(
+                _feedParser,
+                searchTerm,
+                filter,
+                0,
+                Take,
+                isSearchSupported,
+                allVersions,
+                logger,
+                cacheContext,
+                token);
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         //////////////////////////////////////////////////////////
@@ -159,10 +195,35 @@ namespace NuGet.Protocol
             bool prerelease,
             ILogger logger,
             CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        {
+            return await PackageAsync(searchTerm, prerelease, logger, cacheContext: null, token);
+        }
+
+        public async override Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger logger,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             var metadataCache = new MetadataReferenceCache();
 
-            var supportsIsAbsoluteLatestVersion = await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, token);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var supportsIsAbsoluteLatestVersion = await _feedCapabilities.SupportsIsAbsoluteLatestVersionAsync(logger, cacheContext, token);
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             SearchFilter searchFilter = null;
 
             if (prerelease)
@@ -177,7 +238,13 @@ namespace NuGet.Protocol
                     // do will potentially result in more than one result, which is not desired.
                     // Instead, use the FindPackageByIdAsync method, and then order the results by version, and return the
                     // top result.
-                    var packages = await FindPackageByIdAsync(searchTerm, includeUnlisted: false, prerelease, sourceCacheContext: null, logger, token);
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+                    var packages = await FindPackageByIdAsync(searchTerm, includeUnlisted: false, prerelease, sourceCacheContext: cacheContext, logger, token);
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
 
                     searchFilter = new SearchFilter(includePrerelease: true, filter: null);
                     searchFilter.OrderBy = SearchOrderBy.Version;
@@ -198,7 +265,13 @@ namespace NuGet.Protocol
 
             searchFilter.ExactPackageId = true;
 
-            var pageOfResults = await _feedParser.GetPackagesPageAsync(searchTerm, searchFilter, 0, 1, logger, token);
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+            var pageOfResults = await _feedParser.GetPackagesPageAsync(searchTerm, searchFilter, 0, 1, logger, cacheContext, token);
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
 
             if (!pageOfResults.Items.Any())
             {
@@ -210,7 +283,7 @@ namespace NuGet.Protocol
 
         private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageByIdAsync(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, Common.ILogger log, CancellationToken token)
         {
-            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, sourceCacheContext, token))
             {
                 return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
             }
@@ -238,8 +311,20 @@ internal class EnumerableAsync<T> : IEnumerableAsync<T>
     private readonly bool _isSearchAvailable;
     private readonly bool _allVersions;
 
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
+    private readonly SourceCacheContext _cacheContext;
+    
 
     public EnumerableAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions, ILogger logger, CancellationToken token)
+        : this(feedParser, searchTerm, filter, skip, take, isSearchAvailable, allVersions, logger, cacheContext: null, token)
+    {
+
+    }
+
+    public EnumerableAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions, ILogger logger, SourceCacheContext cacheContext, CancellationToken token)
     {
         _feedParser = feedParser;
         _searchTerm = searchTerm;
@@ -249,12 +334,17 @@ internal class EnumerableAsync<T> : IEnumerableAsync<T>
         _isSearchAvailable = isSearchAvailable;
         _allVersions = allVersions;
         _logger = logger;
+        _cacheContext = cacheContext;
         _token = token;
     }
 
+    //////////////////////////////////////////////////////////
+    // End - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////
+
     public IEnumeratorAsync<T> GetEnumeratorAsync()
     {
-        return (IEnumeratorAsync<T>)new EnumeratorAsync(_feedParser, _searchTerm, _filter, _skip, _take, _isSearchAvailable, _allVersions, _logger, _token);
+        return (IEnumeratorAsync<T>)new EnumeratorAsync(_feedParser, _searchTerm, _filter, _skip, _take, _isSearchAvailable, _allVersions, _logger, _cacheContext, _token);
     }
 }
 
@@ -274,8 +364,21 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
     private IEnumerator<IPackageSearchMetadata> _currentEnumerator;
     private V2FeedPage _currentPage;
 
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////            
+    
+    private readonly SourceCacheContext _cacheContext;
+    
     public EnumeratorAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions,
         ILogger logger, CancellationToken token)
+        : this(feedParser, searchTerm, filter, skip, take, isSearchAvailable, allVersions, logger, cacheContext: null, token)
+    {
+
+    }
+
+    public EnumeratorAsync(IV2FeedParser feedParser, string searchTerm, SearchFilter filter, int skip, int take, bool isSearchAvailable, bool allVersions,
+        ILogger logger, SourceCacheContext cacheContext, CancellationToken token)
     {
         _feedParser = feedParser;
         _searchTerm = searchTerm;
@@ -285,8 +388,12 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
         _isSearchAvailable = isSearchAvailable;
         _allVersions = allVersions;
         _logger = logger;
+        _cacheContext = cacheContext;
         _token = token;
     }
+    //////////////////////////////////////////////////////////
+    // Start - Chocolatey Specific Modification
+    //////////////////////////////////////////////////////////            
 
     public IPackageSearchMetadata Current
     {
@@ -303,11 +410,16 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
         if (_currentPage == null)
         {
 
-
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////  
             _currentPage = _isSearchAvailable
-                ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token)
-                : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token);
-
+                ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _cacheContext, _token)
+                : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _cacheContext, _token);
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+                
 
             var results = _allVersions ?
                 _currentPage.Items.GroupBy(p => p.Id)
@@ -338,10 +450,16 @@ internal class EnumeratorAsync : IEnumeratorAsync<IPackageSearchMetadata>
                     return false;
                 }
                 _skip += _take;
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
                 _currentPage = _isSearchAvailable
-                                    ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token)
-                                    : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _token);
-
+                                    ? await _feedParser.GetSearchPageAsync(_searchTerm, _filter, _skip, _take, _logger, _cacheContext, _token)
+                                    : await _feedParser.GetPackagesPageAsync(_searchTerm, _filter, _skip, _take, _logger, _cacheContext, _token);
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                
                 var results = _allVersions ?
                _currentPage.Items.GroupBy(p => p.Id)
                 .Select(group => group.OrderByDescending(p => p.Version)).SelectMany(pg => pg)

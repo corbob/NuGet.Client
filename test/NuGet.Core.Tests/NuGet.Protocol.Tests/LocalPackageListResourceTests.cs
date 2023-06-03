@@ -192,6 +192,15 @@ namespace NuGet.Protocol.Tests
             // Start - Chocolatey Specific Modification
             //////////////////////////////////////////////////////////
 
+            public override Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(string searchTerm, SearchFilter filters, int skip, int take, ILogger log, SourceCacheContext cacheContext, CancellationToken cancellationToken)
+            {
+                _actualSearchTerm = searchTerm;
+                _searchFilter = filters;
+                _actualSkip = skip;
+                _actualTake = take;
+                return Task.FromResult(new List<IPackageSearchMetadata>().AsEnumerable());
+            }
+
             public override Task<int> SearchCountAsync(string searchTerm, SearchFilter filters, ILogger log, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();

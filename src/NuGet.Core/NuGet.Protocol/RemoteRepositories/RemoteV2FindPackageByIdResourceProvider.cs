@@ -20,13 +20,30 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository sourceRepository, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(sourceRepository, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository sourceRepository, SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             INuGetResource resource = null;
 
             if (sourceRepository.PackageSource.IsHttp
                 &&
                 !sourceRepository.PackageSource.Source.EndsWith("json", StringComparison.OrdinalIgnoreCase))
             {
-                var httpSourceResource = await sourceRepository.GetResourceAsync<HttpSourceResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                var httpSourceResource = await sourceRepository.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
                 resource = new RemoteV2FindPackageByIdResource(
                     sourceRepository.PackageSource,

@@ -59,14 +59,33 @@ namespace NuGet.Protocol
             Common.ILogger log,
             CancellationToken cancellationToken)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await SearchAsync(searchTerm, filters, skip, take, log, cacheContext: null, cancellationToken);
+        }
+
+        public override async Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            Common.ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken cancellationToken)
+        {
             var query = await _feedParser.Search(
                 searchTerm,
                 filters,
                 skip,
                 take,
                 log,
+                cacheContext,
                 cancellationToken);
-
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            
             var metadataCache = new MetadataReferenceCache();
             // NuGet.Server does not group packages by id, this resource needs to handle it.
             var results = query.GroupBy(p => p.Id)

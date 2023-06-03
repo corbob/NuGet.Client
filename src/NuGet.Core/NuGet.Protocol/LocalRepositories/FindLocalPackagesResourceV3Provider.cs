@@ -17,10 +17,21 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
             FindLocalPackagesResource curResource = null;
 
-            if (await source.GetFeedType(token) == FeedType.FileSystemV3)
-            {
+            if (await source.GetFeedType(cacheContext, token) == FeedType.FileSystemV3)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+           {
                 curResource = new FindLocalPackagesResourceV3(source.PackageSource.Source);
             }
 
