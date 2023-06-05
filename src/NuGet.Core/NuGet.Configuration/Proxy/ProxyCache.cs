@@ -64,7 +64,22 @@ namespace NuGet.Configuration
 
             if (_isProxyOverridden)
             {
-                return _overrideProxy;
+                if (_overrideProxy != null)
+                {
+                    return _overrideProxy;
+                }
+
+                // This is explicitly a copy of the below code so that Chocolatey can get the System proxy settings without the NuGet User configured settings.
+#if !IS_CORECLR
+                if (IsSystemProxySet(sourceUri))
+                {
+                    var systemProxy = GetSystemProxy(sourceUri);
+                    TryAddProxyCredentialsToCache(systemProxy);
+                    systemProxy.Credentials = this;
+                    return systemProxy;
+                }
+#endif
+                return null;
             }
 
             //////////////////////////////////////////////////////////
