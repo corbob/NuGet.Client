@@ -83,7 +83,7 @@ namespace NuGet.Configuration
             }
 
             //////////////////////////////////////////////////////////
-            // Start - Chocolatey Specific Modification
+            // End - Chocolatey Specific Modification
             //////////////////////////////////////////////////////////
 
             // Check if the user has configured proxy details in settings or in the environment.
