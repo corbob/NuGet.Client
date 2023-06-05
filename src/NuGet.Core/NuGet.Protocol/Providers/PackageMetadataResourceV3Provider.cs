@@ -18,15 +18,26 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
             PackageMetadataResourceV3 curResource = null;
 
-            if (await source.GetResourceAsync<ServiceIndexResourceV3>(token) != null)
+            if (await source.GetResourceAsync<ServiceIndexResourceV3>(cacheContext, token) != null)
             {
                 var regResource = await source.GetResourceAsync<RegistrationResourceV3>();
                 var reportAbuseResource = await source.GetResourceAsync<ReportAbuseResourceV3>();
                 var packageDetailsUriResource = await source.GetResourceAsync<PackageDetailsUriResourceV3>();
 
-                var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(token);
+                var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
                 // construct a new resource
                 curResource = new PackageMetadataResourceV3(

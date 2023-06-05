@@ -36,27 +36,42 @@ namespace NuGet.Protocol
                 baseAddress);
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public override async Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, CancellationToken token)
         {
-            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+            return await SupportsIsAbsoluteLatestVersionAsync(log, cacheContext: null, token);
+        }
+
+        public override async Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(log, cacheContext, token);
 
             return capabilities.SupportsIsAbsoluteLatestVersion;
         }
 
         public override async Task<bool> SupportsSearchAsync(ILogger log, CancellationToken token)
         {
-            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+            return await SupportsSearchAsync(log, cacheContext: null, token);
+        }
+
+        public override async Task<bool> SupportsSearchAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(log, cacheContext, token);
 
             return capabilities.SupportsSearch;
         }
 
-        //////////////////////////////////////////////////////////
-        // Start - Chocolatey Specific Modification
-        //////////////////////////////////////////////////////////
-
         public override async Task<bool> SupportsFindPackagesByIdAsync(ILogger log, CancellationToken token)
         {
-            var capabilities = await GetCachedCapabilitiesAsync(log, token);
+            return await SupportsFindPackagesByIdAsync(log, cacheContext: null, token);
+        }
+
+        public override async Task<bool> SupportsFindPackagesByIdAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token)
+        {
+            var capabilities = await GetCachedCapabilitiesAsync(log, cacheContext, token);
 
             return capabilities.SupportsFindPackageById;
         }
@@ -65,16 +80,16 @@ namespace NuGet.Protocol
         // End - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
-        private async Task<Capabilities> GetCachedCapabilitiesAsync(ILogger log, CancellationToken token)
+        private async Task<Capabilities> GetCachedCapabilitiesAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token)
         {
             var task = CachedCapabilities.GetOrAdd(
                 _metadataUri,
-                key => GetCapabilitiesAsync(key, log, token));
+                key => GetCapabilitiesAsync(key, log, cacheContext, token));
 
             return await task;
         }
 
-        private async Task<Capabilities> GetCapabilitiesAsync(string metadataUri, ILogger log, CancellationToken token)
+        private async Task<Capabilities> GetCapabilitiesAsync(string metadataUri, ILogger log, SourceCacheContext cacheContext, CancellationToken token)
         {
             var capabilities = new Capabilities
             {
@@ -85,13 +100,20 @@ namespace NuGet.Protocol
             XDocument document;
             try
             {
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 document = await _feedParser.LoadXmlAsync(
                     metadataUri,
-                    cacheKey: null,
+                    cacheKey: "$metadata",
                     ignoreNotFounds: true,
-                    sourceCacheContext: null,
+                    sourceCacheContext: cacheContext,
                     log: log,
                     token: token);
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 var metadata = DataServiceMetadataExtractor.Extract(document);
 

@@ -34,6 +34,18 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             ODataServiceDocumentResourceV2 serviceDocument = null;
             ODataServiceDocumentCacheInfo cacheInfo = null;
             var url = source.PackageSource.Source;
@@ -56,7 +68,13 @@ namespace NuGet.Protocol
                     // check the cache again, another thread may have finished this one waited for the lock
                     if (!_cache.TryGetValue(url, out cacheInfo) || entryValidCutoff > cacheInfo.CachedTime)
                     {
-                        var client = (await source.GetResourceAsync<HttpSourceResource>(token)).HttpSource;
+                        //////////////////////////////////////////////////////////
+                        // Start - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////    
+                        var client = (await source.GetResourceAsync<HttpSourceResource>(cacheContext, token)).HttpSource;
+                        //////////////////////////////////////////////////////////
+                        // End - Chocolatey Specific Modification
+                        //////////////////////////////////////////////////////////
                         serviceDocument = await ODataServiceDocumentUtils.CreateODataServiceDocumentResourceV2(url, client, utcNow, NullLogger.Instance, token);
 
                         // cache the value even if it is null to avoid checking it again later

@@ -27,6 +27,17 @@ namespace NuGet.Protocol
 
         public override Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return TryCreate(source, cacheContext: null, token);
+        }
+
+        public override Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             FeedTypeResource curResource = null;
 
             if (source.FeedTypeOverride == FeedType.Undefined)

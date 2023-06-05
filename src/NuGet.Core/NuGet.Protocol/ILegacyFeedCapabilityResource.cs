@@ -16,7 +16,10 @@ namespace NuGet.Protocol.Core.Types
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
+        Task<bool> SupportsIsAbsoluteLatestVersionAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token);
+        Task<bool> SupportsSearchAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token);
         Task<bool> SupportsFindPackagesByIdAsync(ILogger log, CancellationToken token);
+        Task<bool> SupportsFindPackagesByIdAsync(ILogger log, SourceCacheContext cacheContext, CancellationToken token);
 
         //////////////////////////////////////////////////////////
         // End - Chocolatey Specific Modification

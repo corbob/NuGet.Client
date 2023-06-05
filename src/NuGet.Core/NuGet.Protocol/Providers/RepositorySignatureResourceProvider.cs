@@ -22,15 +22,32 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
             RepositorySignatureResource resource = null;
-            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(token);
+            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             if (serviceIndex != null)
             {
                 var serviceEntry = serviceIndex.GetServiceEntries(ServiceTypes.RepositorySignatures).FirstOrDefault();
 
                 if (serviceEntry != null)
                 {
-                    resource = await GetRepositorySignatureResourceAsync(source, serviceEntry, NullLogger.Instance, token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                    resource = await GetRepositorySignatureResourceAsync(source, serviceEntry, NullLogger.Instance, cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                 }
             }
 
@@ -43,6 +60,22 @@ namespace NuGet.Protocol
             ILogger log,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await GetRepositorySignatureResourceAsync(source, serviceEntry, log, cacheContext: null, token);
+        }
+
+        private async Task<RepositorySignatureResource> GetRepositorySignatureResourceAsync(
+            SourceRepository source,
+            ServiceIndexEntry serviceEntry,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var repositorySignaturesResourceUri = serviceEntry.Uri;
 
             if (repositorySignaturesResourceUri == null || !string.Equals(repositorySignaturesResourceUri.Scheme, "https", StringComparison.OrdinalIgnoreCase))
@@ -50,7 +83,13 @@ namespace NuGet.Protocol
                 throw new FatalProtocolException(string.Format(CultureInfo.CurrentCulture, Strings.RepositorySignaturesResourceMustBeHttps, source.PackageSource.Source));
             }
 
-            var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var client = httpSourceResource.HttpSource;
             var cacheKey = GenerateCacheKey(serviceEntry);
 
@@ -59,7 +98,13 @@ namespace NuGet.Protocol
             {
                 using (var sourceCacheContext = new SourceCacheContext())
                 {
-                    var cacheContext = HttpSourceCacheContext.Create(sourceCacheContext, isFirstAttempt: retry == 1);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                    var httpSourceCacheContext = HttpSourceCacheContext.Create(sourceCacheContext, isFirstAttempt: retry == 1);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
                     try
                     {
@@ -67,7 +112,13 @@ namespace NuGet.Protocol
                             new HttpSourceCachedRequest(
                                 serviceEntry.Uri.AbsoluteUri,
                                 cacheKey,
-                                cacheContext)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                                httpSourceCacheContext)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                             {
                                 EnsureValidContents = stream => HttpStreamValidation.ValidateJObject(repositorySignaturesResourceUri.AbsoluteUri, stream),
                                 MaxTries = 1,

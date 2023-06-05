@@ -17,11 +17,25 @@ namespace NuGet.Protocol.LocalRepositories
             NuGetResourceProviderPositions.Last)
         {
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source,
             CancellationToken token)
         {
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
             ListResource resource = null;
-            var findLocalPackagesResource = await source.GetResourceAsync<FindLocalPackagesResource>(token);
+            var findLocalPackagesResource = await source.GetResourceAsync<FindLocalPackagesResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             if (findLocalPackagesResource != null)
             {

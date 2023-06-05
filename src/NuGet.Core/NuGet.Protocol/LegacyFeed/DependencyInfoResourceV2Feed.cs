@@ -194,7 +194,7 @@ namespace NuGet.Protocol
 
         private async Task<IReadOnlyList<V2FeedPackageInfo>> FindPackageById(string packageId, bool includeUnlisted, bool includePrerelease, SourceCacheContext sourceCacheContext, ILogger log, CancellationToken token)
         {
-            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, token))
+            if (await _feedCapabilities.SupportsFindPackagesByIdAsync(log, sourceCacheContext, token))
             {
                 return await _feedParser.FindPackagesByIdAsync(packageId, includeUnlisted, includePrerelease, sourceCacheContext, log, token);
             }

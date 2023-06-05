@@ -16,8 +16,8 @@ namespace NuGet.Protocol
         }
 
         public TimeSpan MaxAge { get; }
-        public string NewFile { get; }
-        public string CacheFile { get; }
+        public string NewFile { get; set; }
+        public string CacheFile { get; set; }
         public Stream Stream { get; set; }
     }
 }

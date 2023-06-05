@@ -234,6 +234,24 @@ namespace NuGet.Protocol
             int take,
             ILogger log,
             CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        {
+            return await GetPackagesPageAsync(searchTerm, filters, skip, take, log, cacheContext: null, token);
+        }
+
+        public async Task<V2FeedPage> GetPackagesPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             var uri = _queryBuilder.BuildGetPackagesUri(
                 searchTerm,
@@ -246,7 +264,13 @@ namespace NuGet.Protocol
                 id: null,
                 max: take, // Only get the first page.
                 ignoreNotFounds: false,
-                sourceCacheContext: null,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                sourceCacheContext: cacheContext,
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
                 log: log,
                 token: token);
 
@@ -261,6 +285,24 @@ namespace NuGet.Protocol
             ILogger log,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await GetSearchPageAsync(searchTerm, filters, skip, take, log, cacheContext: null, token);
+        }
+
+        public async Task<V2FeedPage> GetSearchPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var uri = _queryBuilder.BuildSearchUri(
                 searchTerm,
                 filters,
@@ -272,7 +314,13 @@ namespace NuGet.Protocol
                 id: null,
                 max: take, // Only get the first page.
                 ignoreNotFounds: false,
-                sourceCacheContext: null,
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                sourceCacheContext: cacheContext,
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                 log: log,
                 token: token);
 
@@ -287,6 +335,24 @@ namespace NuGet.Protocol
             ILogger log,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await Search(searchTerm, filters, skip, take, log, cacheContext: null, token);
+        }
+
+        public async Task<IReadOnlyList<V2FeedPackageInfo>> Search(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var uri = _queryBuilder.BuildSearchUri(searchTerm, filters, skip, take);
 
             var page = await QueryV2FeedAsync(
@@ -294,7 +360,13 @@ namespace NuGet.Protocol
                 id: null,
                 max: take,
                 ignoreNotFounds: false,
-                sourceCacheContext: null,
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                sourceCacheContext: cacheContext,
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                 log: log,
                 token: token);
 

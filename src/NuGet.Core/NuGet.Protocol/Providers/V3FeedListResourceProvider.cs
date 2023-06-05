@@ -24,16 +24,36 @@ namespace NuGet.Protocol
             SourceRepository source,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(
+            SourceRepository source,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
             ListResource resource = null;
 
-            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(token);
+            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             if (serviceIndex != null)
             {
                 var baseUrl = serviceIndex.GetServiceEntryUri(ServiceTypes.LegacyGallery);
                 if (baseUrl != null)
                 {
-                    var httpSource = await source.GetResourceAsync<HttpSourceResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                    var httpSource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                     var serviceDocument =
                         await ODataServiceDocumentUtils.CreateODataServiceDocumentResourceV2(
                             baseUrl.AbsoluteUri, httpSource.HttpSource, DateTime.UtcNow, NullLogger.Instance, token);

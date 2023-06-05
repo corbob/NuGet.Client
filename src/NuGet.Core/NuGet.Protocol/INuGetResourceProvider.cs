@@ -32,6 +32,25 @@ namespace NuGet.Protocol.Core.Types
         /// <returns>True if this provider handles the input source.</returns>
         Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token);
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Attempts to create a resource for this source.
+        /// </summary>
+        /// <remarks>
+        /// The provider may return true but null for the resource if the
+        /// provider determines that it should not exist.
+        /// </remarks>
+        /// <param name="source">Source repository</param>
+        /// <returns>True if this provider handles the input source.</returns>
+        Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Resource type provided
         /// </summary>

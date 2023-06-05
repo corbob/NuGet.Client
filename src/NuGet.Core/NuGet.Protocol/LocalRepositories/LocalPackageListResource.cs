@@ -22,8 +22,31 @@ namespace NuGet.Protocol
         }
         public override string Source => _baseAddress;
 
-        public override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(string searchTerm, bool prerelease, bool allVersions, bool includeDelisted, ILogger logger,
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        public override async Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            ILogger logger,
             CancellationToken token)
+        {
+            return await ListAsync(searchTerm, prerelease, allVersions, includeDelisted, logger, cacheContext: null, token);
+        }
+
+        public override Task<IEnumerableAsync<IPackageSearchMetadata>> ListAsync(
+            string searchTerm,
+            bool prerelease,
+            bool allVersions,
+            bool includeDelisted,
+            ILogger logger,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             SearchFilter filter;
 
@@ -51,9 +74,20 @@ namespace NuGet.Protocol
                     IncludeDelisted = includeDelisted
                 };
             }
-            IEnumerableAsync<IPackageSearchMetadata> enumerable = new EnumerableAsync<IPackageSearchMetadata>(_localPackageSearchResource, searchTerm, filter,
-                logger, token);
-            return Task.FromResult(enumerable);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            IEnumerableAsync<IPackageSearchMetadata> enumerable = new EnumerableAsync<IPackageSearchMetadata>(
+                _localPackageSearchResource,
+                searchTerm,
+                filter,
+                logger,
+                cacheContext,
+                token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+           return Task.FromResult(enumerable);
 
         }
 
@@ -66,11 +100,33 @@ namespace NuGet.Protocol
             bool prerelease,
             ILogger logger,
             CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+        {
+            return await PackageAsync(searchTerm, prerelease, logger, cacheContext: null, token);
+        }
+
+        public async override Task<IPackageSearchMetadata> PackageAsync(
+            string searchTerm,
+            bool prerelease,
+            ILogger logger,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
         {
             var searchFilter = new SearchFilter(prerelease);
             searchFilter.ExactPackageId = true;
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
-            var result = await _localPackageSearchResource.SearchAsync(searchTerm, searchFilter, 0, int.MaxValue, logger, token);
+            var result = await _localPackageSearchResource.SearchAsync(searchTerm, searchFilter, 0, int.MaxValue, logger, cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             return result.FirstOrDefault();
         }
@@ -87,19 +143,33 @@ namespace NuGet.Protocol
             private readonly CancellationToken _token;
             private readonly PackageSearchResource _packageSearchResource;
 
-
-            public EnumerableAsync(PackageSearchResource feedParser, string searchTerm, SearchFilter filter, ILogger logger, CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            private readonly SourceCacheContext _cacheContext;
+            
+            public EnumerableAsync(PackageSearchResource feedParser, string searchTerm, SearchFilter filter, ILogger logger, SourceCacheContext cacheContext, CancellationToken token)
             {
                 _packageSearchResource = feedParser;
                 _searchTerm = searchTerm;
                 _filter = filter;
                 _logger = logger;
+                _cacheContext = cacheContext;
                 _token = token;
             }
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             public IEnumeratorAsync<T> GetEnumeratorAsync()
             {
-                return (IEnumeratorAsync<T>)new EnumeratorAsync(_packageSearchResource, _searchTerm, _filter, _logger, _token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                return (IEnumeratorAsync<T>)new EnumeratorAsync(_packageSearchResource, _searchTerm, _filter, _logger, _cacheContext, _token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             }
         }
 
@@ -114,14 +184,23 @@ namespace NuGet.Protocol
 
             private IEnumerator<IPackageSearchMetadata> _currentEnumerator;
 
-            public EnumeratorAsync(PackageSearchResource feedParser, string searchTerm, SearchFilter filter, ILogger logger, CancellationToken token)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            private readonly SourceCacheContext _cacheContext;
+            
+            public EnumeratorAsync(PackageSearchResource feedParser, string searchTerm, SearchFilter filter, ILogger logger, SourceCacheContext cacheContext, CancellationToken token)
             {
                 _packageSearchResource = feedParser;
                 _searchTerm = searchTerm;
                 _filter = filter;
                 _logger = logger;
+                _cacheContext = cacheContext;
                 _token = token;
             }
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             public IPackageSearchMetadata Current
             {
@@ -134,10 +213,16 @@ namespace NuGet.Protocol
             public async Task<bool> MoveNextAsync()
             {
                 if (_currentEnumerator == null)
-                { // NOTE: We need to sort the values so this is very innefficient by design. 
+                { // NOTE: We need to sort the values so this is very innefficient by design.
                   // The FS search resource would return the results ordered in FS nat ordering.
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                     var results = await _packageSearchResource.SearchAsync(
-                        _searchTerm, _filter, 0, int.MaxValue, _logger, _token);
+                        _searchTerm, _filter, 0, int.MaxValue, _logger, _cacheContext, _token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                     switch (_filter.OrderBy)
                     {
                         case SearchOrderBy.Id:

@@ -87,6 +87,16 @@ namespace NuGet.Protocol.Core.Types
 
         public abstract Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token);
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public abstract Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token);
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         private static IEnumerable<string> ToArray(string s)
         {
             if (!String.IsNullOrEmpty(s))
