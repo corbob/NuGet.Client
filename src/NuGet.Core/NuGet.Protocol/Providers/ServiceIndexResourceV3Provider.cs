@@ -45,6 +45,17 @@ namespace NuGet.Protocol
 
         public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(SourceRepository source, SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             ServiceIndexResourceV3 index = null;
             ServiceIndexCacheInfo cacheInfo = null;
             var url = source.PackageSource.Source;
@@ -74,7 +85,13 @@ namespace NuGet.Protocol
                         if (!_cache.TryGetValue(url, out cacheInfo) ||
                             entryValidCutoff > cacheInfo.CachedTime)
                         {
-                            index = await GetServiceIndexResourceV3(source, utcNow, NullLogger.Instance, token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                            index = await GetServiceIndexResourceV3(source, utcNow, NullLogger.Instance, cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
                             // cache the value even if it is null to avoid checking it again later
                             var cacheEntry = new ServiceIndexCacheInfo
@@ -120,74 +137,96 @@ namespace NuGet.Protocol
             SourceRepository source,
             DateTime utcNow,
             ILogger log,
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            SourceCacheContext cacheContext,
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             CancellationToken token)
         {
             var url = source.PackageSource.Source;
-            var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var client = httpSourceResource.HttpSource;
 
             int maxRetries = _enhancedHttpRetryHelper.IsEnabled ? _enhancedHttpRetryHelper.RetryCount : 3;
 
             for (var retry = 1; retry <= maxRetries; retry++)
             {
-                using (var sourceCacheContext = new SourceCacheContext())
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                var httpSourceCacheContext = HttpSourceCacheContext.Create(cacheContext, isFirstAttempt: retry == 1);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+                try
                 {
-                    var cacheContext = HttpSourceCacheContext.Create(sourceCacheContext, isFirstAttempt: retry == 1);
-
-                    try
-                    {
-                        return await client.GetAsync(
-                            new HttpSourceCachedRequest(
-                                url,
-                                "service_index",
-                                cacheContext)
-                            {
-                                EnsureValidContents = stream => HttpStreamValidation.ValidateJObject(url, stream),
-                                MaxTries = 1,
-                                IsRetry = retry > 1,
-                                IsLastAttempt = retry == maxRetries
-                            },
-                            async httpSourceResult =>
-                            {
-                                var result = await ConsumeServiceIndexStreamAsync(httpSourceResult.Stream, utcNow, token);
-
-                                return result;
-                            },
-                            log,
-                            token);
-                    }
-                    catch (OperationCanceledException ex)
-                    {
-                        var message = ExceptionUtilities.DisplayMessage(ex);
-                        log.LogMinimal(message);
-                        throw;
-                    }
-                    catch (Exception ex) when (retry < maxRetries)
-                    {
-                        var message = string.Format(CultureInfo.CurrentCulture, Strings.Log_RetryingServiceIndex, url)
-                            + Environment.NewLine
-                            + ExceptionUtilities.DisplayMessage(ex);
-                        log.LogMinimal(message);
-
-                        if (_enhancedHttpRetryHelper.IsEnabled &&
-                            ex.InnerException != null &&
-                            ex.InnerException is IOException &&
-                            ex.InnerException.InnerException != null &&
-                            ex.InnerException.InnerException is System.Net.Sockets.SocketException)
+                    return await client.GetAsync(
+                        new HttpSourceCachedRequest(
+                            url,
+                            "service_index",
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                            httpSourceCacheContext)
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                         {
-                            // An IO Exception with inner SocketException indicates server hangup ("Connection reset by peer").
-                            // Azure DevOps feeds sporadically do this due to mandatory connection cycling.
-                            // Stalling an extra <ExperimentalRetryDelayMilliseconds> gives Azure more of a chance to recover.
-                            log.LogVerbose("Enhanced retry: Encountered SocketException, delaying between tries to allow recovery");
-                            await Task.Delay(TimeSpan.FromMilliseconds(_enhancedHttpRetryHelper.DelayInMilliseconds), token);
-                        }
-                    }
-                    catch (Exception ex) when (retry == maxRetries)
-                    {
-                        var message = string.Format(CultureInfo.CurrentCulture, Strings.Log_FailedToReadServiceIndex, url);
+                            EnsureValidContents = stream => HttpStreamValidation.ValidateJObject(url, stream),
+                            MaxTries = 1,
+                            IsRetry = retry > 1,
+                            IsLastAttempt = retry == maxRetries
+                        },
+                        async httpSourceResult =>
+                        {
+                            var result = await ConsumeServiceIndexStreamAsync(httpSourceResult.Stream, utcNow, token);
 
-                        throw new FatalProtocolException(message, ex);
+                            return result;
+                        },
+                        log,
+                        token);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    var message = ExceptionUtilities.DisplayMessage(ex);
+                    log.LogMinimal(message);
+                    throw;
+                }
+                catch (Exception ex) when (retry < maxRetries)
+                {
+                    var message = string.Format(CultureInfo.CurrentCulture, Strings.Log_RetryingServiceIndex, url)
+                        + Environment.NewLine
+                        + ExceptionUtilities.DisplayMessage(ex);
+                    log.LogMinimal(message);
+
+                    if (_enhancedHttpRetryHelper.IsEnabled &&
+                        ex.InnerException != null &&
+                        ex.InnerException is IOException &&
+                        ex.InnerException.InnerException != null &&
+                        ex.InnerException.InnerException is System.Net.Sockets.SocketException)
+                    {
+                        // An IO Exception with inner SocketException indicates server hangup ("Connection reset by peer").
+                        // Azure DevOps feeds sporadically do this due to mandatory connection cycling.
+                        // Stalling an extra <ExperimentalRetryDelayMilliseconds> gives Azure more of a chance to recover.
+                        log.LogVerbose("Enhanced retry: Encountered SocketException, delaying between tries to allow recovery");
+                        await Task.Delay(TimeSpan.FromMilliseconds(_enhancedHttpRetryHelper.DelayInMilliseconds), token);
                     }
+                }
+                catch (Exception ex) when (retry == maxRetries)
+                {
+                    var message = string.Format(CultureInfo.CurrentCulture, Strings.Log_FailedToReadServiceIndex, url);
+
+                    throw new FatalProtocolException(message, ex);
                 }
             }
 

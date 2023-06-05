@@ -42,7 +42,31 @@ namespace NuGet.Protocol.Core.Types
             SourceRepository source,
             CancellationToken cancellationToken)
         {
-            if (source == null)
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, cancellationToken);
+        }
+
+        /// <summary>
+        /// Asynchronously attempts to create a resource for the specified source repository.
+        /// </summary>
+        /// <param name="source">A source repository.</param>
+        /// <param name="cancellationToken">A cancellation token.</param>
+        /// <returns>A task that represents the asynchronous operation.
+        /// The task result (<see cref="Task{TResult}.Result" />) returns a Tuple&lt;bool, INuGetResource&gt;</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="source"/> is <c>null</c>.</exception>
+        /// <exception cref="OperationCanceledException">Thrown if <paramref name="cancellationToken"/>
+        /// is cancelled.</exception>
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(
+            SourceRepository source,
+            SourceCacheContext cacheContext,
+            CancellationToken cancellationToken)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+           if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }

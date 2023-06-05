@@ -25,6 +25,18 @@ namespace NuGet.Protocol.Core.Types
         //////////////////////////////////////////////////////////
 
         /// <summary>
+        /// Retrieves search results
+        /// </summary>
+        public abstract Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            Common.ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         /// Retrieves the total number of search results
         /// </summary>
         public abstract Task<int> SearchCountAsync(

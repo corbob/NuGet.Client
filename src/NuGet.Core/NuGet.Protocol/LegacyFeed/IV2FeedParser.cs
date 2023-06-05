@@ -39,6 +39,24 @@ namespace NuGet.Protocol
         // Start - Chocolatey Specific Modification
         //////////////////////////////////////////////////////////
 
+        Task<V2FeedPage> GetSearchPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token);
+
+        Task<V2FeedPage> GetPackagesPageAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token);
+
         Task<IReadOnlyList<V2FeedPackageInfo>> FindPackagesByIdAsync(
             string id,
             bool includeUnlisted,

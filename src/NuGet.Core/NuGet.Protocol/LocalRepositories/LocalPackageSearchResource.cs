@@ -36,6 +36,24 @@ namespace NuGet.Protocol
             ILogger log,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await SearchAsync(searchTerm, filters, skip, take, log, cacheContext: null, token);
+        }
+
+        public async override Task<IEnumerable<IPackageSearchMetadata>> SearchAsync(
+            string searchTerm,
+            SearchFilter filters,
+            int skip,
+            int take,
+            ILogger log,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             return await Task.Factory.StartNew(() =>
             {
                 // Check if source is available.
@@ -193,7 +211,7 @@ namespace NuGet.Protocol
         /// <summary>
         /// Returns a distinct set of elements using the comparer specified. This implementation will pick the last occurrence
         /// of each element instead of picking the first. This method assumes that similar items occur in order.
-        /// </summary>        
+        /// </summary>
         private static IEnumerable<LocalPackageInfo> CollapseToHighestVersion(IEnumerable<LocalPackageInfo> source)
         {
             bool first = true;

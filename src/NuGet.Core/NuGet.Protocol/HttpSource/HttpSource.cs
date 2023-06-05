@@ -163,11 +163,30 @@ namespace NuGet.Protocol
 
                         if (!request.CacheContext.DirectDownload)
                         {
-                            await HttpCacheUtility.CreateCacheFileAsync(
-                                cacheResult,
-                                throttledResponse.Response,
-                                request.EnsureValidContents,
-                                lockedToken);
+                            try
+                            {
+                                await HttpCacheUtility.CreateCacheFileAsync(
+                                    cacheResult,
+                                    throttledResponse.Response,
+                                    request.EnsureValidContents,
+                                    lockedToken);
+                            }
+                            catch (Exception)
+                            {
+                                // If an exception is thrown, assume that this is due to long path name,
+                                // and attempt to save if again in a hashed Uri file name
+                                var newFileInfo = new FileInfo(cacheResult.NewFile);
+                                var cacheFileInfo = new FileInfo(cacheResult.CacheFile);
+
+                                cacheResult.NewFile = Path.Combine(newFileInfo.Directory.FullName, CachingUtility.ComputeHash(newFileInfo.Name));
+                                cacheResult.CacheFile = Path.Combine(cacheFileInfo.Directory.FullName, CachingUtility.ComputeHash(cacheFileInfo.Name));
+
+                                await HttpCacheUtility.CreateCacheFileAsync(
+                                    cacheResult,
+                                    throttledResponse.Response,
+                                    request.EnsureValidContents,
+                                    lockedToken);
+                            }
 
                             using (var httpSourceResult = new HttpSourceResult(
                                 HttpSourceResultStatus.OpenedFromDisk,
@@ -460,7 +479,18 @@ namespace NuGet.Protocol
         protected virtual Stream TryReadCacheFile(string uri, TimeSpan maxAge, string cacheFile)
         {
             // Do not need the uri here
-            return CachingUtility.ReadCacheFile(maxAge, cacheFile);
+            var cachedFile = CachingUtility.ReadCacheFile(maxAge, cacheFile);
+
+            // We need to check incase the cached file name was tool long, and the
+            // file was saved in a truncated form
+            if (cachedFile == null)
+            {
+                var cacheFileInfo = new FileInfo(cacheFile);
+                var hashedUri = CachingUtility.ComputeHash(cacheFileInfo.Name);
+                cachedFile = CachingUtility.ReadCacheFile(maxAge, Path.Combine(cacheFileInfo.Directory.FullName, hashedUri));
+            }
+
+            return cachedFile;
         }
 
         public static HttpSource Create(SourceRepository source)

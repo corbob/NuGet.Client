@@ -96,9 +96,24 @@ namespace NuGet.Protocol.Core.Types
         /// </summary>
         public virtual async Task<FeedType> GetFeedType(CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await GetFeedType(cacheContext: null, token);
+        }
+
+        /// <summary>
+        /// Find the FeedType of the source. If overridden FeedTypeOverride is returned.
+        /// </summary>
+        public virtual async Task<FeedType> GetFeedType(SourceCacheContext cacheContext, CancellationToken token)
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
             if (FeedTypeOverride == FeedType.Undefined)
             {
-                var resource = await GetResourceAsync<FeedTypeResource>(token);
+                var resource = await GetResourceAsync<FeedTypeResource>(cacheContext, token);
                 return resource.FeedType;
             }
             else
@@ -117,6 +132,24 @@ namespace NuGet.Protocol.Core.Types
             return GetResource<T>(CancellationToken.None);
         }
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Returns a resource from the SourceRepository if it exists.
+        /// </summary>
+        /// <typeparam name="T">Expected resource type</typeparam>
+        /// <returns>Null if the resource does not exist</returns>
+        public virtual T GetResource<T>(SourceCacheContext cacheContext) where T : class, INuGetResource
+        {
+            return GetResource<T>(cacheContext, CancellationToken.None);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         /// <summary>
         /// Returns a resource from the SourceRepository if it exists.
         /// </summary>
@@ -124,7 +157,24 @@ namespace NuGet.Protocol.Core.Types
         /// <returns>Null if the resource does not exist</returns>
         public virtual T GetResource<T>(CancellationToken token) where T : class, INuGetResource
         {
-            var task = GetResourceAsync<T>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+            return GetResource<T>(cacheContext: null, token);
+        }
+
+        /// <summary>
+        /// Returns a resource from the SourceRepository if it exists.
+        /// </summary>
+        /// <typeparam name="T">Expected resource type</typeparam>
+        /// <returns>Null if the resource does not exist</returns>
+        public virtual T GetResource<T>(SourceCacheContext cacheContext, CancellationToken token) where T : class, INuGetResource
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            var task = GetResourceAsync<T>(cacheContext, token);
             task.Wait();
 
             return task.Result;
@@ -147,6 +197,22 @@ namespace NuGet.Protocol.Core.Types
         /// <returns>Null if the resource does not exist</returns>
         public virtual async Task<T> GetResourceAsync<T>(CancellationToken token) where T : class, INuGetResource
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await GetResourceAsync<T>(cacheContext: null, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Returns a resource from the SourceRepository if it exists.
+        /// </summary>
+        /// <typeparam name="T">Expected resource type</typeparam>
+        /// <returns>Null if the resource does not exist</returns>
+        public virtual async Task<T> GetResourceAsync<T>(SourceCacheContext cacheContext, CancellationToken token) where T : class, INuGetResource
+        {
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
             var resourceType = typeof(T);
             INuGetResourceProvider[] possible = null;
 
@@ -154,7 +220,14 @@ namespace NuGet.Protocol.Core.Types
             {
                 foreach (var provider in possible)
                 {
-                    var result = await provider.TryCreate(this, token);
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+                    var result = await provider.TryCreate(this, cacheContext, token);
+                    //////////////////////////////////////////////////////////
+                    // End - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+
                     if (result.Item1)
                     {
                         return (T)result.Item2;

@@ -24,9 +24,23 @@ namespace NuGet.Protocol
             SourceRepository source,
             CancellationToken token)
         {
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+            return await TryCreate(source, cacheContext: null, token);
+        }
+
+        public override async Task<Tuple<bool, INuGetResource>> TryCreate(
+            SourceRepository source,
+            SourceCacheContext cacheContext,
+            CancellationToken token)
+        {
             PackageUpdateResource packageUpdateResource = null;
 
-            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(token);
+            var serviceIndex = await source.GetResourceAsync<ServiceIndexResourceV3>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
 
             if (serviceIndex != null)
             {
@@ -44,7 +58,13 @@ namespace NuGet.Protocol
                 {
                     if (!(new Uri(sourceUri)).IsFile)
                     {
-                        var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(token);
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+                        var httpSourceResource = await source.GetResourceAsync<HttpSourceResource>(cacheContext, token);
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
                         httpSource = httpSourceResource.HttpSource;
                     }
                     packageUpdateResource = new PackageUpdateResource(sourceUri, httpSource);
