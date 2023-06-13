@@ -83,6 +83,28 @@ namespace NuGet.Protocol
                 request.CacheKey,
                 request.CacheContext);
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            // There are times when the URI that is being queried results in a CacheFile name that
+            // is greater that the allowed 259 characters for a file path.  While .NET "should" handle
+            // this, some methods in the BCL don't, and as a result, we need to create a hashed
+            // version of the file path, so that we can cache the file with that name, and therefore
+            // an exception will not be thrown.
+            // NOTE: We are aware that the long path limit is documented as 260, however, during some
+            // tests, it wasn't immediately clear that this was respected, so we are going one character
+            // less, just to be on the safe side.
+            if (cacheResult.NewFile.Length > 259 || cacheResult.CacheFile.Length > 259)
+            {
+                cacheResult.NewFile = GetHashedCacheFileName(cacheResult.NewFile);
+                cacheResult.CacheFile = GetHashedCacheFileName(cacheResult.CacheFile);
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             return await ConcurrencyUtilities.ExecuteWithFileLockedAsync(
                 cacheResult.CacheFile,
                 action: async lockedToken =>
@@ -163,30 +185,11 @@ namespace NuGet.Protocol
 
                         if (!request.CacheContext.DirectDownload)
                         {
-                            try
-                            {
-                                await HttpCacheUtility.CreateCacheFileAsync(
-                                    cacheResult,
-                                    throttledResponse.Response,
-                                    request.EnsureValidContents,
-                                    lockedToken);
-                            }
-                            catch (Exception)
-                            {
-                                // If an exception is thrown, assume that this is due to long path name,
-                                // and attempt to save if again in a hashed Uri file name
-                                var newFileInfo = new FileInfo(cacheResult.NewFile);
-                                var cacheFileInfo = new FileInfo(cacheResult.CacheFile);
-
-                                cacheResult.NewFile = Path.Combine(newFileInfo.Directory.FullName, CachingUtility.ComputeHash(newFileInfo.Name));
-                                cacheResult.CacheFile = Path.Combine(cacheFileInfo.Directory.FullName, CachingUtility.ComputeHash(cacheFileInfo.Name));
-
-                                await HttpCacheUtility.CreateCacheFileAsync(
-                                    cacheResult,
-                                    throttledResponse.Response,
-                                    request.EnsureValidContents,
-                                    lockedToken);
-                            }
+                            await HttpCacheUtility.CreateCacheFileAsync(
+                                cacheResult,
+                                throttledResponse.Response,
+                                request.EnsureValidContents,
+                                lockedToken);
 
                             using (var httpSourceResult = new HttpSourceResult(
                                 HttpSourceResultStatus.OpenedFromDisk,
@@ -478,19 +481,25 @@ namespace NuGet.Protocol
 
         protected virtual Stream TryReadCacheFile(string uri, TimeSpan maxAge, string cacheFile)
         {
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             // Do not need the uri here
             var cachedFile = CachingUtility.ReadCacheFile(maxAge, cacheFile);
 
-            // We need to check incase the cached file name was tool long, and the
+            // We need to check incase the cached file name was too long, and the
             // file was saved in a truncated form
             if (cachedFile == null)
             {
-                var cacheFileInfo = new FileInfo(cacheFile);
-                var hashedUri = CachingUtility.ComputeHash(cacheFileInfo.Name);
-                cachedFile = CachingUtility.ReadCacheFile(maxAge, Path.Combine(cacheFileInfo.Directory.FullName, hashedUri));
+                cachedFile = CachingUtility.ReadCacheFile(maxAge, GetHashedCacheFileName(cacheFile));
             }
 
             return cachedFile;
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         public static HttpSource Create(SourceRepository source)
@@ -575,5 +584,23 @@ namespace NuGet.Protocol
                 }
             }
         }
+
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        private string GetHashedCacheFileName(string cacheFile)
+        {
+            var cacheFileExtension = Path.GetExtension(cacheFile);
+            var cacheFileName = Path.GetFileNameWithoutExtension(cacheFile);
+            var cacheFileDirectoryName = cacheFile.Substring(0, cacheFile.LastIndexOf(Path.DirectorySeparatorChar));
+
+            return Path.Combine(cacheFileDirectoryName, CachingUtility.ComputeHash(cacheFileName) + cacheFileExtension);
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
     }
 }
