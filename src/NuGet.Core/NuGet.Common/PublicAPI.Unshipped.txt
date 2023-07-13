@@ -1,0 +1,1 @@
+static NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync<T>(string filePath, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> action, System.Threading.CancellationToken token, string lockFileDirectoryPath) -> System.Threading.Tasks.Task<T>

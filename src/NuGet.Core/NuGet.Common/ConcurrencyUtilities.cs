@@ -27,6 +27,34 @@ namespace NuGet.Common
         private static bool UseDeleteOnClose = RuntimeEnvironmentHelper.IsWindows ||
                                                Environment.GetEnvironmentVariable("NUGET_ConcurrencyUtils_DeleteOnClose") == "1"; // opt-in.
 
+        //////////////////////////////////////////////////////////
+        // Start - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
+        public async static Task<T> ExecuteWithFileLockedAsync<T>(string filePath,
+            Func<CancellationToken, Task<T>> action,
+            CancellationToken token,
+            string lockFileDirectoryPath)
+        {
+            var originalBasePath = BasePath;
+            BasePath = lockFileDirectoryPath;
+
+            try
+            {
+                var result = await ExecuteWithFileLockedAsync(filePath, action, token);
+
+                return result;
+            }
+            finally
+            {
+                BasePath = originalBasePath;
+            }
+        }
+
+        //////////////////////////////////////////////////////////
+        // End - Chocolatey Specific Modification
+        //////////////////////////////////////////////////////////
+
         public async static Task<T> ExecuteWithFileLockedAsync<T>(string filePath,
             Func<CancellationToken, Task<T>> action,
             CancellationToken token)
@@ -231,6 +259,19 @@ namespace NuGet.Common
 
                 return _basePath;
             }
+
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            set
+            {
+                _basePath = value;
+            }
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
         }
 
         private static string FileLockPath(string filePath)
