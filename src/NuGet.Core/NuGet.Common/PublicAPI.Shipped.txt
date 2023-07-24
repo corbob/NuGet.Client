@@ -503,6 +503,7 @@ static NuGet.Common.AsyncLazy<T>.implicit operator System.Lazy<System.Threading.
 static NuGet.Common.ClientVersionUtility.GetNuGetAssemblyVersion() -> string
 static NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLocked(string filePath, System.Action action) -> void
 static NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync<T>(string filePath, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> action, System.Threading.CancellationToken token) -> System.Threading.Tasks.Task<T>
+static NuGet.Common.ConcurrencyUtilities.ExecuteWithFileLockedAsync<T>(string filePath, System.Func<System.Threading.CancellationToken, System.Threading.Tasks.Task<T>> action, System.Threading.CancellationToken token, string lockFileDirectoryPath) -> System.Threading.Tasks.Task<T>
 static NuGet.Common.CryptoHashUtility.ComputeHash(this NuGet.Common.HashAlgorithmName hashAlgorithmName, byte[] data) -> byte[]
 static NuGet.Common.CryptoHashUtility.ComputeHash(this System.Security.Cryptography.HashAlgorithm hashAlgorithm, System.IO.Stream data) -> byte[]
 static NuGet.Common.CryptoHashUtility.ComputeHash(this System.Security.Cryptography.HashAlgorithm hashAlgorithm, System.IO.Stream data, bool leaveStreamOpen) -> byte[]
