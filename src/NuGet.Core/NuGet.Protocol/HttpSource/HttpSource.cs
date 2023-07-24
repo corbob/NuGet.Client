@@ -101,6 +101,13 @@ namespace NuGet.Protocol
                 cacheResult.CacheFile = GetHashedCacheFileName(cacheResult.CacheFile);
             }
 
+            var lockFileDirectoryPath = Path.Combine(new FileInfo(HttpCacheDirectory).Directory.FullName, "ChocolateyHttpCache", ".locks");
+
+            if (HttpCacheDirectory.IndexOf(".chocolatey", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                lockFileDirectoryPath = Path.Combine(new FileInfo(HttpCacheDirectory).Directory.FullName, "http-cache", ".locks");
+            }
+
             //////////////////////////////////////////////////////////
             // End - Chocolatey Specific Modification
             //////////////////////////////////////////////////////////
@@ -216,7 +223,15 @@ namespace NuGet.Protocol
                         }
                     }
                 },
-                token: token);
+                token: token,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                lockFileDirectoryPath: lockFileDirectoryPath
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                );
         }
 
         public Task<T> ProcessStreamAsync<T>(
