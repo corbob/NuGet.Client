@@ -37,6 +37,16 @@ namespace NuGet.Common
                 throw new ArgumentNullException(nameof(filePath));
             }
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var lockDirectory = Path.GetDirectoryName(filePath) ?? Environment.CurrentDirectory;
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             await ConcurrencyUtilities.ExecuteWithFileLockedAsync(filePath,
                 lockedToken =>
                 {
@@ -45,7 +55,14 @@ namespace NuGet.Common
                     return Task.FromResult(0);
                 },
                 // Do not allow this to be cancelled
-                CancellationToken.None);
+                CancellationToken.None,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                lockDirectory);
+                //////////////////////////////////////////////////////////
+                // End- Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
         }
 
         /// <summary>
@@ -65,6 +82,16 @@ namespace NuGet.Common
                 throw new ArgumentNullException(nameof(destFilePath));
             }
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var lockDirectory = Path.GetDirectoryName(destFilePath) ?? Environment.CurrentDirectory;
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             await ConcurrencyUtilities.ExecuteWithFileLockedAsync(destFilePath,
                 lockedToken =>
                 {
@@ -73,7 +100,14 @@ namespace NuGet.Common
                     return Task.FromResult(0);
                 },
                 // Do not allow this to be cancelled
-                CancellationToken.None);
+                CancellationToken.None,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                lockDirectory);
+                //////////////////////////////////////////////////////////
+                // End- Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
         }
 
         /// <summary>
@@ -240,7 +274,7 @@ namespace NuGet.Common
                     Sleep(100);
                 }
             }
-            // This will never reached, but the compiler can't detect that 
+            // This will never reached, but the compiler can't detect that
             return default(T);
         }
 
@@ -262,7 +296,7 @@ namespace NuGet.Common
                     Sleep(100);
                 }
             }
-            // This will never reached, but the compiler can't detect that 
+            // This will never reached, but the compiler can't detect that
             return default(T);
         }
 
