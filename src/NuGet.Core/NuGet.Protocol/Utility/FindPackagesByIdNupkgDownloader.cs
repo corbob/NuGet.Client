@@ -393,6 +393,16 @@ namespace NuGet.Protocol
                 return false;
             }
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var lockDirectory = Path.GetDirectoryName(cacheEntry.CacheFile) ?? Environment.CurrentDirectory;
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             // Acquire the lock on a file before we open it to prevent this process
             // from opening a file deleted by another HTTP request.
             using (var cacheStream = await ConcurrencyUtilities.ExecuteWithFileLockedAsync(
@@ -406,7 +416,14 @@ namespace NuGet.Protocol
                         FileShare.ReadWrite | FileShare.Delete,
                         StreamExtensions.BufferSize));
                 },
-                token))
+                token,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                lockDirectory))
+                //////////////////////////////////////////////////////////
+                // End- Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
             {
                 await processStreamAsync(cacheStream);
 

@@ -146,6 +146,16 @@ namespace NuGet.ProjectManagement
 
             var packageDirectory = PackagePathResolver.GetInstallPath(packageIdentity);
 
+            //////////////////////////////////////////////////////////
+            // Start - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
+            var lockDirectory = Path.GetDirectoryName(packageDirectory) ?? Environment.CurrentDirectory;
+
+            //////////////////////////////////////////////////////////
+            // End - Chocolatey Specific Modification
+            //////////////////////////////////////////////////////////
+
             return ConcurrencyUtilities.ExecuteWithFileLockedAsync(
                 packageDirectory,
                 action: async cancellationToken =>
@@ -230,7 +240,14 @@ namespace NuGet.ProjectManagement
 
                     return true;
                 },
-                token: token);
+                token: token,
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+                lockDirectory);
+                //////////////////////////////////////////////////////////
+                // End- Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
         }
 
         /// <summary>
