@@ -385,6 +385,16 @@ namespace NuGet.Packaging
                 logger.LogVerbose(
                     $"Acquiring lock for the installation of {packageIdentity.Id} {packageIdentity.Version}");
 
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                var lockDirectory = Path.GetDirectoryName(targetNupkg) ?? Environment.CurrentDirectory;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
                 // Acquire the lock on a nukpg before we extract it to prevent the race condition when multiple
                 // processes are extracting to the same destination simultaneously
                 return await ConcurrencyUtilities.ExecuteWithFileLockedAsync(targetNupkg,
@@ -563,7 +573,14 @@ namespace NuGet.Packaging
                             return false;
                         }
                     },
-                    token: token);
+                    token: token,
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+                    lockDirectory);
+                    //////////////////////////////////////////////////////////
+                    // End- Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
             }
         }
 
@@ -623,6 +640,16 @@ namespace NuGet.Packaging
 
                 logger.LogVerbose(
                     $"Acquiring lock for the installation of {packageIdentity.Id} {packageIdentity.Version}");
+
+                //////////////////////////////////////////////////////////
+                // Start - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
+
+                var lockDirectory = Path.GetDirectoryName(targetNupkg) ?? Environment.CurrentDirectory;
+
+                //////////////////////////////////////////////////////////
+                // End - Chocolatey Specific Modification
+                //////////////////////////////////////////////////////////
 
                 // Acquire the lock on a nukpg before we extract it to prevent the race condition when multiple
                 // processes are extracting to the same destination simultaneously
@@ -830,7 +857,14 @@ namespace NuGet.Packaging
                             return false;
                         }
                     },
-                    token: token);
+                    token: token,
+                    //////////////////////////////////////////////////////////
+                    // Start - Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
+                    lockDirectory);
+                    //////////////////////////////////////////////////////////
+                    // End- Chocolatey Specific Modification
+                    //////////////////////////////////////////////////////////
             }
         }
 
