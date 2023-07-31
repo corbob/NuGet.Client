@@ -60,7 +60,7 @@
     <PackageProjectUrl>https://github.com/chocolatey/nuget.client</PackageProjectUrl>
     <!-- //////////////////////////////////////////////////////////
          // End - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->    
+         ////////////////////////////////////////////////////////// -->
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
@@ -72,7 +72,7 @@
     <Description>Chocolatey NuGet client library.</Description>
     <!-- //////////////////////////////////////////////////////////
          // End - Chocolatey Specific Modification
-         ////////////////////////////////////////////////////////// -->    
+         ////////////////////////////////////////////////////////// -->
     <Copyright>&#169; Microsoft Corporation. All rights reserved.</Copyright>
     <Serviceable>true</Serviceable>
     <!-- //////////////////////////////////////////////////////////
