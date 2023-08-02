@@ -389,7 +389,7 @@ namespace NuGet.Packaging
                 // Start - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
 
-                var lockDirectory = Path.GetDirectoryName(targetNupkg) ?? Environment.CurrentDirectory;
+                var lockDirectory = Path.GetDirectoryName(targetPath) ?? Environment.CurrentDirectory;
 
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification
@@ -645,7 +645,7 @@ namespace NuGet.Packaging
                 // Start - Chocolatey Specific Modification
                 //////////////////////////////////////////////////////////
 
-                var lockDirectory = Path.GetDirectoryName(targetNupkg) ?? Environment.CurrentDirectory;
+                var lockDirectory = Path.GetDirectoryName(targetPath) ?? Environment.CurrentDirectory;
 
                 //////////////////////////////////////////////////////////
                 // End - Chocolatey Specific Modification

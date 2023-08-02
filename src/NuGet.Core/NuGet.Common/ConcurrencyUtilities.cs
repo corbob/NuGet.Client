@@ -36,7 +36,10 @@ namespace NuGet.Common
             CancellationToken token,
             string lockFileDirectoryPath)
         {
-            var originalBasePath = BasePath;
+            // We use the field here, as the BasePath variable
+            // will try to create a lock file, even if the path is not writable by the current user.
+            string originalBasePath = _basePath;
+
             BasePath = lockFileDirectoryPath;
 
             try
