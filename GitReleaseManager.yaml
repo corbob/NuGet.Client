@@ -4,11 +4,12 @@ issue-labels-include:
 - Feature
 - C4B Feature
 - Bug
-- Enhancement
+- Improvement
 - Documentation
+- Dependency Change
 issue-labels-exclude:
 - Internal Refactoring
-- Build
+- BuildAutomation
 - NO RELEASE NOTES
 issue-labels-alias:
     - name:    Documentation
@@ -33,7 +34,7 @@ close:
 
     - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
     - [Chocolatey.NuGet.Commands NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Commands/{milestone})
-    - [Chocolatey.NuGet.Common NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Common/{milestone})    
+    - [Chocolatey.NuGet.Common NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Common/{milestone})
     - [Chocolatey.NuGet.Configuration NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Configuration/{milestone})
     - [Chocolatey.NuGet.Credentials NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Credentials/{milestone})
     - [Chocolatey.NuGet.DependencyResolver.Core NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.DependencyResolver.Core/{milestone})
