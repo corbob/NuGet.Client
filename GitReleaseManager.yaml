@@ -47,4 +47,4 @@ close:
     - [Chocolatey.NuGet.Resolver NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Resolver/{milestone})
     - [Chocolatey.NuGet.Versioning NuGet Package](https://nuget.org/packages/Chocolatey.NuGet.Versioning/{milestone})
 
-    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
+    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package: :rocket:
